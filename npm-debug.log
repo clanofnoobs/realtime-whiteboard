@@ -1,14 +1,10 @@
 0 info it worked if it ends with ok
-1 verbose cli [ '/usr/bin/node',
-1 verbose cli   '/usr/bin/npm',
-1 verbose cli   'install',
-1 verbose cli   '-g',
-1 verbose cli   'express-generator' ]
+1 verbose cli [ '/usr/bin/node', '/usr/bin/npm', 'install', '-g', 'socket.io' ]
 2 info using npm@1.4.28
 3 info using node@v0.10.33
 4 verbose node symlink /usr/bin/node
-5 verbose cache add [ 'express-generator', null ]
-6 verbose cache add name=undefined spec="express-generator" args=["express-generator",null]
+5 verbose cache add [ 'socket.io', null ]
+6 verbose cache add name=undefined spec="socket.io" args=["socket.io",null]
 7 verbose parsed url { protocol: null,
 7 verbose parsed url   slashes: null,
 7 verbose parsed url   auth: null,
@@ -18,146 +14,198 @@
 7 verbose parsed url   hash: null,
 7 verbose parsed url   search: null,
 7 verbose parsed url   query: null,
-7 verbose parsed url   pathname: 'express-generator',
-7 verbose parsed url   path: 'express-generator',
-7 verbose parsed url   href: 'express-generator' }
-8 silly lockFile 198a68d8-express-generator express-generator
-9 verbose lock express-generator /home/sami/.npm/198a68d8-express-generator.lock
-10 silly lockFile 198a68d8-express-generator express-generator
-11 silly lockFile 198a68d8-express-generator express-generator
-12 verbose addNamed [ 'express-generator', '' ]
+7 verbose parsed url   pathname: 'socket.io',
+7 verbose parsed url   path: 'socket.io',
+7 verbose parsed url   href: 'socket.io' }
+8 silly lockFile 71475bfd-socket-io socket.io
+9 verbose lock socket.io /home/sami/.npm/71475bfd-socket-io.lock
+10 silly lockFile 71475bfd-socket-io socket.io
+11 silly lockFile 71475bfd-socket-io socket.io
+12 verbose addNamed [ 'socket.io', '' ]
 13 verbose addNamed [ null, '*' ]
-14 silly lockFile bd41e3d3-express-generator express-generator@
-15 verbose lock express-generator@ /home/sami/.npm/bd41e3d3-express-generator.lock
-16 silly addNameRange { name: 'express-generator', range: '*', hasData: false }
-17 verbose request where is /express-generator
+14 silly lockFile c03de861-socket-io socket.io@
+15 verbose lock socket.io@ /home/sami/.npm/c03de861-socket-io.lock
+16 silly addNameRange { name: 'socket.io', range: '*', hasData: false }
+17 verbose request where is /socket.io
 18 verbose request registry https://registry.npmjs.org/
-19 verbose request id 06105130175d4cf5
-20 verbose url raw /express-generator
-21 verbose url resolving [ 'https://registry.npmjs.org/', './express-generator' ]
-22 verbose url resolved https://registry.npmjs.org/express-generator
-23 verbose request where is https://registry.npmjs.org/express-generator
-24 info trying registry request attempt 1 at 16:38:31
-25 http GET https://registry.npmjs.org/express-generator
-26 http 200 https://registry.npmjs.org/express-generator
+19 verbose request id 8f35af8019295180
+20 verbose url raw /socket.io
+21 verbose url resolving [ 'https://registry.npmjs.org/', './socket.io' ]
+22 verbose url resolved https://registry.npmjs.org/socket.io
+23 verbose request where is https://registry.npmjs.org/socket.io
+24 info trying registry request attempt 1 at 16:49:59
+25 http GET https://registry.npmjs.org/socket.io
+26 http 200 https://registry.npmjs.org/socket.io
 27 silly registry.get cb [ 200,
-27 silly registry.get   { date: 'Mon, 10 Nov 2014 21:39:31 GMT',
+27 silly registry.get   { date: 'Mon, 10 Nov 2014 21:50:59 GMT',
 27 silly registry.get     server: 'CouchDB/1.5.0 (Erlang OTP/R16B03)',
-27 silly registry.get     etag: '"D8MAOBCOVFO78JBUQNLK8DEX0"',
+27 silly registry.get     etag: '"94WHOLJJEZ8UGR32D0ILJCH58"',
 27 silly registry.get     'content-type': 'application/json',
 27 silly registry.get     'cache-control': 'max-age=60',
-27 silly registry.get     'content-length': '12149',
+27 silly registry.get     'content-length': '101188',
 27 silly registry.get     'accept-ranges': 'bytes',
 27 silly registry.get     via: '1.1 varnish',
-27 silly registry.get     age: '33',
-27 silly registry.get     'x-served-by': 'cache-jfk1032-JFK',
+27 silly registry.get     age: '37',
+27 silly registry.get     'x-served-by': 'cache-jfk1034-JFK',
 27 silly registry.get     'x-cache': 'HIT',
 27 silly registry.get     'x-cache-hits': '1',
-27 silly registry.get     'x-timer': 'S1415655571.402630,VS0,VE0',
+27 silly registry.get     'x-timer': 'S1415656259.349249,VS0,VE0',
 27 silly registry.get     vary: 'Accept',
 27 silly registry.get     'keep-alive': 'timeout=10, max=50',
 27 silly registry.get     connection: 'Keep-Alive' } ]
-28 silly addNameRange number 2 { name: 'express-generator', range: '*', hasData: true }
-29 silly addNameRange versions [ 'express-generator',
-29 silly addNameRange   [ '1.0.0', '3.0.0', '4.0.0', '4.2.0', '4.8.0', '4.9.0' ] ]
-30 verbose addNamed [ 'express-generator', '4.9.0' ]
-31 verbose addNamed [ '4.9.0', '4.9.0' ]
-32 silly lockFile 0580e4a0-express-generator-4-9-0 express-generator@4.9.0
-33 verbose lock express-generator@4.9.0 /home/sami/.npm/0580e4a0-express-generator-4-9-0.lock
-34 silly lockFile 995b2f4d-ator-express-generator-4-9-0-tgz https://registry.npmjs.org/express-generator/-/express-generator-4.9.0.tgz
-35 verbose lock https://registry.npmjs.org/express-generator/-/express-generator-4.9.0.tgz /home/sami/.npm/995b2f4d-ator-express-generator-4-9-0-tgz.lock
-36 verbose addRemoteTarball [ 'https://registry.npmjs.org/express-generator/-/express-generator-4.9.0.tgz',
-36 verbose addRemoteTarball   'f5da999d12ae4b072f6e61055633f7ad9e49fd73' ]
-37 info retry fetch attempt 1 at 16:38:32
-38 verbose fetch to= /tmp/npm-5062-dg-J0A65/registry.npmjs.org/express-generator/-/express-generator-4.9.0.tgz
-39 http GET https://registry.npmjs.org/express-generator/-/express-generator-4.9.0.tgz
-40 http 200 https://registry.npmjs.org/express-generator/-/express-generator-4.9.0.tgz
-41 silly lockFile 995b2f4d-ator-express-generator-4-9-0-tgz https://registry.npmjs.org/express-generator/-/express-generator-4.9.0.tgz
-42 silly lockFile 995b2f4d-ator-express-generator-4-9-0-tgz https://registry.npmjs.org/express-generator/-/express-generator-4.9.0.tgz
-43 silly lockFile 0580e4a0-express-generator-4-9-0 express-generator@4.9.0
-44 silly lockFile 0580e4a0-express-generator-4-9-0 express-generator@4.9.0
-45 silly lockFile bd41e3d3-express-generator express-generator@
-46 silly lockFile bd41e3d3-express-generator express-generator@
-47 silly resolved [ { name: 'express-generator',
-47 silly resolved     description: 'Express\' application generator',
-47 silly resolved     version: '4.9.0',
-47 silly resolved     author: { name: 'TJ Holowaychuk', email: 'tj@vision-media.ca' },
-47 silly resolved     contributors: [ [Object], [Object], [Object], [Object], [Object] ],
-47 silly resolved     keywords:
-47 silly resolved      [ 'express',
-47 silly resolved        'framework',
-47 silly resolved        'sinatra',
-47 silly resolved        'web',
-47 silly resolved        'rest',
-47 silly resolved        'restful',
-47 silly resolved        'router',
-47 silly resolved        'app',
-47 silly resolved        'api' ],
-47 silly resolved     repository: { type: 'git', url: 'https://github.com/expressjs/generator' },
-47 silly resolved     license: 'MIT',
-47 silly resolved     dependencies: { commander: '1.3.2', mkdirp: '0.5.0' },
-47 silly resolved     main: 'bin/express',
-47 silly resolved     preferGlobal: true,
-47 silly resolved     bin: { express: './bin/express' },
-47 silly resolved     devDependencies:
-47 silly resolved      { mocha: '~1.21.4',
-47 silly resolved        rimraf: '~2.2.8',
-47 silly resolved        should: '~4.0.4',
-47 silly resolved        supertest: '~0.13.0' },
-47 silly resolved     engines: { node: '>= 0.8.0' },
-47 silly resolved     files: [ 'LICENSE', 'bin/', 'templates/' ],
-47 silly resolved     scripts:
-47 silly resolved      { test: 'mocha --reporter spec --bail --check-leaks test/',
-47 silly resolved        'test-travis': 'mocha --reporter spec --bail --check-leaks test/' },
-47 silly resolved     gitHead: 'd00f7fc2c9e3a1f22f740019bab64fc0f579146d',
-47 silly resolved     bugs: { url: 'https://github.com/expressjs/generator/issues' },
-47 silly resolved     homepage: 'https://github.com/expressjs/generator',
-47 silly resolved     _id: 'express-generator@4.9.0',
-47 silly resolved     _shasum: 'f5da999d12ae4b072f6e61055633f7ad9e49fd73',
-47 silly resolved     _from: 'express-generator@',
-47 silly resolved     _npmVersion: '1.4.21',
-47 silly resolved     _npmUser: { name: 'dougwilson', email: 'doug@somethingdoug.com' },
-47 silly resolved     maintainers: [ [Object], [Object], [Object], [Object], [Object], [Object] ],
-47 silly resolved     dist:
-47 silly resolved      { shasum: 'f5da999d12ae4b072f6e61055633f7ad9e49fd73',
-47 silly resolved        tarball: 'http://registry.npmjs.org/express-generator/-/express-generator-4.9.0.tgz' },
-47 silly resolved     directories: {},
-47 silly resolved     _resolved: 'https://registry.npmjs.org/express-generator/-/express-generator-4.9.0.tgz' } ]
-48 info install express-generator@4.9.0 into /usr/lib
-49 info installOne express-generator@4.9.0
-50 verbose lib/node_modules/express-generator unbuild
-51 verbose tar unpack /home/sami/.npm/express-generator/4.9.0/package.tgz
-52 silly lockFile 73f1f6cd-b-node-modules-express-generator tar:///usr/lib/node_modules/express-generator
-53 verbose lock tar:///usr/lib/node_modules/express-generator /home/sami/.npm/73f1f6cd-b-node-modules-express-generator.lock
-54 silly lockFile 8f52da84-ress-generator-4-9-0-package-tgz tar:///home/sami/.npm/express-generator/4.9.0/package.tgz
-55 verbose lock tar:///home/sami/.npm/express-generator/4.9.0/package.tgz /home/sami/.npm/8f52da84-ress-generator-4-9-0-package-tgz.lock
-56 silly gunzTarPerm modes [ '775', '664' ]
-57 error Error: EACCES, mkdir '/usr/lib/node_modules/express-generator'
-57 error  { [Error: EACCES, mkdir '/usr/lib/node_modules/express-generator']
-57 error   errno: 3,
-57 error   code: 'EACCES',
-57 error   path: '/usr/lib/node_modules/express-generator',
-57 error   fstream_type: 'Directory',
-57 error   fstream_path: '/usr/lib/node_modules/express-generator',
-57 error   fstream_class: 'DirWriter',
-57 error   fstream_stack:
-57 error    [ '/usr/lib/node_modules/npm/node_modules/fstream/lib/dir-writer.js:36:23',
-57 error      '/usr/lib/node_modules/npm/node_modules/mkdirp/index.js:46:53',
-57 error      'Object.oncomplete (fs.js:107:15)' ] }
-58 error Please try running this command again as root/Administrator.
-59 error System Linux 3.13.0-29-generic
-60 error command "/usr/bin/node" "/usr/bin/npm" "install" "-g" "express-generator"
-61 error cwd /home/sami/realtime_board
-62 error node -v v0.10.33
-63 error npm -v 1.4.28
-64 error path /usr/lib/node_modules/express-generator
-65 error fstream_path /usr/lib/node_modules/express-generator
-66 error fstream_type Directory
-67 error fstream_class DirWriter
-68 error code EACCES
-69 error errno 3
-70 error stack Error: EACCES, mkdir '/usr/lib/node_modules/express-generator'
-71 error fstream_stack /usr/lib/node_modules/npm/node_modules/fstream/lib/dir-writer.js:36:23
-71 error fstream_stack /usr/lib/node_modules/npm/node_modules/mkdirp/index.js:46:53
-71 error fstream_stack Object.oncomplete (fs.js:107:15)
-72 verbose exit [ 3, true ]
+28 silly addNameRange number 2 { name: 'socket.io', range: '*', hasData: true }
+29 silly addNameRange versions [ 'socket.io',
+29 silly addNameRange   [ '0.3.8',
+29 silly addNameRange     '0.4.0',
+29 silly addNameRange     '0.4.1',
+29 silly addNameRange     '0.5.1',
+29 silly addNameRange     '0.5.3',
+29 silly addNameRange     '0.6.0',
+29 silly addNameRange     '0.6.1',
+29 silly addNameRange     '0.6.3',
+29 silly addNameRange     '0.6.4',
+29 silly addNameRange     '0.6.5',
+29 silly addNameRange     '0.6.6',
+29 silly addNameRange     '0.6.7',
+29 silly addNameRange     '0.6.8',
+29 silly addNameRange     '0.6.9',
+29 silly addNameRange     '0.6.10',
+29 silly addNameRange     '0.6.11',
+29 silly addNameRange     '0.6.12',
+29 silly addNameRange     '0.6.14',
+29 silly addNameRange     '0.6.15',
+29 silly addNameRange     '0.6.16',
+29 silly addNameRange     '0.6.17',
+29 silly addNameRange     '0.6.18',
+29 silly addNameRange     '0.7.0',
+29 silly addNameRange     '0.7.1',
+29 silly addNameRange     '0.7.2',
+29 silly addNameRange     '0.7.3',
+29 silly addNameRange     '0.7.4',
+29 silly addNameRange     '0.7.5',
+29 silly addNameRange     '0.7.6',
+29 silly addNameRange     '0.7.7',
+29 silly addNameRange     '0.7.8',
+29 silly addNameRange     '0.7.9',
+29 silly addNameRange     '0.7.10',
+29 silly addNameRange     '0.7.11',
+29 silly addNameRange     '0.8.0',
+29 silly addNameRange     '0.8.1',
+29 silly addNameRange     '0.8.2',
+29 silly addNameRange     '0.8.3',
+29 silly addNameRange     '0.8.4',
+29 silly addNameRange     '0.8.5',
+29 silly addNameRange     '0.8.6',
+29 silly addNameRange     '0.8.7',
+29 silly addNameRange     '0.9.0',
+29 silly addNameRange     '0.9.1',
+29 silly addNameRange     '0.9.1-1',
+29 silly addNameRange     '0.9.2',
+29 silly addNameRange     '0.9.3',
+29 silly addNameRange     '0.9.4',
+29 silly addNameRange     '0.9.5',
+29 silly addNameRange     '0.9.6',
+29 silly addNameRange     '0.9.7',
+29 silly addNameRange     '0.9.8',
+29 silly addNameRange     '0.9.9',
+29 silly addNameRange     '0.9.10',
+29 silly addNameRange     '0.9.11',
+29 silly addNameRange     '0.9.12',
+29 silly addNameRange     '0.9.13',
+29 silly addNameRange     '0.9.14',
+29 silly addNameRange     '0.9.15',
+29 silly addNameRange     '0.9.16',
+29 silly addNameRange     '1.0.0-pre',
+29 silly addNameRange     '1.0.0-pre2',
+29 silly addNameRange     '1.0.0-pre3',
+29 silly addNameRange     '1.0.0-pre4',
+29 silly addNameRange     '1.0.0-pre5',
+29 silly addNameRange     '0.9.17',
+29 silly addNameRange     '1.0.0',
+29 silly addNameRange     '1.0.1',
+29 silly addNameRange     '1.0.2',
+29 silly addNameRange     '1.0.3',
+29 silly addNameRange     '1.0.4',
+29 silly addNameRange     '1.0.5',
+29 silly addNameRange     '1.0.6',
+29 silly addNameRange     '1.1.0',
+29 silly addNameRange     '1.2.0' ] ]
+30 verbose addNamed [ 'socket.io', '1.2.0' ]
+31 verbose addNamed [ '1.2.0', '1.2.0' ]
+32 silly lockFile 1b93a138-socket-io-1-2-0 socket.io@1.2.0
+33 verbose lock socket.io@1.2.0 /home/sami/.npm/1b93a138-socket-io-1-2-0.lock
+34 silly lockFile 1b93a138-socket-io-1-2-0 socket.io@1.2.0
+35 silly lockFile 1b93a138-socket-io-1-2-0 socket.io@1.2.0
+36 silly lockFile c03de861-socket-io socket.io@
+37 silly lockFile c03de861-socket-io socket.io@
+38 silly resolved [ { name: 'socket.io',
+38 silly resolved     version: '1.2.0',
+38 silly resolved     description: 'node.js realtime framework server',
+38 silly resolved     keywords:
+38 silly resolved      [ 'realtime',
+38 silly resolved        'framework',
+38 silly resolved        'websocket',
+38 silly resolved        'tcp',
+38 silly resolved        'events',
+38 silly resolved        'socket',
+38 silly resolved        'io' ],
+38 silly resolved     repository: { type: 'git', url: 'git://github.com/Automattic/socket.io' },
+38 silly resolved     scripts: { test: 'make test' },
+38 silly resolved     dependencies:
+38 silly resolved      { 'engine.io': '1.4.2',
+38 silly resolved        'socket.io-parser': '2.2.2',
+38 silly resolved        'socket.io-client': '1.2.0',
+38 silly resolved        'socket.io-adapter': '0.3.1',
+38 silly resolved        'has-binary-data': '0.1.3',
+38 silly resolved        debug: '0.7.4' },
+38 silly resolved     devDependencies:
+38 silly resolved      { mocha: '1.16.2',
+38 silly resolved        'expect.js': '0.3.1',
+38 silly resolved        supertest: '0.8.2',
+38 silly resolved        superagent: '0.17.0',
+38 silly resolved        istanbul: '0.2.3' },
+38 silly resolved     contributors: [ [Object], [Object], [Object], [Object] ],
+38 silly resolved     readme: '\n# socket.io\n\n[![Build Status](https://secure.travis-ci.org/Automattic/socket.io.svg)](http://travis-ci.org/Automattic/socket.io)\n[![NPM version](https://badge.fury.io/js/socket.io.svg)](http://badge.fury.io/js/socket.io)\n![Downloads](http://img.shields.io/npm/dm/socket.io.svg)\n\n## How to use\n\nThe following example attaches socket.io to a plain Node.JS\nHTTP server listening on port `3000`.\n\n```js\nvar server = require(\'http\').createServer();\nvar io = require(\'socket.io\')(server);\nio.on(\'connection\', function(socket){\n  socket.on(\'event\', function(data){});\n  socket.on(\'disconnect\', function(){});\n});\nserver.listen(3000);\n```\n\n### Standalone\n\n```js\nvar io = require(\'socket.io\')();\nio.on(\'connection\', function(socket){});\nio.listen(3000);\n```\n\n### In conjunction with Express\n\nStarting with **3.0**, express applications have become request handler\nfunctions that you pass to `http` or `http` `Server` instances. You need\nto pass the `Server` to `socket.io`, and not the express application\nfunction.\n\n```js\nvar app = require(\'express\')();\nvar server = require(\'http\').createServer(app);\nvar io = require(\'socket.io\')(server);\nio.on(\'connection\', function(){ /* … */ });\nserver.listen(3000);\n```\n\n### In conjunction with Koa\n\nLike Express.JS, Koa works by exposing an application as a request\nhandler function, but only by calling the `callback` method.\n\n```js\nvar app = require(\'koa\')();\nvar server = require(\'http\').createServer(app.callback());\nvar io = require(\'socket.io\')(server);\nio.on(\'connection\', function(){ /* … */ });\nserver.listen(3000);\n```\n\n## API\n\n### Server\n\n  Exposed by `require(\'socket.io\')`.\n\n### Server()\n\n  Creates a new `Server`. Works with and without `new`:\n\n  ```js\n  var io = require(\'socket.io\')();\n  // or\n  var Server = require(\'socket.io\');\n  var io = new Server();\n  ```\n\n### Server(opts:Object)\n\n  Optionally, the first or second argument (see below) of the `Server`\n  constructor can be an options object.\n\n  The following options are supported:\n\n  - `serveClient` sets the value for Server#serveClient()\n  - `path` sets the value for Server#path()\n\n  The same options passed to socket.io are always passed to\n  the `engine.io` `Server` that gets created. See engine.io\n  [options](https://github.com/learnboost/engine.io#methods-1)\n  as reference.\n\n### Server(srv:http#Server, opts:Object)\n\n  Creates a new `Server` and attaches it to the given `srv`. Optionally\n  `opts` can be passed.\n\n### Server(port:Number, opts:Object)\n\n  Binds socket.io to a new `http.Server` that listens on `port`.\n\n### Server#serveClient(v:Boolean):Server\n\n  If `v` is `true` the attached server (see `Server#attach`) will serve\n  the client files. Defaults to `true`.\n\n  This method has no effect after `attach` is called.\n\n  ```js\n  // pass a server and the `serveClient` option\n  var io = require(\'socket.io\')(http, { serveClient: false });\n\n  // or pass no server and then you can call the method\n  var io = require(\'socket.io\')();\n  io.serveClient(false);\n  io.attach(http);\n  ```\n\n  If no arguments are supplied this method returns the current value.\n\n### Server#path(v:String):Server\n\n  Sets the path `v` under which `engine.io` and the static files will be\n  served. Defaults to `/socket.io`.\n\n  If no arguments are supplied this method returns the current value.\n\n### Server#adapter(v:Adapter):Server\n\n  Sets the adapter `v`. Defaults to an instance of the `Adapter` that\n  ships with socket.io which is memory based. See\n  [socket.io-adapter](https://github.com/Automattic/socket.io-adapter).\n\n  If no arguments are supplied this method returns the current value.\n\n### Server#origins(v:String):Server\n\n  Sets the allowed origins `v`. Defaults to any origins being allowed.\n\n  If no arguments are supplied this method returns the current value.\n\n### Server#origins(v:Function):Server\n\n  Sets the allowed origins as dynamic function. Function takes two arguments `origin:String` and `callback(error, success)`, where `success` is a boolean value indicating whether origin is allowed or not.\n\n  __Potential drawbacks__:\n  * in some situations, when it is not possible to determine `origin` it may have value of `*`\n  * As this function will be executed for every request, it is advised to make this function work as fast as possible\n  * If `socket.io` is used together with `Express`, the CORS headers will be affected only for `socket.io` requests. For Express can use [cors](https://github.com/troygoode/node-cors/)\n\n\n### Server#sockets:Namespace\n\n  The default (`/`) namespace.\n\n### Server#attach(srv:http#Server, opts:Object):Server\n\n  Attaches the `Server` to an engine.io instance on `srv` with the\n  supplied `opts` (optionally).\n\n### Server#attach(port:Number, opts:Object):Server\n\n  Attaches the `Server` to an engine.io instance that is bound to `port`\n  with the given `opts` (optionally).\n\n### Server#listen\n\n  Synonym of `Server#attach`.\n\n### Server#bind(srv:engine#Server):Server\n\n  Advanced use only. Binds the server to a specific engine.io `Server`\n  (or compatible API) instance.\n\n### Server#onconnection(socket:engine#Socket):Server\n\n  Advanced use only. Creates a new `socket.io` client from the incoming\n  engine.io (or compatible API) `socket`.\n\n### Server#of(nsp:String):Namespace\n\n  Initializes and retrieves the given `Namespace` by its pathname\n  identifier `nsp`.\n\n  If the namespace was already initialized it returns it right away.\n\n### Server#emit\n\n  Emits an event to all connected clients. The following two are\n  equivalent:\n\n  ```js\n  var io = require(\'socket.io\')();\n  io.sockets.emit(\'an event sent to all connected clients\');\n  io.emit(\'an event sent to all connected clients\');\n  ```\n\n  For other available methods, see `Namespace` below.\n\n### Server#close\n\n  Closes socket server\n\n  ```js\n  var Server = require(\'socket.io\');\n  var PORT   = 3030;\n  var server = require(\'http\').Server();\n\n  var io = Server(PORT);\n\n  io.close(); // Close current server\n\n  server.listen(PORT); // PORT is free to use\n\n  io = Server(server);\n  ```\n\n### Server#use\n\n  See `Namespace#use` below.\n\n### Namespace\n\n  Represents a pool of sockets connected under a given scope identified\n  by a pathname (eg: `/chat`).\n\n  By default the client always connects to `/`.\n\n#### Events\n\n  - `connection` / `connect`. Fired upon a connection.\n\n    Parameters:\n    - `Socket` the incoming socket.\n\n### Namespace#name:String\n\n  The namespace identifier property.\n\n### Namespace#connected:Object<Socket>\n\n  Hash of `Socket` objects that are connected to this namespace indexed\n  by `id`.\n\n### Namespace#use(fn:Function):Namespace\n\n  Registers a middleware, which is a function that gets executed for\n  every incoming `Socket` and receives as parameter the socket and a\n  function to optionally defer execution to the next registered\n  middleware.\n\n  ```js\n  var io = require(\'socket.io\')();\n  io.use(function(socket, next){\n    if (socket.request.headers.cookie) return next();\n    next(new Error(\'Authentication error\'));\n  });\n  ```\n\n  Errors passed to middleware callbacks are sent as special `error`\n  packets to clients.\n\n### Socket\n\n  A `Socket` is the fundamental class for interacting with browser\n  clients. A `Socket` belongs to a certain `Namespace` (by default `/`)\n  and uses an underlying `Client` to communicate.\n\n### Socket#rooms:Array\n\n  A list of strings identifying the rooms this socket is in.\n\n### Socket#client:Client\n\n  A reference to the underlying `Client` object.\n\n### Socket#conn:Socket\n\n  A reference to the underyling `Client` transport connection (engine.io\n  `Socket` object).\n\n### Socket#request:Request\n\n  A getter proxy that returns the reference to the `request` that\n  originated the underlying engine.io `Client`. Useful for accessing\n  request headers such as `Cookie` or `User-Agent`.\n\n### Socket#id:String\n\n  A unique identifier for the socket session, that comes from the\n  underlying `Client`.\n\n### Socket#emit(name:String[, …]):Socket\n\n  Emits an event to the socket identified by the string `name`. Any\n  other parameters can be included.\n\n  All datastructures are supported, including `Buffer`. JavaScript\n  functions can\'t be serialized/deserialized.\n\n  ```js\n  var io = require(\'socket.io\')();\n  io.on(\'connection\', function(socket){\n    socket.emit(\'an event\', { some: \'data\' });\n  });\n  ```\n\n### Socket#join(name:String[, fn:Function]):Socket\n\n  Adds the socket to the `room`, and fires optionally a callback `fn`\n  with `err` signature (if any).\n\n  The socket is automatically a member of a room identified with its\n  session id (see `Socket#id`).\n\n  The mechanics of joining  rooms are handled by the `Adapter`\n  that has been configured (see `Server#adapter` above), defaulting to\n  [socket.io-adapter](https://github.com/Automattic/socket.io-adapter).\n\n### Socket#leave(name:String[, fn:Function]):Socket\n\n  Removes the socket from `room`, and fires optionally a callback `fn`\n  with `err` signature (if any).\n\n  **Rooms are left automatically upon disconnection**.\n\n  The mechanics of leaving rooms are handled by the `Adapter`\n  that has been configured (see `Server#adapter` above), defaulting to\n  [socket.io-adapter](https://github.com/Automattic/socket.io-adapter).\n\n### Socket#to(room:String):Socket\n### Socket#in(room:String):Socket\n\n  Sets a modifier for a subsequent event emission that the event will\n  only be _broadcasted_ to sockets that have joined the given `room`.\n\n  To emit to multiple rooms, you can call `to` several times.\n\n  ```js\n  var io = require(\'socket.io\')();\n  io.on(\'connection\', function(socket){\n    socket.to(\'others\').emit(\'an event\', { some: \'data\' });\n  });\n  ```\n\n### Client\n\n  The `Client` class represents an incoming transport (engine.io)\n  connection. A `Client` can be associated with many multiplexed `Socket`\n  that belong to different `Namespace`s.\n\n### Client#conn\n\n  A reference to the underlying `engine.io` `Socket` connection.\n\n### Client#request\n\n  A getter proxy that returns the reference to the `request` that\n  originated the engine.io connection. Useful for accessing\n  request headers such as `Cookie` or `User-Agent`.\n\n## Debug / logging\n\nSocket.IO is powered by [debug](http://github.com/visionmedia/debug).\nIn order to see all the debug output, run your app with the environment variable\n`DEBUG` including the desired scope.\n\nTo see the output from all of Socket.IO\'s debugging scopes you can use:\n\n```\nDEBUG=socket.io* node myapp\n```\n\n## License\n\nMIT\n',
+38 silly resolved     readmeFilename: 'Readme.md',
+38 silly resolved     bugs: { url: 'https://github.com/Automattic/socket.io/issues' },
+38 silly resolved     homepage: 'https://github.com/Automattic/socket.io',
+38 silly resolved     _id: 'socket.io@1.2.0',
+38 silly resolved     _from: 'socket.io@' } ]
+39 info install socket.io@1.2.0 into /usr/lib
+40 info installOne socket.io@1.2.0
+41 verbose lib/node_modules/socket.io unbuild
+42 verbose tar unpack /home/sami/.npm/socket.io/1.2.0/package.tgz
+43 silly lockFile f74c53eb-r-usr-lib-node-modules-socket-io tar:///usr/lib/node_modules/socket.io
+44 verbose lock tar:///usr/lib/node_modules/socket.io /home/sami/.npm/f74c53eb-r-usr-lib-node-modules-socket-io.lock
+45 silly lockFile ad8a4349--npm-socket-io-1-2-0-package-tgz tar:///home/sami/.npm/socket.io/1.2.0/package.tgz
+46 verbose lock tar:///home/sami/.npm/socket.io/1.2.0/package.tgz /home/sami/.npm/ad8a4349--npm-socket-io-1-2-0-package-tgz.lock
+47 silly gunzTarPerm modes [ '775', '664' ]
+48 error Error: EACCES, mkdir '/usr/lib/node_modules/socket.io'
+48 error  { [Error: EACCES, mkdir '/usr/lib/node_modules/socket.io']
+48 error   errno: 3,
+48 error   code: 'EACCES',
+48 error   path: '/usr/lib/node_modules/socket.io',
+48 error   fstream_type: 'Directory',
+48 error   fstream_path: '/usr/lib/node_modules/socket.io',
+48 error   fstream_class: 'DirWriter',
+48 error   fstream_stack:
+48 error    [ '/usr/lib/node_modules/npm/node_modules/fstream/lib/dir-writer.js:36:23',
+48 error      '/usr/lib/node_modules/npm/node_modules/mkdirp/index.js:46:53',
+48 error      'Object.oncomplete (fs.js:107:15)' ] }
+49 error Please try running this command again as root/Administrator.
+50 error System Linux 3.13.0-29-generic
+51 error command "/usr/bin/node" "/usr/bin/npm" "install" "-g" "socket.io"
+52 error cwd /home/sami/realtime
+53 error node -v v0.10.33
+54 error npm -v 1.4.28
+55 error path /usr/lib/node_modules/socket.io
+56 error fstream_path /usr/lib/node_modules/socket.io
+57 error fstream_type Directory
+58 error fstream_class DirWriter
+59 error code EACCES
+60 error errno 3
+61 error stack Error: EACCES, mkdir '/usr/lib/node_modules/socket.io'
+62 error fstream_stack /usr/lib/node_modules/npm/node_modules/fstream/lib/dir-writer.js:36:23
+62 error fstream_stack /usr/lib/node_modules/npm/node_modules/mkdirp/index.js:46:53
+62 error fstream_stack Object.oncomplete (fs.js:107:15)
+63 verbose exit [ 3, true ]
