@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 var express = require('express');
 var path = require('path');
 var favicon = require('serve-favicon');
@@ -65,3 +64,5 @@ var http = require('http');
 var server = http.createServer();
 server.listen(8001);
 >>>>>>> cebf810a7a80064b7a0f19eb2075d369bdd0720c
+=======
+>>>>>>> de2a0ecfc5e18ad376ff601d10d3041b672b8520
