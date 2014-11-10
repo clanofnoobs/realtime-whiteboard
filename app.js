@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 var express = require('express');
 var path = require('path');
 var favicon = require('serve-favicon');
@@ -58,3 +59,9 @@ app.use(function(err, req, res, next) {
 
 
 module.exports = app;
+=======
+var http = require('http');
+
+var server = http.createServer();
+server.listen(8001);
+>>>>>>> cebf810a7a80064b7a0f19eb2075d369bdd0720c
