@@ -6,4 +6,4 @@ var UserSchema = mongoose.schema({
   email: String
 });
 
-mongoose.model('User',UserSchema);
+mongoose.model('User', UserSchema);

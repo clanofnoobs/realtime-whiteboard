@@ -14,6 +14,16 @@ require('./models/Whiteboard');
 
 var app = express();
 
+//passport config
+var passport = require('passport');
+var expressSession = require('express-session');
+app.use(expressSession({secret:'mySecretKey'}));
+app.use(passport.initialize());
+app.use(passport.session());
+
+var initPassport = require('./passport/init');
+initPassport(passport);
+
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'hjs');
