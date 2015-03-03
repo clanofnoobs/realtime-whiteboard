@@ -4,14 +4,18 @@ var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
-var mongoose = require('mongoose');
 var flash = require('connect-flash');
 
-var routes = require('./routes/index');
 var users = require('./routes/users');
 
+var mongoose = require('mongoose');
+mongoose.connect('mongodb://localhost/whiteboard');
 require('./models/Users');
 require('./models/Whiteboard');
+var User = mongoose.model("User");
+var Whiteboard = mongoose.model("Whiteboard");
+
+var routes = require('./routes/index');
 
 var app = express();
 

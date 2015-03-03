@@ -1,8 +1,8 @@
 var mongoose = require("mongoose");
 
-var WhiteboardSchema = new mongoose.schema({
+var WhiteboardSchema = new mongoose.Schema({
   title: String,
-  created: { type: Date, default: Date.now() }
+  created: { type: Date, default: Date.now() },
   author: { type: Number, ref: 'User' }
 });
 
