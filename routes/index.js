@@ -22,7 +22,7 @@ router.get('/logout', function(req, res) {
 });
 
 router.get('/signup', function(req,res){
-  res.render('signup');
+  res.render('signup', { message: req.flash('signupMessage')});
 });
 
 router.get('/all', function(req,res, next){
