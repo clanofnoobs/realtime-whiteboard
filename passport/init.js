@@ -9,9 +9,9 @@ module.exports = function(passport){
   });
    
   passport.deserializeUser(function(id, done) {
-      User.findById(id, function(err, user) {
-            done(err, user);
-              });
+    User.findById(id, function(err, user) {
+      done(err, user);
+    });
   });
 
 
@@ -23,6 +23,7 @@ module.exports = function(passport){
   },
   function(req, email, password, done){
     process.nextTick(function(){
+
       User.findOne({$and:[{'local.email': email }, {'local.username': username}]}, function(err,user){
         if (err){
           return done(err);
@@ -32,6 +33,7 @@ module.exports = function(passport){
         } else {
           var newUser = new User();
           newUser.local.email = email;
+          newUser.local.username = username;
         }
       });
     });

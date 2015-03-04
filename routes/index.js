@@ -11,13 +11,17 @@ router.get('/', function(req, res) {
 
 router.get('/login', function(req, res) {
 
-  res.render('login');
+  res.render('login', { message: req.flash('loginMessage')});
 
 });
 
 router.get('/logout', function(req, res) {
   req.logout();
   res.redirect('/');
+});
+
+router.get('/signup', function(req,res){
+  res.render('signup');
 });
 
 
