@@ -10,8 +10,8 @@ var users = require('./routes/users');
 
 var mongoose = require('mongoose');
 mongoose.connect('mongodb://localhost/whiteboard');
-require('./models/Users');
 require('./models/Whiteboard');
+require('./models/Users');
 var User = mongoose.model("User");
 var Whiteboard = mongoose.model("Whiteboard");
 

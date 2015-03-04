@@ -5,7 +5,8 @@ var UserSchema = new mongoose.Schema({
   local : { 
     username: String,
     password: String,
-    email: String
+    email: String,
+    whiteboards: [{type: mongoose.Schema.Types.ObjectId, ref: 'Whiteboard'}]
   }
 });
 
