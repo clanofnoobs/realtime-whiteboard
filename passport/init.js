@@ -17,14 +17,15 @@ module.exports = function(passport){
 
   //Local signup
   passport.use('local-signup', new LocalStrategy({
-    usernameField: 'email',
+    usernameField: 'username',
     passwordField: 'password',
     passReqToCallback: true
   },
-  function(req, email, password, done){
+  function(req, username, password, done){
     process.nextTick(function(){
 
-      User.findOne({$and:[{'local.email': email }, {'local.username': username}]}, function(err,user){
+
+      User.findOne({'local.username':username}, function(err, user){
         if (err){
           return done(err);
         }
@@ -32,8 +33,15 @@ module.exports = function(passport){
           return done(null, false, req.flash('signupMessage', 'That email is already taken'));
         } else {
           var newUser = new User();
-          newUser.local.email = email;
           newUser.local.username = username;
+          newUser.local.email = req.body.email;
+          newUser.local.password = newUser.generateHash(password);
+          newUser.save(function(err){
+            if (err) {
+              throw err;
+            }
+            return done(null, newUser);
+          });
         }
       });
     });

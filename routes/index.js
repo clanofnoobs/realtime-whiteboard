@@ -3,6 +3,7 @@ var router = express.Router();
 var mongoose = require('mongoose');
 var User = mongoose.model('User');
 var Whiteboard = mongoose.model('Whiteboard');
+var passport = require("passport");
 
 //GET home page. 
 router.get('/', function(req, res) {
@@ -23,6 +24,21 @@ router.get('/logout', function(req, res) {
 router.get('/signup', function(req,res){
   res.render('signup');
 });
+
+router.get('/all', function(req,res, next){
+  User.find(function(err,users){
+    if (err){
+      return next(err);
+    }
+    res.json(users);
+  });
+});
+
+router.post('/signup', passport.authenticate('local-signup', {
+  successRedirect: '/',
+  failureRedirect: '/signup',
+  failureFlash: true
+}));
 
 
 module.exports = router;
