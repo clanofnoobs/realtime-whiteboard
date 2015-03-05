@@ -72,7 +72,7 @@ router.get('/all', function(req,res, next){
   });
 });
 
-router.post('/createuser', passport.authenticate('local-signup', {
+router.post('/signup', passport.authenticate('local-signup', {
   successRedirect: '/',
   failureRedirect: '/signup',
   failureFlash: true

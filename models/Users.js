@@ -6,10 +6,10 @@ var UserSchema = new mongoose.Schema({
     username: String,
     password: String,
     email: String,
-    active: { type: boolean, default: false },
-    token: { type: String, unique: true, required: true },
+    active: { type: Boolean, default: false },
     whiteboards: [{type: mongoose.Schema.Types.ObjectId, ref: 'Whiteboard'}]
-  }
+  },
+  token: { type: String, unique: true, required: true }
 });
 
 UserSchema.methods.generateHash = function(password) {

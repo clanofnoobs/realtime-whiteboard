@@ -2,6 +2,7 @@ var LocalStrategy = require('passport-local').Strategy;
 var mongoose = require("mongoose");
 var User = mongoose.model('User');
 var mailer = require('nodemailer');
+var crypto = require('crypto');
 var transporter = mailer.createTransport({
   service: 'Gmail',
     auth: {
@@ -32,8 +33,9 @@ module.exports = function(passport){
   function(req, username, password, done){
     process.nextTick(function(){
 
-
-      User.findOne({'local.username':username}, function(err, user){
+  var usr = req.body.username;
+  var email = req.body.email;
+    User.findOne({$or:[{'local.username':usr}, {'local.email':email}]}, function(err, user){
         if (err){
           return done(err);
         }
