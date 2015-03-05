@@ -7,7 +7,7 @@ var passport = require("passport");
 
 //GET home page. 
 router.get('/', function(req, res) {
-  res.render('index', { title: 'Express' });
+  res.render('index', { message: req.flash('success'), user: req.user });
 });
 
 router.get('/login', function(req, res) {
@@ -16,9 +16,29 @@ router.get('/login', function(req, res) {
 
 });
 
+router.post('/login', passport.authenticate('local-login', {
+  successRedirect: '/',
+  failureRedirect: '/login',
+  failureFlash: true
+}));
+
 router.get('/logout', function(req, res) {
   req.logout();
   res.redirect('/');
+});
+
+router.get('/checkusername', function(req,res){
+  User.findOne({'local.username':req.query.username}, function(err, user){
+    if (err){
+      throw err;
+    }
+    if (user){
+      return res.json(403,{message: 'There already is a user named ' + req.query.username});
+    }
+    if (!user){
+      return res.json("Good to go (Y)");
+    }
+  });
 });
 
 router.get('/signup', function(req,res){

@@ -4,11 +4,13 @@
     <title>Node Authentication</title>
     <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.2/css/bootstrap.min.css"> <!-- load bootstrap css -->
     <link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css"> <!-- load fontawesome -->
+    <script src="javascripts/angular.min.js"></script>
+    <script src="javascripts/angularApp.js"></script>
     <style>
         body        { padding-top:80px; }
     </style>
 </head>
-<body>
+<body ng-app="whiteboard">
 <div class="container">
 
 <div class="col-sm-6 col-sm-offset-3">
@@ -21,11 +23,17 @@
 
     <!-- LOGIN FORM -->
     <form action="/signup" method="post">
-        <div class="form-group">
+        <div class="form-group" ng-controller="login">
             <label>Email</label>
             <input type="text" class="form-control" name="email">
             <label>Username</label>
-            <input type="text" class="form-control" name="username">
+            <input type="text" class="form-control" ng-model="username" name="username">
+            <div ng-show="usernameFree">
+              Username is not taken.
+            </div>
+            <div ng-hide="usernameFree">
+              Username is taken.
+            </div>
         </div>
         <div class="form-group">
             <label>Password</label>
