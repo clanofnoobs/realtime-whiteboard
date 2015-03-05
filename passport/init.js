@@ -1,6 +1,7 @@
 var LocalStrategy = require('passport-local').Strategy;
 var mongoose = require("mongoose");
 var User = mongoose.model('User');
+var sendgrid = require('sendgrid');
 
 module.exports = function(passport){
 
@@ -65,7 +66,11 @@ module.exports = function(passport){
         if (!user.validPassword(password)){
           return done(null, false, req.flash('loginMessage', 'Wrong password'));
         }
-        return done(null, user, req.flash('success', 'Success login!'));
+        if (user.active){
+          return done(null, user, req.flash('success', 'Success login!'));
+        } else {
+          return done(null, false, req.flash('loginMessage', 'You haven\'t confirmed your account yet. Please visit your e-mail account and confirm'));
+        }
       });
     });
   }));
