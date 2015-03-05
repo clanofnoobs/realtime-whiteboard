@@ -1,7 +1,14 @@
 var LocalStrategy = require('passport-local').Strategy;
 var mongoose = require("mongoose");
 var User = mongoose.model('User');
-var sendgrid = require('sendgrid');
+var mailer = require('nodemailer');
+var transporter = mailer.createTransport({
+  service: 'Gmail',
+    auth: {
+      user: 'gmail.user@gmail.com',
+      pass: 'userpass'
+    }
+});
 
 module.exports = function(passport){
 
@@ -42,7 +49,20 @@ module.exports = function(passport){
             if (err) {
               throw err;
             }
-            return done(null, newUser);
+            var mailOptions = {
+              from: 'Realtime Whiteboard <samiulg3@gmail.com>',
+              to: newUser.local.email,
+              subject: 'Email confirmation',
+              text: 'test'
+            };
+            transporter.sendMail(mailOptions, function(err,info){
+              if (err){
+                console.log(err);
+              } else {
+                console.log('Message sent: ' + info.response);
+              }
+            });
+            return done(null, false, req.flash('signupMessage', 'Email sent to ' + newUser.local.email));
           });
         }
       });
