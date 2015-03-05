@@ -6,6 +6,8 @@ var UserSchema = new mongoose.Schema({
     username: String,
     password: String,
     email: String,
+    active: { type: boolean, default: false },
+    token: { type: String, unique: true, required: true },
     whiteboards: [{type: mongoose.Schema.Types.ObjectId, ref: 'Whiteboard'}]
   }
 });

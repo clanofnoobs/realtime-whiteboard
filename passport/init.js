@@ -36,6 +36,7 @@ module.exports = function(passport){
           newUser.local.username = username;
           newUser.local.email = req.body.email;
           newUser.local.password = newUser.generateHash(password);
+          newUser.token = randomValueBase64(8);
           newUser.save(function(err){
             if (err) {
               throw err;
@@ -68,5 +69,13 @@ module.exports = function(passport){
       });
     });
   }));
+
+  function randomValueBase64(len){
+    return crypto.randomBytes(Math.ceil(len * 3 /4))
+      .toString('base64')
+      .slice(0,len)
+      .replace(/\+/g,'0')
+      .replace(/\//g, '0');
+  }
 
 }

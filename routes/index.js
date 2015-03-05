@@ -4,6 +4,7 @@ var mongoose = require('mongoose');
 var User = mongoose.model('User');
 var Whiteboard = mongoose.model('Whiteboard');
 var passport = require("passport");
+var crypto = require("crypto");
 
 //GET home page. 
 router.get('/', function(req, res) {
@@ -58,6 +59,10 @@ router.get('/signup', function(req,res){
   res.render('signup', { message: req.flash('signupMessage')});
 });
 
+router.get('/emailconfirmation/:token', function(req, res){
+
+});
+
 router.get('/all', function(req,res, next){
   User.find(function(err,users){
     if (err){
@@ -67,11 +72,12 @@ router.get('/all', function(req,res, next){
   });
 });
 
-router.post('/signup', passport.authenticate('local-signup', {
+router.post('/createuser', passport.authenticate('local-signup', {
   successRedirect: '/',
   failureRedirect: '/signup',
   failureFlash: true
 }));
+
 
 
 module.exports = router;
