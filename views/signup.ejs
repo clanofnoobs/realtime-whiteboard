@@ -4,6 +4,7 @@
     <title>Node Authentication</title>
     <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.2/css/bootstrap.min.css"> <!-- load bootstrap css -->
     <link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css"> <!-- load fontawesome -->
+    <link rel="stylesheet" type="text/css" href="stylesheets/style.css">
     <script src="javascripts/angular.min.js"></script>
     <script src="javascripts/angularApp.js"></script>
     <style>
@@ -33,12 +34,15 @@
         <div class="form-group" ng-controller="login">
             <label>Email</label>
             <input type="text" class="form-control" ng-model="email" name="email">
-            <label ng-show="eNotTaken" for="email">Email is not taken </label>
-            <label ng-show="eTaken" for="email">Email is taken </label>
+            <img src="images/indicator.gif" ng-show="loadingEmail" />
+            <span class="nottaken" ng-show="eNotTaken" for="email">Email is not taken </span>
+            <span class="taken" ng-show="eTaken" for="email">Email is taken </span>
+            </br>
             <label>Username</label>
             <input type="text" class="form-control" ng-model="username" name="username">
-            <label ng-show="userFree" for="username">Username is not taken </label>
-            <label ng-show="userNotFree" for="username">Username is taken </label>
+            <span class="nottaken" ng-show="userFree" for="username">Username is not taken </span>
+            <span class="taken" ng-show="userNotFree" for="username">Username is taken </span>
+            <img src="images/indicator.gif" ng-show="loadingUser" />
         </div>
         <div class="form-group">
             <label>Password</label>
