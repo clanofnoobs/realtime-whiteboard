@@ -28,8 +28,17 @@ router.get('/logout', function(req, res) {
 });
 
 router.get('/checkusername', function(req,res){
-  User.findOne({'local.username':req.query.username}, function(err, user){
+  var credential = '';
+  var query;
+  if (req.query.username){
+    query = 'local.username';
+  } else {
+    query = 'local.email';
+  }
+  credential = req.query.username || req.query.email;
+  User.findOne({query:credential}, function(err, user){
     if (err){
+      console.log("in the err");
       throw err;
     }
     if (user){
@@ -38,6 +47,7 @@ router.get('/checkusername', function(req,res){
     if (!user){
       return res.json("Good to go (Y)");
     }
+    console.log("in the end");
   });
 });
 
