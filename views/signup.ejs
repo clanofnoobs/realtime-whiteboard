@@ -33,12 +33,12 @@
         <div class="form-group" ng-controller="login">
             <label>Email</label>
             <input type="text" class="form-control" ng-model="email" name="email">
-            <label ng-hide="emailFree" for="email">Email is not taken </label>
-            <label ng-show="emailFree" for="email">Email is taken </label>
+            <label ng-show="eNotTaken" for="email">Email is not taken </label>
+            <label ng-show="eTaken" for="email">Email is taken </label>
             <label>Username</label>
             <input type="text" class="form-control" ng-model="username" name="username">
-            <label ng-show="usernameisFree" for="username">Username is not taken </label>
-            <label ng-show="usernameFree" for="username">Username is taken </label>
+            <label ng-show="userFree" for="username">Username is not taken </label>
+            <label ng-show="userNotFree" for="username">Username is taken </label>
         </div>
         <div class="form-group">
             <label>Password</label>

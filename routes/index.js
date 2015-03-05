@@ -35,16 +35,19 @@ router.get('/checkusername', function(req,res){
   } else {
     query = 'local.email';
   }
-  credential = req.query.username || req.query.email;
-  User.findOne({query:credential}, function(err, user){
+  credential = req.query.username;
+  User.findOne({$or:[{'local.username':credential}, {'local.email':credential}]}, function(err, user){
     if (err){
       console.log("in the err");
       throw err;
     }
     if (user){
+      console.log("Found user");
       return res.json(403,{message: 'There already is a user named ' + req.query.username});
     }
     if (!user){
+      console.log(credential);
+      console.log("Not found user, good to go");
       return res.json("Good to go (Y)");
     }
     console.log("in the end");

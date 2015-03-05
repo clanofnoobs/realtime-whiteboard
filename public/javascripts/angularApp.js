@@ -3,14 +3,19 @@ var app = angular.module('whiteboard', []);
 app.controller('login', ['$scope', '$http','$timeout', function($scope, $http, $timeout){
 
   $scope.$watch('username', function(){
-    if ($scope.username.length > 3){
+    if ($scope.username.length >= 3){
      $scope.getUsername($scope.username); 
+    } else {
+      $scope.userFree = false; 
+      $scope.userNotFree = false;
     }
   });
 
   $scope.$watch('email', function(){
     if ($scope.email.match(/\w+@\w+.(com|gov|org|net|\w+.edu)/)){
       $scope.getUsername($scope.email);
+    } else {
+      $scope.eTaken, $scope.eNotTaken = false;
     }
   });
 
@@ -21,24 +26,27 @@ app.controller('login', ['$scope', '$http','$timeout', function($scope, $http, $
       $timeout(function(){
         if (cred == $scope.email){
           $scope.loadingUser = false;
-          $scope.emailFree = true;
+          $scope.eNotTaken = true;
+          $scope.eTaken = false;
         } else {
           $scope.loadingUser = false;
-          $scope.usernameFree = true;
+          $scope.userFree = true;
+          $scope.userNotFree = false;
         }
       },500);
       }).error(function(data){
-        alert(data.message);
         $timeout(function(){
-            alert("hi");
           if (cred == $scope.email){
             $scope.loadingUser = false;
-            $scope.emailFree = false;
+            $scope.eNotTaken = false;
+            $scope.eTaken = true;
           } else {
             $scope.loadingUser = false;
-            $scope.usernameisFree= true;
+            $scope.userFree = false;
+            $scope.userNotFree = true;
+            console.log($scope.usernameFree);
           }
-        });
+        }, 1000);
       });
   }
 
