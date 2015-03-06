@@ -81,12 +81,24 @@ router.get('/all', function(req,res, next){
   });
 });
 
+router.get('/createwhiteboard', isLoggedIn, function(req,res){
+  res.render('whiteboard', {user: req.user});
+});
+
 
 router.post('/signup', passport.authenticate('local-signup', {
   successRedirect: '/',
   failureRedirect: '/signup',
   failureFlash: true
 }));
+
+function isLoggedIn(req,res,next){
+  if (req.isAuthenticated()){
+    return next();
+  }
+  req.flash('loginMessage', 'You are not logged in');
+  res.redirect('/login');
+}
 
 
 
