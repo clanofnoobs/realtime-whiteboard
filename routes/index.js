@@ -113,8 +113,9 @@ router.get('/all', function(req,res, next){
   });
 });
 
-router.get('/createwhiteboard', isLoggedIn, function(req,res){
-  res.render('whiteboard', {user: req.user});
+router.get('/createboard', isLoggedIn, function(req,res){
+  var populated = req.user.populate('Whiteboard');
+  res.render('whiteboard', {user: populated });
 });
 
 

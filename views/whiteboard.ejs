@@ -14,22 +14,17 @@
 <body>
 <div class="container">
 
-    <% if (message.length > 0) {%> 
-      <div class="alert alert-success"><%= message %></div>
-    <% } %>
     <% if (user) {%> 
       <div class="alert alert-success"><%= user.local.username %></div>
       <a href="/logout" class="btn btn-default"><span class="fa fa-user"></span>Logout</a>
       <% } else { %>
+    <form class="form-group" ng-submit="createWhiteboard()">
+      <label>Title</label>
+      <input type="text" class="form-control" ng-model="title" name="title">
+      </br>
+      <button class="btn btn-default" type="submit"/>
+    </form>
 
-    <div class="jumbotron text-center">
-        <h1><span class="fa fa-lock"></span> Node Authentication</h1>
-
-        <p>Login or Register with:</p>
-
-        <a href="/login" class="btn btn-default"><span class="fa fa-user"></span> Local Login</a>
-        <a href="/signup" class="btn btn-default"><span class="fa fa-user"></span> Local Signup</a>
-    </div>
     <% } %>
 
 </div>
