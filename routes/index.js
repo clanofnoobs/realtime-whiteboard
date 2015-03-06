@@ -68,8 +68,26 @@ router.get('/signup', function(req,res){
   res.render('signup', { message: req.flash('signupMessage'), success: req.flash('success')});
 });
 
-router.get('/emailconfirmation/:token', function(req, res){
-
+router.get('/activate', function(req, res, next){
+  User.findOne({'token':req.query.token}, function(err, user){
+    console.log(user);
+    if (err){
+      return next(err);
+    }
+    user.active = true;
+    user.save(function(err){
+      if (err){
+        return next(err);
+      }
+      req.flash('success', 'Successfully activated your account!');
+      req.login(user, function(err){
+        if (err){
+          next(err);
+        }
+        return res.redirect('/');
+      });
+    });
+  });
 });
 
 router.get('/all', function(req,res, next){

@@ -6,8 +6,8 @@ var crypto = require('crypto');
 var transporter = mailer.createTransport({
   service: 'Gmail',
     auth: {
-      user: '',
-      pass: ''
+      user: 'testsami1994@gmail.com',
+      pass: 'baklavabinsukar'
     }
 });
 
@@ -58,8 +58,8 @@ module.exports = function(passport){
             var mailOptions = {
               from: 'Realtime Whiteboard <samiulg3@gmail.com>',
               to: newUser.local.email,
-              subject: 'Email confirmation',
-              text: 'test'
+              subject: 'Email confirmation - RealtimeWhiteboard',
+              html: 'Thank you for registering at Realtime Whiteboards. </br> Click <a href="http://localhost:3000/activate?token='+newUser.token+'">here</a> to activate your profile.'
             };
             transporter.sendMail(mailOptions, function(err,info){
               if (err){
@@ -82,7 +82,7 @@ module.exports = function(passport){
   },
   function(req,username,password,done){
     process.nextTick(function(){
-      User.findOne({'local.username':username}, function(err, user){
+      User.findOne({$or:[{'local.username':username}, {'local.email':username}]}, function(err, user){
         if (err){
           return done(err);
         }
