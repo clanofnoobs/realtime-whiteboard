@@ -45,6 +45,7 @@ app.controller('login', ['$scope', '$http','$timeout', function($scope, $http, $
             $scope.loadingEmail = false;
             $scope.eNotTaken = false;
             $scope.eTaken = true;
+            alert(data.message);
           } else {
             $scope.loadingUser = false;
             $scope.userFree = false;

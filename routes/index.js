@@ -12,6 +12,11 @@ router.get('/', function(req, res) {
 });
 
 router.get('/login', function(req, res) {
+  console.log(req.user);
+  if (req.user){
+    req.flash('success', 'You are logged in already');
+    return res.redirect('/');
+  }
 
   res.render('login', { message: req.flash('loginMessage')});
 
@@ -74,13 +79,15 @@ router.get('/activate', function(req, res, next){
     if (user.active == true) {
       req.flash('failure', 'You have already activated your account'); 
       req.login(user,function(err){
-        if (err){
-          return next(err);
-        }
-        return res.redirect('/');
+      if (err){
+        return next(err);
+      }
+
+      return res.redirect('/');
       });
     } else {
       user.active = true;
+
       user.save(function(err){
         if (err){
           return next(err);

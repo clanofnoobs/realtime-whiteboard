@@ -35,7 +35,7 @@ module.exports = function(passport){
 
   var usr = req.body.username;
   var email = req.body.email;
-    User.findOne({$or:[{'local.username':usr}, {'local.email':email}]}, function(err, user){
+    User.findOne({$or:[{'local.username':usr}, {'local.email':email}]}).populate('whiteboards').exec(function(err, user){
         if (err){
           return done(err);
         }
