@@ -28,6 +28,9 @@
     <% if (message.length > 0) {%> 
       <div class="alert alert-danger"><%= message %></div>
     <% } %>
+    <% if (success.length > 0) {%> 
+      <div class="alert alert-success"><%= success %></div>
+    <% } %>
 
     <!-- LOGIN FORM -->
     <form action="/signup" method="post">

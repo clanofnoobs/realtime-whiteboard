@@ -5,10 +5,10 @@ var UserSchema = new mongoose.Schema({
   local : { 
     username: String,
     password: String,
-    email: String,
-    active: { type: Boolean, default: false },
-    whiteboards: [{type: mongoose.Schema.Types.ObjectId, ref: 'Whiteboard'}]
+    email: String
   },
+  active: { type: Boolean, default: false },
+  whiteboards: [{type: mongoose.Schema.Types.ObjectId, ref: 'Whiteboard'}],
   token: { type: String, unique: true, required: true }
 });
 

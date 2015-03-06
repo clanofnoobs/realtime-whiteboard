@@ -55,8 +55,17 @@ router.get('/checkusername', function(req,res){
   });
 });
 
+router.get('/deleteall', function(req,res){
+  User.find(function(err,users){
+    users.forEach(function(user){
+      user.remove();
+    });
+  });
+  res.json("Removed!");
+});
+
 router.get('/signup', function(req,res){
-  res.render('signup', { message: req.flash('signupMessage')});
+  res.render('signup', { message: req.flash('signupMessage'), success: req.flash('success')});
 });
 
 router.get('/emailconfirmation/:token', function(req, res){
@@ -71,6 +80,7 @@ router.get('/all', function(req,res, next){
     res.json(users);
   });
 });
+
 
 router.post('/signup', passport.authenticate('local-signup', {
   successRedirect: '/',

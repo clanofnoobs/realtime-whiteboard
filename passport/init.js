@@ -6,8 +6,8 @@ var crypto = require('crypto');
 var transporter = mailer.createTransport({
   service: 'Gmail',
     auth: {
-      user: 'gmail.user@gmail.com',
-      pass: 'userpass'
+      user: '',
+      pass: ''
     }
 });
 
@@ -39,7 +39,11 @@ module.exports = function(passport){
         if (err){
           return done(err);
         }
-        if (user){
+        console.log(user);
+        if (user && !user.active){
+          return done(null,false, req.flash('signupMessage', 'You are already registered with this email but it is not yet active. Please confirm your email')); 
+        }
+        else if (user){
           return done(null, false, req.flash('signupMessage', 'That email is already taken'));
         } else {
           var newUser = new User();
@@ -64,7 +68,7 @@ module.exports = function(passport){
                 console.log('Message sent: ' + info.response);
               }
             });
-            return done(null, false, req.flash('signupMessage', 'Email sent to ' + newUser.local.email));
+            return done(null, false, req.flash('success', 'Email sent to ' + newUser.local.email));
           });
         }
       });
