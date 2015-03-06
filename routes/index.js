@@ -8,7 +8,7 @@ var crypto = require("crypto");
 
 //GET home page. 
 router.get('/', function(req, res) {
-  res.render('index', { message: req.flash('success'), user: req.user });
+  res.render('index', { message: req.flash('success'), user: req.user, failure: req.flash('failure') });
 });
 
 router.get('/login', function(req, res) {
@@ -70,23 +70,30 @@ router.get('/signup', function(req,res){
 
 router.get('/activate', function(req, res, next){
   User.findOne({'token':req.query.token}, function(err, user){
-    console.log(user);
-    if (err){
-      return next(err);
-    }
-    user.active = true;
-    user.save(function(err){
-      if (err){
-        return next(err);
-      }
-      req.flash('success', 'Successfully activated your account!');
-      req.login(user, function(err){
+    console.log(err);
+    if (user.active == true) {
+      req.flash('failure', 'You have already activated your account'); 
+      req.login(user,function(err){
         if (err){
-          next(err);
+          return next(err);
         }
         return res.redirect('/');
       });
-    });
+    } else {
+      user.active = true;
+      user.save(function(err){
+        if (err){
+          return next(err);
+        }
+        req.flash('success', 'Successfully activated your account!');
+        req.login(user, function(err){
+          if (err){
+            next(err);
+          }
+          return res.redirect('/');
+        });
+      });
+    }
   });
 });
 

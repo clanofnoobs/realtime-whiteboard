@@ -14,6 +14,9 @@
 <body>
 <div class="container">
 
+    <% if (failure.length > 0) {%> 
+      <div class="alert alert-danger"><%= failure %></div>
+    <% } %>
     <% if (message.length > 0) {%> 
       <div class="alert alert-success"><%= message %></div>
     <% } %>
