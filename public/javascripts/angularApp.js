@@ -57,3 +57,43 @@ app.controller('login', ['$scope', '$http','$timeout', function($scope, $http, $
   }
 
 }]);
+
+app.controller('create_whiteboard', ['$scope', '$http', function($scope, $http){
+
+  $scope.createWhiteboard = function(){
+    var board = {
+      title: $scope.title
+    }
+    return $http.post('/createboard', board).success(function(data){
+      console.log(data);
+    }).error(function(data){
+      alert(data);
+    });
+  }
+}]);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -11,22 +11,14 @@
         body        { padding-top:80px; }
     </style>
 </head>
-<body>
-<div class="container">
-
-    <% if (user) {%> 
-      <div class="alert alert-success"><%= user.local.username %></div>
-      <a href="/logout" class="btn btn-default"><span class="fa fa-user"></span>Logout</a>
-      <% } else { %>
+<body ng-app="whiteboard">
+  <div class="container" ng-controller="create_whiteboard">
     <form class="form-group" ng-submit="createWhiteboard()">
       <label>Title</label>
       <input type="text" class="form-control" ng-model="title" name="title">
       </br>
-      <button class="btn btn-default" type="submit"/>
+      <button class="btn btn-default" type="submit">Submit </button>
     </form>
-
-    <% } %>
-
-</div>
+  </div>
 </body>
 </html>

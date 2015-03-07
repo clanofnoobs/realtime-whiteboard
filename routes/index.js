@@ -8,7 +8,18 @@ var crypto = require("crypto");
 
 //GET home page. 
 router.get('/', function(req, res) {
-  res.render('index', { message: req.flash('success'), user: req.user, failure: req.flash('failure') });
+  var user1;
+  if (req.user){
+    User.findOne({'local.username':req.user.local.username}).populate('whiteboards').exec(function(err, populated){
+      if (err){
+        console.log(err);
+      }
+      console.log(populated);
+    res.render('index', { message: req.flash('success'), user: populated, failure: req.flash('failure') });
+    });
+  } else {
+    res.render('index', { message: req.flash('success'), user: req.user, failure: req.flash('failure') });
+  }
 });
 
 router.get('/login', function(req, res) {
@@ -105,19 +116,46 @@ router.get('/activate', function(req, res, next){
 });
 
 router.get('/all', function(req,res, next){
-  User.find(function(err,users){
+  User.findOne({'local.username':'clanofnoobs'}).populate('whiteboards').exec(function(err, user){
     if (err){
-      return next(err);
+      console.log(err);
     }
-    res.json(users);
+    console.log(user);
+    res.json(user);
   });
 });
 
 router.get('/createboard', isLoggedIn, function(req,res){
-  var populated = req.user.populate('Whiteboard');
+  var populated = req.user.populate('whiteboards');
   res.render('whiteboard', {user: populated });
 });
 
+router.post('/createboard', isLoggedIn, function(req,res, next){
+   var user = req.user;
+   User.findOne({'local.username':user.local.username}, function(err,user){
+     var newWhiteboard = new Whiteboard();
+     newWhiteboard.title = req.body.title;
+     newWhiteboard.author = user._id;
+     newWhiteboard.access.push(user.id);
+     newWhiteboard.save(function(err){
+       if (err){
+         console.log(err);
+         return next(err);
+       }
+       user.whiteboards.push(newWhiteboard);
+       user.save(function(err){
+         if (err){
+         console.log(err);
+           return next(err);
+         }
+         User.findOne({'local.username':user.local.username}).populate('whiteboards').exec(function(err, populated){
+           console.log(populated);
+           return res.send(populated);
+         });
+       });
+     });
+   });
+});
 
 router.post('/signup', passport.authenticate('local-signup', {
   successRedirect: '/',
