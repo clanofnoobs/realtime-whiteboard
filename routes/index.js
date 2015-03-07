@@ -44,6 +44,9 @@ router.get('/logout', function(req, res) {
   res.redirect('/');
 });
 
+router.get('/:user/board/:token', isLoggedInAndAuthorized, function(req,res,next){
+});
+
 router.get('/checkusername', function(req,res){
   var credential = '';
   var query;
@@ -166,6 +169,24 @@ router.post('/signup', passport.authenticate('local-signup', {
 function isLoggedIn(req,res,next){
   if (req.isAuthenticated()){
     return next();
+  }
+  req.flash('loginMessage', 'You are not logged in');
+  res.redirect('/login');
+}
+
+function isLoggedInAndAuthorized(req,res,next){
+  if (req.isAuthenticated()){
+    Whiteboard.findOne({'access':req.user.local.username})
+      .exec(function(err, board){
+        if (err){
+          console.log(err);
+        }
+        if (board == null){
+          req.flash('failure', 'You do not have permission to view this board!');
+          res.redirect('/login');
+        }
+        return next();
+      });
   }
   req.flash('loginMessage', 'You are not logged in');
   res.redirect('/login');
