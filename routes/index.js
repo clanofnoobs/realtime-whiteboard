@@ -22,6 +22,29 @@ router.get('/', function(req, res) {
   }
 });
 
+router.get('/:user', function(req,res, next){
+  User.findOne({'local.username':req.params.user})
+    .select('local.username whiteboards')
+    .exec(function(err,user){
+      if (err){
+        console.log(err);
+        return next(err);
+      }
+      if (user == null){
+        req.flash('failure', 'No users found with the username ' + req.body.user);
+        return res.redirect('/');
+      }
+      console.log(userWithBoards);
+      User.getWhiteBoards(req.params.user, function(err, whiteboards){
+        if (err){
+          console.log(err);
+          return next(err);
+        }
+        res.render('user', {user : whiteboards});
+      });
+    });
+});
+
 router.get('/login', function(req, res) {
   console.log(req.user);
   if (req.user){
@@ -34,7 +57,7 @@ router.get('/login', function(req, res) {
 });
 
 router.post('/login', passport.authenticate('local-login', {
-  successRedirect: '/',
+  successRedirect: '/:user',
   failureRedirect: '/login',
   failureFlash: true
 }));
@@ -44,7 +67,17 @@ router.get('/logout', function(req, res) {
   res.redirect('/');
 });
 
-router.get('/:user/board/:token', isLoggedInAndAuthorized, function(req,res,next){
+router.get('/:user/board/:slug', isLoggedInAndAuthorized, function(req,res,next){
+  User.findOne({'local.username':req.params.user})
+    .select('-local.password')
+    .populate('whiteboards')  
+    .exec(function(err, user){
+      if (err){
+        console.log(err);
+        return next(err);
+      }
+      res.render('show_whiteboard'); 
+    });
 });
 
 router.get('/checkusername', function(req,res){
@@ -176,14 +209,14 @@ function isLoggedIn(req,res,next){
 
 function isLoggedInAndAuthorized(req,res,next){
   if (req.isAuthenticated()){
-    Whiteboard.findOne({'access':req.user.local.username})
+    Whiteboard.findOne({$or: [{'access':req.user.local.username},{'author':req.user.local.username}], 'unique_token':req.params.uniq_token })
       .exec(function(err, board){
         if (err){
           console.log(err);
         }
         if (board == null){
           req.flash('failure', 'You do not have permission to view this board!');
-          res.redirect('/login');
+          res.redirect('/');
         }
         return next();
       });
