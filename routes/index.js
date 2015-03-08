@@ -70,7 +70,6 @@ router.get('/logout', function(req, res) {
 router.get('/:user/board/:slug', isLoggedInAndAuthorized, function(req,res,next){
   User.findOne({'local.username':req.params.user})
     .select('-local.password')
-    .populate('whiteboards')  
     .exec(function(err, user){
       if (err){
         console.log(err);
@@ -209,16 +208,24 @@ function isLoggedIn(req,res,next){
 
 function isLoggedInAndAuthorized(req,res,next){
   if (req.isAuthenticated()){
-    Whiteboard.findOne({$or: [{'access':req.user.local.username},{'author':req.user.local.username}], 'unique_token':req.params.uniq_token })
+    Whiteboard.findOne({'unique_token':req.query.uniq_token })
       .exec(function(err, board){
         if (err){
           console.log(err);
         }
         if (board == null){
-          req.flash('failure', 'You do not have permission to view this board!');
+          req.flash('failure', 'This board does exist or has been deleted by the user!');
           res.redirect('/');
         }
-        return next();
+        if ((board.access.indexOf(req.user.local.username) > -1) || board.author == req.user.local.username){
+
+          return next();
+
+        } else {
+
+          req.flash('failure', 'You do not have permissions to access this board!');
+          return res.redirect('/');
+        }
       });
   }
   req.flash('loginMessage', 'You are not logged in');
