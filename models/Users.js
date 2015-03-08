@@ -15,8 +15,6 @@ UserSchema.static('getWhiteBoards', function(username, callback){
   return this.findOne({'local.username':username}).select('local.username whiteboards').populate('whiteboards')
     .exec(callback);
 });
-  User.findOne({'local.username':user.local.username}).populate('whiteboards')
-    .exec(
 
 UserSchema.methods.generateHash = function(password) {
     return bcrypt.hashSync(password, bcrypt.genSaltSync(8), null);

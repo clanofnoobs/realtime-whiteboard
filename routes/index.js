@@ -15,7 +15,6 @@ router.get('/', function(req, res) {
       if (err){
         console.log(err);
       }
-      console.log(populated);
     res.render('index', { message: req.flash('success'), user: populated, failure: req.flash('failure') });
     });
   } else {
@@ -23,7 +22,7 @@ router.get('/', function(req, res) {
   }
 });
 
-router.get('/:user', function(req,res, next){
+router.get('/user/:user', function(req,res, next){
   User.findOne({'local.username':req.params.user})
     .select('local.username whiteboards')
     .exec(function(err,user){
@@ -32,10 +31,9 @@ router.get('/:user', function(req,res, next){
         return next(err);
       }
       if (user == null){
-        req.flash('failure', 'No users found with the username ' + req.body.user);
+        req.flash('failure', 'No users found with the username ' + req.params.user);
         return res.redirect('/');
       }
-      console.log(userWithBoards);
       User.getWhiteBoards(req.params.user, function(err, whiteboards){
         if (err){
           console.log(err);
@@ -47,7 +45,6 @@ router.get('/:user', function(req,res, next){
 });
 
 router.get('/login', function(req, res) {
-  console.log(req.user);
   if (req.user){
     req.flash('success', 'You are logged in already');
     return res.redirect('/');
@@ -58,7 +55,7 @@ router.get('/login', function(req, res) {
 });
 
 router.post('/login', passport.authenticate('local-login', {
-  successRedirect: '/:user',
+  successRedirect: '/',
   failureRedirect: '/login',
   failureFlash: true
 }));
@@ -68,7 +65,7 @@ router.get('/logout', function(req, res) {
   res.redirect('/');
 });
 
-router.get('/:user/board/:slug', isLoggedInAndAuthorized, function(req,res,next){
+router.get('/user/:user/boards/:slug', isLoggedInAndAuthorized, function(req,res,next){
   User.findOne({'local.username':req.params.user})
     .select('-local.password')
     .exec(function(err, user){
@@ -76,7 +73,7 @@ router.get('/:user/board/:slug', isLoggedInAndAuthorized, function(req,res,next)
         console.log(err);
         return next(err);
       }
-      res.render('show_whiteboard'); 
+      res.render('show_whiteboard', {board : req.whiteboard}); 
     });
 });
 
@@ -91,19 +88,15 @@ router.get('/checkusername', function(req,res){
   credential = req.query.username;
   User.findOne({$or:[{'local.username':credential}, {'local.email':credential}]}, function(err, user){
     if (err){
-      console.log("in the err");
       throw err;
     }
     if (user){
-      console.log("Found user");
       return res.json(403,{message: 'There already is a user named ' + req.query.username});
     }
     if (!user){
-      console.log(credential);
       console.log("Not found user, good to go");
       return res.json("Good to go (Y)");
     }
-    console.log("in the end");
   });
 });
 
@@ -156,7 +149,6 @@ router.get('/all', function(req,res, next){
     if (err){
       console.log(err);
     }
-    console.log(user);
     res.json(user);
   });
 });
@@ -173,6 +165,7 @@ router.post('/createboard', isLoggedIn, function(req,res, next){
      newWhiteboard.title = req.body.title;
      newWhiteboard.slug = slug(req.body.title);
      newWhiteboard.author = user._id;
+     newWhiteboard.unique_token = randomValueBase64(7);
      newWhiteboard.access.push(user.id);
      newWhiteboard.save(function(err){
        if (err){
@@ -186,7 +179,6 @@ router.post('/createboard', isLoggedIn, function(req,res, next){
            return next(err);
          }
          User.findOne({'local.username':user.local.username}).populate('whiteboards').exec(function(err, populated){
-           console.log(populated);
            return res.send(populated);
          });
        });
@@ -210,30 +202,40 @@ function isLoggedIn(req,res,next){
 
 function isLoggedInAndAuthorized(req,res,next){
   if (req.isAuthenticated()){
-    Whiteboard.findOne({'unique_token':req.query.uniq_token })
+    Whiteboard.findOne({'unique_token':req.query.unique_token })
+      .populate({path: 'author', select: 'local.username'})
       .exec(function(err, board){
         if (err){
           console.log(err);
+          return next(err);
         }
         if (board == null){
           req.flash('failure', 'This board does exist or has been deleted by the user!');
-          res.redirect('/');
+          return res.redirect('/');
         }
-        if ((board.access.indexOf(req.user.local.username) > -1) || board.author == req.user.local.username){
-
+        console.log(board);
+        if (board.author.local.username == req.user.local.username){
+          console.log("Has access");
+          req.whiteboard = board;
           return next();
 
         } else {
-
-          req.flash('failure', 'You do not have permissions to access this board!');
-          return res.redirect('/');
+        console.log("in the else");
         }
       });
+  } else {
+    req.flash('loginMessage', 'You are not logged in');
+    return res.redirect('/login');
   }
-  req.flash('loginMessage', 'You are not logged in');
-  res.redirect('/login');
 }
 
+function randomValueBase64(len){
+  return crypto.randomBytes(Math.ceil(len * 3 /4))
+    .toString('base64')
+    .slice(0,len)
+    .replace(/\+/g,'0')
+    .replace(/\//g, '0');
+}
 
 
 module.exports = router;
