@@ -220,7 +220,8 @@ function isLoggedInAndAuthorized(req,res,next){
           return next();
 
         } else {
-        console.log("in the else");
+          req.flash('failure', 'You do not have permission to view this collab!');
+          return res.redirect('/');
         }
       });
   } else {
