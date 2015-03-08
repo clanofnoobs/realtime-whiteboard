@@ -1,5 +1,6 @@
 var express = require('express');
 var router = express.Router();
+var slug = require('slug');
 var mongoose = require('mongoose');
 var User = mongoose.model('User');
 var Whiteboard = mongoose.model('Whiteboard');
@@ -170,6 +171,7 @@ router.post('/createboard', isLoggedIn, function(req,res, next){
    User.findOne({'local.username':user.local.username}, function(err,user){
      var newWhiteboard = new Whiteboard();
      newWhiteboard.title = req.body.title;
+     newWhiteboard.slug = slug(req.body.title);
      newWhiteboard.author = user._id;
      newWhiteboard.access.push(user.id);
      newWhiteboard.save(function(err){
