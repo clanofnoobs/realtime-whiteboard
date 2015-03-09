@@ -9,7 +9,6 @@ var crypto = require("crypto");
 
 //GET home page. 
 router.get('/', function(req, res) {
-  var user1;
   if (req.user){
     User.findOne({'local.username':req.user.local.username}).populate('whiteboards').exec(function(err, populated){
       if (err){
@@ -245,6 +244,7 @@ function isLoggedInAndAuthorized(req,res,next){
       });
   } else {
     req.flash('loginMessage', 'You are not logged in');
+    req.session.redirect_to = req.originalUrl;
     return res.redirect('/login');
   }
 }
