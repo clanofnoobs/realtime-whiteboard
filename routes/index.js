@@ -33,6 +33,9 @@ router.get('/user/:user', function(req,res, next){
     });
 });
 
+router.get('/get/:user', function(req,res,next){
+});
+
 router.get('/login', function(req, res) {
   if (req.user){
     req.flash('success', 'You are logged in already');
@@ -57,7 +60,7 @@ router.post('/login', function(req,res,next) {
         console.log(err);
         return next(err);
       }
-      var redirect_to = req.session.redirect_to ? req.session.redirect_to : '/';
+      var redirect_to = req.session.redirect_to ? req.session.redirect_to : '/user/'+user.local.username;
       return res.redirect(redirect_to);
     });
   })(req,res,next);

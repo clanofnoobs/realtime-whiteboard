@@ -58,6 +58,33 @@ app.controller('login', ['$scope', '$http','$timeout', function($scope, $http, $
 
 }]);
 
+app.factory("whiteboards", ['$http','$q','$location', function($http, $q, $location){
+  var o = {
+    whiteboards : []
+  };
+
+  o.create = function(whiteboard){
+    return $http.post('/createboard', whiteboard)
+      .success(function(data){
+        
+      }).error(function(data){
+
+      });
+  }
+
+  o.getUsersWhiteboards = function(){
+    return $http.get('/user/'+$stateParams.username)
+      .success(function(data){
+        angular.copy(data, o.whiteboards);
+      }).error(function(data){
+
+      });
+  }
+  o.checkIfLoggedInAndAuth = function(whiteboard){
+  }
+  return o;
+}]);
+
 app.controller('create_whiteboard', ['$scope', '$http', function($scope, $http){
 
   $scope.createWhiteboard = function(){
@@ -72,29 +99,49 @@ app.controller('create_whiteboard', ['$scope', '$http', function($scope, $http){
   }
 }]);
 
+app.controller('home', ['$scope','whiteboards', function($scope){
+  $scope.whiteboards = whiteboards.whiteboards;
+}]);
+
 app.config([
     '$stateProvider',
     '$urlRouterProvider',
-    function($stateProvider, $urlRouterProvider){
+    'whiteboards',
+    function($stateProvider, $urlRouterProvider, whiteboards){
       $stateProvider
-        .state('something',{
+        .state('home',{
           url:'',
           controller: 'home',
-          templateUrl: '/test.html'
+          templateUrl: 'test1.html'
+        })
+        .state('users', {
+          url:'/user/{username}',
+          controller: 'home',
+          templateUrl: 'users.html'
+        })
+        .state('login',{
+          url:'/login',
+          controller: 'home',
+          templateUrl: 'login.html'
+        })
+        .state('whiteboards', {
+          url:'/user/{username}/boards/{slug}',
+          controller: 'home',
+          templateUrl: 'whiteboard.html'
+        })
+        .state('user_homepage', {
+          url: '',
+          controller: 'home',
+          templateUrl: 'user.html',
+          resolve: {
+            getPromise : ['whiteboards', '$stateParams', function(whiteboards, $stateParams){
+              return whiteboards.getUsersWhiteboards($stateParams.username);
+            }]
+          }
         });
     $urlRouterProvider.otherwise('');
     }
 ]);
-
-
-
-
-app.controller('home', ['$scope', '$http', function($scope, $http){
-  $scope.test = "hello"
-}]);
-
-
-
 
 
 
