@@ -31,15 +31,14 @@ router.get('/user/:user', function(req,res, next){
         return next(err);
       }
       if (user == null){
-        req.flash('failure', 'No users found with the username ' + req.params.user);
-        return res.redirect('/');
+        return next(new Error("Could not find user"));
       }
       User.getWhiteBoards(req.params.user, function(err, whiteboards){
         if (err){
           console.log(err);
           return next(err);
         }
-        res.render('user', {user : whiteboards});
+        res.json(whiteboards);
       });
     });
 });
@@ -49,16 +48,30 @@ router.get('/login', function(req, res) {
     req.flash('success', 'You are logged in already');
     return res.redirect('/');
   }
-
+  
   res.render('login', { message: req.flash('loginMessage')});
 
 });
 
-router.post('/login', passport.authenticate('local-login', {
-  successRedirect: '/',
-  failureRedirect: '/login',
-  failureFlash: true
-}));
+router.post('/login', function(req,res,next) {
+  passport.authenticate('local-login', function(err, user, info){
+    if (err){
+      console.log(err);
+      return next(err);
+    }
+    if (!user){
+      return res.json(403, "Your username or password is incorrect");
+    }
+    req.login(user, function(err){
+      if (err){
+        console.log(err);
+        return next(err);
+      }
+      var redirect_to = req.session.redirect_to ? req.session.redirect_to : '/';
+      return res.redirect(redirect_to);
+    });
+  })(req,res,next);
+});
 
 router.get('/logout', function(req, res) {
   req.logout();
@@ -73,7 +86,7 @@ router.get('/user/:user/boards/:slug', isLoggedInAndAuthorized, function(req,res
         console.log(err);
         return next(err);
       }
-      res.render('show_whiteboard', {board : req.whiteboard}); 
+      res.json(req.whiteboard);
     });
 });
 
@@ -178,9 +191,13 @@ router.post('/createboard', isLoggedIn, function(req,res, next){
          console.log(err);
            return next(err);
          }
-         User.findOne({'local.username':user.local.username}).populate('whiteboards').exec(function(err, populated){
-           return res.send(populated);
-         });
+       User.populate(user, {path:'whiteboards'}, function(err,populated){
+         if (err){
+         console.log(err);
+         return next(err);
+         }
+         return res.json(populated);
+       });
        });
      });
    });
@@ -196,6 +213,8 @@ function isLoggedIn(req,res,next){
   if (req.isAuthenticated()){
     return next();
   }
+  console.log(req.path);
+  req.session.redirect_to = req.path;
   req.flash('loginMessage', 'You are not logged in');
   res.redirect('/login');
 }
