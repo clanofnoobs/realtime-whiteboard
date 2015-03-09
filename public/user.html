@@ -1,6 +1,14 @@
-<div ng-controller="home">
-    {{user.local.username}}
-  <div ng-repeat="whiteboard in whiteboards">
-    {{whiteboard.title}}
+<div class="col-sm-6 col-sm-offset-3">
+  <div ng-controller="home">
+    <div class="page-header">
+      <h1>
+      {{user.local.username}}
+    </h1>
+    </div>
+    <div ng-repeat="whiteboard in whiteboards">
+      <div class="board">
+      {{whiteboard.title}} - <span class="label label-danger" ng-click="deleteBoard(whiteboard.unique_token)" style="float:right;cursor:pointer;">Delete</span>
+      </div>
+    </div>
   </div>
 </div>

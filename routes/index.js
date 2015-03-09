@@ -109,6 +109,11 @@ router.get('/checkusername', function(req,res){
   });
 });
 
+router.delete('/board/delete/:unique_token', isLoggedInAndAuthorized, function(req,res){
+  req.whiteboard.remove();
+  res.json("sucessfully removed");
+});
+
 router.get('/deleteall', function(req,res){
   User.find(function(err,users){
     users.forEach(function(user){
@@ -216,8 +221,10 @@ function isLoggedIn(req,res,next){
 }
 
 function isLoggedInAndAuthorized(req,res,next){
+  var unique_token = req.query.unique_token || req.params.unique_token
+  console.log(unique_token);
   if (req.isAuthenticated()){
-    Whiteboard.findOne({'unique_token':req.query.unique_token })
+    Whiteboard.findOne({'unique_token':unique_token })
       .populate({path: 'author', select: 'local.username'})
       .exec(function(err, board){
         if (err){
@@ -225,8 +232,7 @@ function isLoggedInAndAuthorized(req,res,next){
           return next(err);
         }
         if (board == null){
-          req.flash('failure', 'This board does exist or has been deleted by the user!');
-          return res.redirect('/');
+          return res.send(404,"This board does not exist or has been deleted by the user!");
         }
         console.log(board);
         if (board.author.local.username == req.user.local.username){
@@ -235,14 +241,12 @@ function isLoggedInAndAuthorized(req,res,next){
           return next();
 
         } else {
-          req.flash('failure', 'You do not have permission to view this collab!');
-          return res.redirect('/');
+          return res.send(401, "You are not authorized");
         }
       });
   } else {
-    req.flash('loginMessage', 'You are not logged in');
-    req.session.redirect_to = req.originalUrl;
-    return res.redirect('/login');
+    return res.send(403, "You are not logged in");
+    //req.session.redirect_to = req.originalUrl;
   }
 }
 
