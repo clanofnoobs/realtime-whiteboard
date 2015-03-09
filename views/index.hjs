@@ -12,10 +12,6 @@
     </style>
 </head>
 <body ng-app="whiteboard">
-<div class="container" ng-controller="home">
-  <div class="jumbotron text-center">
     <div ui-view></div>
-  </div>
-</div>
 </body>
 </html>

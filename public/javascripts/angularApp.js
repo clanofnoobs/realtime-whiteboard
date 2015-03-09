@@ -99,17 +99,16 @@ app.controller('create_whiteboard', ['$scope', '$http', function($scope, $http){
   }
 }]);
 
-app.controller('home', ['$scope','whiteboards', function($scope){
+app.controller('home', ['$scope','whiteboards', function($scope, whiteboards){
   $scope.whiteboards = whiteboards.whiteboards;
 }]);
 
 app.config([
     '$stateProvider',
     '$urlRouterProvider',
-    'whiteboards',
-    function($stateProvider, $urlRouterProvider, whiteboards){
+    function($stateProvider, $urlRouterProvider){
       $stateProvider
-        .state('home',{
+        .state('root',{
           url:'',
           controller: 'home',
           templateUrl: 'test1.html'
