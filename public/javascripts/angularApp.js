@@ -1,4 +1,4 @@
-var app = angular.module('whiteboard', []);
+var app = angular.module('whiteboard', ['ui.router']);
 
 app.controller('login', ['$scope', '$http','$timeout', function($scope, $http, $timeout){
 
@@ -72,7 +72,26 @@ app.controller('create_whiteboard', ['$scope', '$http', function($scope, $http){
   }
 }]);
 
+app.config([
+    '$stateProvider',
+    '$urlRouterProvider',
+    function($stateProvider, $urlRouterProvider){
+      $stateProvider
+        .state('something',{
+          url:'',
+          controller: 'home',
+          templateUrl: '/test.html'
+        });
+    $urlRouterProvider.otherwise('');
+    }
+]);
 
+
+
+
+app.controller('home', ['$scope', '$http', function($scope, $http){
+  $scope.test = "hello"
+}]);
 
 
 

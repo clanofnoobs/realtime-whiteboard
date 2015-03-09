@@ -9,16 +9,7 @@ var crypto = require("crypto");
 
 //GET home page. 
 router.get('/', function(req, res) {
-  if (req.user){
-    User.findOne({'local.username':req.user.local.username}).populate('whiteboards').exec(function(err, populated){
-      if (err){
-        console.log(err);
-      }
-    res.render('index', { message: req.flash('success'), user: populated, failure: req.flash('failure') });
-    });
-  } else {
-    res.render('index', { message: req.flash('success'), user: req.user, failure: req.flash('failure') });
-  }
+  res.render('index');
 });
 
 router.get('/user/:user', function(req,res, next){
