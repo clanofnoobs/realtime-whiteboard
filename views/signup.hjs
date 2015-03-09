@@ -34,7 +34,7 @@
 
     <!-- LOGIN FORM -->
     <form action="/signup" method="post">
-        <div class="form-group" ng-controller="login">
+        <div class="form-group" ng-controller="signup">
             <label>Email</label>
             <input type="text" class="form-control" ng-model="email" name="email">
             <img src="images/indicator.gif" ng-show="loadingEmail" />

@@ -1,3 +1,6 @@
-<div ng-repeat="whiteboard in whiteboards">
-  {{whiteboard.title}}
+<div ng-controller="home">
+    {{user.local.username}}
+  <div ng-repeat="whiteboard in whiteboards">
+    {{whiteboard.title}}
+  </div>
 </div>

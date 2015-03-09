@@ -1,6 +1,6 @@
 var app = angular.module('whiteboard', ['ui.router']);
 
-app.controller('login', ['$scope', '$http','$timeout', function($scope, $http, $timeout){
+app.controller('signup', ['$scope', '$http','$timeout', function($scope, $http, $timeout){
 
   $scope.$watch('username', function(){
     if ($scope.username.length >= 3){
@@ -58,11 +58,32 @@ app.controller('login', ['$scope', '$http','$timeout', function($scope, $http, $
 
 }]);
 
+app.factory("user", ["$http","$location", function($http, $location){
+  var o = {
+    user: {}
+  }
+
+  o.login = function(credentials){
+    return $http.post('/login',credentials)
+      .success(function(data){
+        angular.copy(data,o.user);
+        console.log(data);
+        $location.url('/user/'+data.local.username);
+      })
+      .error(function(err){
+        alert(err);
+      });
+  }
+
+  return o;
+}]);
+
 app.factory("whiteboards", ['$http','$q','$location', function($http, $q, $location){
   var o = {
-    whiteboards : []
+    whiteboards : {}
   };
 
+  
   o.create = function(whiteboard){
     return $http.post('/createboard', whiteboard)
       .success(function(data){
@@ -72,17 +93,27 @@ app.factory("whiteboards", ['$http','$q','$location', function($http, $q, $locat
       });
   }
 
-  o.getUsersWhiteboards = function(){
-    return $http.get('/user/'+$stateParams.username)
+  o.getUsersWhiteboards = function(username){
+    return $http.get('/user/'+ username)
       .success(function(data){
         angular.copy(data, o.whiteboards);
+        console.log(o.whiteboards);
       }).error(function(data){
-
+        alert(data);
       });
   }
   o.checkIfLoggedInAndAuth = function(whiteboard){
   }
   return o;
+}]);
+
+app.controller('login', ['$scope', 'user', '$http', function($scope, user, $http){
+  $scope.login = function(){
+    user.login({
+      username: $scope.username,
+      password: $scope.password
+    });
+  }
 }]);
 
 app.controller('create_whiteboard', ['$scope', '$http', function($scope, $http){
@@ -100,7 +131,9 @@ app.controller('create_whiteboard', ['$scope', '$http', function($scope, $http){
 }]);
 
 app.controller('home', ['$scope','whiteboards', function($scope, whiteboards){
-  $scope.whiteboards = whiteboards.whiteboards;
+  $scope.user = whiteboards.whiteboards;
+  $scope.whiteboards = whiteboards.whiteboards.whiteboards;
+  $scope.test = "telskj"
 }]);
 
 app.config([
@@ -113,15 +146,15 @@ app.config([
           controller: 'home',
           templateUrl: 'test1.html'
         })
-        .state('users', {
-          url:'/user/{username}',
-          controller: 'home',
-          templateUrl: 'users.html'
-        })
         .state('login',{
           url:'/login',
-          controller: 'home',
-          templateUrl: 'login.html'
+          controller: 'login',
+          templateUrl: 'login.html',
+          resolve : {
+            getPromise: ['user', function(user){
+
+            }]
+          }
         })
         .state('whiteboards', {
           url:'/user/{username}/boards/{slug}',
@@ -129,7 +162,7 @@ app.config([
           templateUrl: 'whiteboard.html'
         })
         .state('user_homepage', {
-          url: '',
+          url: '/user/{username}',
           controller: 'home',
           templateUrl: 'user.html',
           resolve: {

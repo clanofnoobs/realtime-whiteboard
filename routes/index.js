@@ -60,8 +60,11 @@ router.post('/login', function(req,res,next) {
         console.log(err);
         return next(err);
       }
-      var redirect_to = req.session.redirect_to ? req.session.redirect_to : '/user/'+user.local.username;
-      return res.redirect(redirect_to);
+      User.populate(user, {path:'-local.password'}, function(err,pop){
+      //var redirect_to = req.session.redirect_to ? req.session.redirect_to : '/user/'+user.local.username;
+      //return res.redirect(redirect_to);
+      return res.json(pop);
+      });
     });
   })(req,res,next);
 });
