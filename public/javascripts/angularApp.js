@@ -38,21 +38,20 @@ app.controller('signup', ['$scope', '$http','$timeout', function($scope, $http, 
           $scope.userFree = true;
           $scope.userNotFree = false;
         }
-      },500);
+      },200);
       }).error(function(data){
         $timeout(function(){
           if (cred == $scope.email){
             $scope.loadingEmail = false;
             $scope.eNotTaken = false;
             $scope.eTaken = true;
-            alert(data.message);
           } else {
             $scope.loadingUser = false;
             $scope.userFree = false;
             $scope.userNotFree = true;
             console.log($scope.usernameFree);
           }
-        }, 1000);
+        }, 200);
       });
   }
 
@@ -175,6 +174,11 @@ app.config([
 
             }]
           }
+        })
+        .state('signup', {
+          url:'/signup',
+          controller: 'signup',
+          templateUrl: 'signup.html'
         })
         .state('whiteboards', {
           url:'/user/{username}/boards/{slug}',
