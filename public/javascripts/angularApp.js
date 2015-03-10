@@ -57,7 +57,7 @@ app.controller('signup', ['$scope', '$http','$timeout', function($scope, $http, 
 
 }]);
 
-app.factory("user", ["$http","$location", function($http, $location){
+app.factory("user", ["$http","$location","$q", function($http, $location, $q){
   var o = {
     user: {}
   }
@@ -71,6 +71,20 @@ app.factory("user", ["$http","$location", function($http, $location){
       })
       .error(function(err){
         alert(err);
+      });
+  }
+
+  o.checkIfLoggedIn = function(){
+    var deferred = $q.defer();
+    return $http.get('/checkIfLoggedIn')
+      .success(function(data){
+        console.log(data);
+        deferred.resolve(data);
+      })
+      .error(function(data){
+        console.log(data);
+        deferred.reject(data);
+        $location.url('/login');
       });
   }
 
@@ -177,6 +191,16 @@ app.config([
           resolve : {
             getPromise: ['user', function(user){
 
+            }]
+          }
+        })
+        .state('create', {
+          url: '/createboard',
+          controller: 'create_whiteboard',
+          templateUrl: 'create.html',
+          resolve: {
+            checkIfLoggedInAndAuth: ['user',function(user){
+              user.checkIfLoggedIn();
             }]
           }
         })

@@ -167,10 +167,6 @@ router.get('/all', function(req,res, next){
   });
 });
 
-router.get('/createboard', isLoggedIn, function(req,res){
-  var populated = req.user.populate('whiteboards');
-  res.render('whiteboard', {user: populated });
-});
 
 router.post('/createboard', isLoggedIn, function(req,res, next){
    var user = req.user;
@@ -210,15 +206,21 @@ router.post('/signup', passport.authenticate('local-signup', {
   failureFlash: true
 }));
 
+
 function isLoggedIn(req,res,next){
   if (req.isAuthenticated()){
-    return next();
+    console.log("authenticaed");
+    return res.send(302, "logged in already");
+  } else {
+    console.log("in the else");
+    console.log(req.path);
+    req.session.redirect_to = req.path;
+    req.flash('loginMessage', 'You are not logged in');
+    return res.send(403, "Not logged in");
   }
-  console.log(req.path);
-  req.session.redirect_to = req.path;
-  req.flash('loginMessage', 'You are not logged in');
-  res.redirect('/#/login');
 }
+router.get('/checkIfLoggedIn', isLoggedIn, function(req,res,next){
+});
 
 function isLoggedInAndAuthorized(req,res,next){
   var unique_token = req.query.unique_token || req.params.unique_token

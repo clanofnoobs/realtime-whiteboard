@@ -2,7 +2,10 @@
   <div ng-controller="home">
     <div class="page-header">
       <h1>
-      {{user.local.username}}
+      {{user.local.username}} - 
+      <a href="#/createboard">
+    <button class="btn">create</button>
+  </a>
     </h1>
     </div>
     <h1 ng-show="empty">
