@@ -148,12 +148,17 @@ app.controller('create_whiteboard', ['$scope', '$http', function($scope, $http){
 app.controller('home', ['$scope','whiteboards', function($scope, whiteboards){
   $scope.user = whiteboards.whiteboards;
   $scope.whiteboards = whiteboards.whiteboards.whiteboards;
-
+  $scope.$watch('whiteboards', function(){
+    if ($scope.whiteboards == ''){
+      $scope.empty = true;
+    }
+  });
   $scope.deleteBoard = function(unique_token){
     alert(unique_token);
     whiteboards.deleteBoard(unique_token);
   }
 }]);
+
 
 app.config([
     '$stateProvider',
@@ -168,7 +173,7 @@ app.config([
         .state('login',{
           url:'/login',
           controller: 'login',
-          templateUrl: 'login.html',
+          templateUrl: 'login.ejs',
           resolve : {
             getPromise: ['user', function(user){
 

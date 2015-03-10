@@ -5,6 +5,9 @@
       {{user.local.username}}
     </h1>
     </div>
+    <h1 ng-show="empty">
+      Empty!
+    </h1>
     <div ng-repeat="whiteboard in whiteboards">
       <div class="board">
       {{whiteboard.title}} - <span class="label label-danger" ng-click="deleteBoard(whiteboard.unique_token)" style="float:right;cursor:pointer;">Delete</span>

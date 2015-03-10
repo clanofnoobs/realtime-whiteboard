@@ -13,6 +13,18 @@
     </style>
 </head>
 <body ng-app="whiteboard">
+  <div class="container">
+    <% if (failure.length > 0) { %>
+    <div class="alert alert-danger">
+    <%= failure %>
+  </div>
+    <% } %>
+    <% if (success.length > 0) { %>
+    <div class="alert alert-success">
+    <%= success %>
+    </div>
+    <% } %>
+  </div>
     <div ui-view></div>
 </body>
 </html>

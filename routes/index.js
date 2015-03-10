@@ -9,7 +9,7 @@ var crypto = require("crypto");
 
 //GET home page. 
 router.get('/', function(req, res) {
-  res.render('index');
+  res.render('index', {failure: req.flash('signupMessage'), success: req.flash('success'), message: req.flash('failure'), loginMessage: req.flash('loginMessage')});
 });
 
 router.get('/user/:user', function(req,res, next){
@@ -206,7 +206,7 @@ router.post('/createboard', isLoggedIn, function(req,res, next){
 
 router.post('/signup', passport.authenticate('local-signup', {
   successRedirect: '/',
-  failureRedirect: '/signup',
+  failureRedirect: '/',
   failureFlash: true
 }));
 
@@ -217,7 +217,7 @@ function isLoggedIn(req,res,next){
   console.log(req.path);
   req.session.redirect_to = req.path;
   req.flash('loginMessage', 'You are not logged in');
-  res.redirect('/login');
+  res.redirect('/#/login');
 }
 
 function isLoggedInAndAuthorized(req,res,next){

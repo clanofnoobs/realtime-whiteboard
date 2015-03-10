@@ -68,7 +68,7 @@ module.exports = function(passport){
                 console.log('Message sent: ' + info.response);
               }
             });
-            return done(null, false, req.flash('success', 'Email sent to ' + newUser.local.email));
+            return done(null, user, req.flash('success', 'Email sent to ' + newUser.local.email));
           });
         }
       });
