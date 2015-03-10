@@ -78,14 +78,14 @@ app.factory("user", ["$http","$location","$q", function($http, $location, $q){
     var deferred = $q.defer();
     return $http.get('/checkIfLoggedIn')
       .success(function(data){
-        console.log(data);
-        deferred.resolve(data);
+        if (data !== "0"){
+          deferred.resolve(data);
+        } else {
+          deferred.reject(data);
+          $location.url("/login");
+        }
       })
-      .error(function(data){
-        console.log(data);
-        deferred.reject(data);
-        $location.url('/login');
-      });
+    return deferred.promise;
   }
 
   return o;

@@ -208,16 +208,7 @@ router.post('/signup', passport.authenticate('local-signup', {
 
 
 function isLoggedIn(req,res,next){
-  if (req.isAuthenticated()){
-    console.log("authenticaed");
-    return res.send(302, "logged in already");
-  } else {
-    console.log("in the else");
-    console.log(req.path);
-    req.session.redirect_to = req.path;
-    req.flash('loginMessage', 'You are not logged in');
-    return res.send(403, "Not logged in");
-  }
+  res.send(req.isAuthenticated() ? req.user: '0');
 }
 router.get('/checkIfLoggedIn', isLoggedIn, function(req,res,next){
 });
