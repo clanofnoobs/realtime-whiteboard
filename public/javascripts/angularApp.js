@@ -100,6 +100,7 @@ app.factory("whiteboards", ['$http','$q','$location','$filter', function($http, 
     return $http.post('/createboard', whiteboard)
       .success(function(data){
        console.log(data);   
+       $location.url("/user/"+data.author.local.username+"/board/"+data.slug+"?unique_token="+data.unique_token);
       }).error(function(data){
        console.log(data);
       });

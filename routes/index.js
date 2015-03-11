@@ -190,13 +190,13 @@ router.post('/createboard', isLoggedIn, function(req,res, next){
            return next(err);
          }
          console.log("SAVED");
-       User.populate(user, {path:'whiteboards'}, function(err,populated){
-         if (err){
-         console.log(err);
-         return next(err);
-         }
-         return res.json(populated);
-       });
+         Whiteboard.populate(newWhiteboard, {path:'author', select: 'local.username'}, function(err, board){
+           if (err){
+             console.log(err);
+             return next(err);
+           }
+           return res.json(board);
+         });
        });
      });
    });
