@@ -74,7 +74,7 @@ router.get('/logout', function(req, res) {
   res.redirect('/');
 });
 
-router.get('/user/:user/boards/:slug', isLoggedInAndAuthorized, function(req,res,next){
+router.get('/user/:user/board/:slug', isLoggedInAndAuthorized, function(req,res,next){
   User.findOne({'local.username':req.params.user})
     .select('-local.password')
     .exec(function(err, user){
@@ -209,7 +209,11 @@ router.post('/signup', passport.authenticate('local-signup', {
 
 
 function isLoggedIn(req,res,next){
-  res.send(req.isAuthenticated() ? req.user: '0');
+  if (req.isAuthenticated()){
+    return next();
+  } else {
+    return res.send(403, "Not logged in");
+  }
 }
 router.get('/checkIfLoggedIn', isLoggedIn, function(req,res,next){
 });

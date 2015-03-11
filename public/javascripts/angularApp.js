@@ -78,13 +78,11 @@ app.factory("user", ["$http","$location","$q", function($http, $location, $q){
     var deferred = $q.defer();
     return $http.get('/checkIfLoggedIn')
       .success(function(data){
-        if (data !== "0"){
-          deferred.resolve(data);
-        } else {
-          deferred.reject(data);
-          $location.url("/login");
-        }
-      })
+        deferred.resolve(data);
+      }).error(function(data){
+        deferred.reject(data);
+        $location.url("/login");
+      });
     return deferred.promise;
   }
 
@@ -101,7 +99,7 @@ app.factory("whiteboards", ['$http','$q','$location','$filter', function($http, 
   o.create = function(whiteboard){
     return $http.post('/createboard', whiteboard)
       .success(function(data){
-        
+        alert(data);
       }).error(function(data){
 
       });
@@ -134,7 +132,7 @@ app.factory("whiteboards", ['$http','$q','$location','$filter', function($http, 
   }
   o.getBoard = function(params){
     var deferred = $q.defer();
-    return $http.get('/user/'+params.user+'/board/'+params.slug+'?unique_token='+params.unique_token)
+    return $http.get('/user/'+params.username+'/board/'+params.slug+'?unique_token='+params.unique_token)
       .success(function(data){
         deferred.resolve(data);
         angular.copy(data, o.board);
@@ -142,6 +140,7 @@ app.factory("whiteboards", ['$http','$q','$location','$filter', function($http, 
       .error(function(data, status, headers, config){
         if (status == 401);{
           alert("You are not authorized");
+          $location.url("/login");
           deferred.reject(data);
         }
       });
