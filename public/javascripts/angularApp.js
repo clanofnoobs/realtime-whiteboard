@@ -99,9 +99,9 @@ app.factory("whiteboards", ['$http','$q','$location','$filter', function($http, 
   o.create = function(whiteboard){
     return $http.post('/createboard', whiteboard)
       .success(function(data){
-        alert(data);
+       console.log(data);   
       }).error(function(data){
-
+       console.log(data);
       });
   }
 
@@ -161,16 +161,11 @@ app.controller('login', ['$scope', 'user', '$http', function($scope, user, $http
   }
 }]);
 
-app.controller('create_whiteboard', ['$scope', '$http', function($scope, $http){
+app.controller('create_whiteboard', ['whiteboards','$scope', '$http', function(whiteboards,$scope, $http){
 
   $scope.createWhiteboard = function(){
-    var board = {
+    whiteboards.create({
       title: $scope.title
-    }
-    return $http.post('/createboard', board).success(function(data){
-      console.log(data);
-    }).error(function(data){
-      alert(data);
     });
   }
 }]);

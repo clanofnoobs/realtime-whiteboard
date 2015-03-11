@@ -169,6 +169,7 @@ router.get('/all', function(req,res, next){
 
 
 router.post('/createboard', isLoggedIn, function(req,res, next){
+  console.log("HERE");
    var user = req.user;
    User.findOne({'local.username':user.local.username}, function(err,user){
      var newWhiteboard = new Whiteboard();
