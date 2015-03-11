@@ -93,7 +93,8 @@ app.factory("user", ["$http","$location","$q", function($http, $location, $q){
 
 app.factory("whiteboards", ['$http','$q','$location','$filter', function($http, $q, $location, $filter){
   var o = {
-    whiteboards : {}
+    whiteboards : {},
+    board: {}
   };
 
   
@@ -131,6 +132,22 @@ app.factory("whiteboards", ['$http','$q','$location','$filter', function($http, 
         alert(data);
       });
   }
+  o.getBoard = function(params){
+    var deferred = $q.defer();
+    return $http.get('/user/'+params.user+'/board/'+params.slug+'?unique_token='+params.unique_token)
+      .success(function(data){
+        deferred.resolve(data);
+        angular.copy(data, o.board);
+      })
+      .error(function(data, status, headers, config){
+        if (status == 401);{
+          alert("You are not authorized");
+          deferred.reject(data);
+        }
+      });
+      return deferred.promise;
+  }
+
   o.checkIfLoggedInAndAuth = function(whiteboard){
   }
   return o;
@@ -162,6 +179,7 @@ app.controller('create_whiteboard', ['$scope', '$http', function($scope, $http){
 app.controller('home', ['$scope','whiteboards', function($scope, whiteboards){
   $scope.user = whiteboards.whiteboards;
   $scope.whiteboards = whiteboards.whiteboards.whiteboards;
+  $scope.board = whiteboards.board;
   $scope.$watch('whiteboards', function(){
     if ($scope.whiteboards == ''){
       $scope.empty = true;
@@ -171,6 +189,7 @@ app.controller('home', ['$scope','whiteboards', function($scope, whiteboards){
     alert(unique_token);
     whiteboards.deleteBoard(unique_token);
   }
+
 }]);
 
 
@@ -209,10 +228,15 @@ app.config([
           controller: 'signup',
           templateUrl: 'signup.html'
         })
-        .state('whiteboards', {
-          url:'/user/{username}/boards/{slug}',
+        .state('board', {
+          url:'/user/{username}/board/{slug}?unique_token',
           controller: 'home',
-          templateUrl: 'whiteboard.html'
+          templateUrl: 'whiteboard.html',
+          resolve: {
+            getBoard: ['whiteboards', '$stateParams', function(whiteboards, $stateParams){
+              whiteboards.getBoard($stateParams);
+            }]
+          }
         })
         .state('user_homepage', {
           url: '/user/{username}',

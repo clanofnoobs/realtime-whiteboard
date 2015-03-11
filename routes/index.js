@@ -188,6 +188,7 @@ router.post('/createboard', isLoggedIn, function(req,res, next){
          console.log(err);
            return next(err);
          }
+         console.log("SAVED");
        User.populate(user, {path:'whiteboards'}, function(err,populated){
          if (err){
          console.log(err);

@@ -13,7 +13,9 @@
     </h1>
     <div ng-repeat="whiteboard in whiteboards">
       <div class="board">
-      {{whiteboard.title}} - <span class="label label-danger" ng-click="deleteBoard(whiteboard.unique_token)" style="float:right;cursor:pointer;">Delete</span>
+        <a href="#/user/{{user.local.username}}/board/{{whiteboard.slug}}?unique_token={{whiteboard.unique_token}}">
+          {{whiteboard.title}}
+        </a> - <span class="label label-danger" ng-click="deleteBoard(whiteboard.unique_token)" style="float:right;cursor:pointer;">Delete</span>
       </div>
     </div>
   </div>
