@@ -174,7 +174,7 @@ app.controller('create_whiteboard', ['whiteboards','$scope', '$http', function(w
 app.controller('home', ['$scope','whiteboards', function($scope, whiteboards){
   $scope.user = whiteboards.whiteboards;
   $scope.whiteboards = whiteboards.whiteboards.whiteboards;
-  $scope.board = whiteboards.board;
+
   $scope.$watch('whiteboards', function(){
     if ($scope.whiteboards == ''){
       $scope.empty = true;
@@ -187,6 +187,22 @@ app.controller('home', ['$scope','whiteboards', function($scope, whiteboards){
 
 }]);
 
+app.controller('board', ['$scope', 'whiteboards', function($scope, whiteboards){
+  $scope.board = whiteboards.board;
+
+    var canvas = new fabric.Canvas('c');
+    canvas.add(new fabric.Circle({ radius: 30, fill: '#f55', top:canvas.getHeight()/2 - 30,left:canvas.getWidth()/2}));
+
+    alert((JSON.stringify(canvas)));
+
+    canvas.on('object:moving', function(e) {
+      var activeObject = e.target;
+      console.log(activeObject.id);
+      console.log(activeObject.get('left'));
+      console.log(activeObject.get('top'));
+    });
+}]);
+
 
 app.config([
     '$stateProvider',
@@ -195,7 +211,7 @@ app.config([
       $stateProvider
         .state('root',{
           url:'',
-          controller: 'home',
+          controller: 'login',
           templateUrl: 'test1.html'
         })
         .state('login',{
@@ -225,7 +241,7 @@ app.config([
         })
         .state('board', {
           url:'/user/{username}/board/{slug}?unique_token',
-          controller: 'home',
+          controller: 'board',
           templateUrl: 'whiteboard.html',
           resolve: {
             getBoard: ['whiteboards', '$stateParams', function(whiteboards, $stateParams){

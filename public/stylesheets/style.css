@@ -11,6 +11,10 @@ a {
 .board:hover{
   background: rgba(255,245,245,1);
 }
+.whiteboard{
+  border:1px solid rgba(215,215,215,1);
+  margin-left: 200px;
+}
 
 .taken {
   color: red;
