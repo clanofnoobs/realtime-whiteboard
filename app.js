@@ -45,6 +45,24 @@ app.use(flash());
 app.use('/', routes);
 app.use('/users', users);
 
+var http = require('http').Server(app);
+var io = require('socket.io')(http);
+
+io.on('connection', function(socket){
+  socket.emit('connected', "You are connected");
+  console.log("User connected");
+  socket.on("user", function(user){
+    console.log(user + " is connected");
+    socket.emit("user", user);
+  });
+});
+
+
+http.listen(3000,function(socket){
+  console.log("connected");
+});
+
+
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
     var err = new Error('Not Found');

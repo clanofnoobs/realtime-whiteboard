@@ -224,7 +224,7 @@ function isLoggedInAndAuthorized(req,res,next){
   console.log(unique_token);
   if (req.isAuthenticated()){
     Whiteboard.findOne({'unique_token':unique_token })
-      .populate({path: 'author', select: 'local.username'})
+      .populate('access')
       .exec(function(err, board){
         if (err){
           console.log(err);
@@ -234,7 +234,11 @@ function isLoggedInAndAuthorized(req,res,next){
           return res.send(404,"This board does not exist or has been deleted by the user!");
         }
         console.log(board);
-        if (board.author.local.username == req.user.local.username){
+        var users = [];
+        board.access.forEach(function(user){
+          users.push(user.local.username);
+        });
+        if (users.indexOf(req.user.local.username) != -1){
           console.log("Has access");
           req.whiteboard = board;
           return next();

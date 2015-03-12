@@ -187,13 +187,24 @@ app.controller('home', ['$scope','whiteboards', function($scope, whiteboards){
 
 }]);
 
-app.controller('board', ['$scope', 'whiteboards', function($scope, whiteboards){
+app.controller('board', ['$scope', 'whiteboards','$timeout', function($scope, whiteboards, $timeout){
+  $scope.users = [];
+  var socket = io();
   $scope.board = whiteboards.board;
+  console.log($scope.board);
+  $timeout(function(){
+    socket.emit("user", $scope.board.author.local.username);
+  },500);
+
+  socket.on("user", function(user){
+    $scope.users.push(user);
+    $scope.$apply();
+  });
+
 
     var canvas = new fabric.Canvas('c');
     canvas.add(new fabric.Circle({ radius: 30, fill: '#f55', top:canvas.getHeight()/2 - 30,left:canvas.getWidth()/2}));
 
-    alert((JSON.stringify(canvas)));
 
     canvas.on('object:moving', function(e) {
       var activeObject = e.target;
