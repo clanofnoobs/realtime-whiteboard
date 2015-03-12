@@ -168,6 +168,34 @@ router.get('/all', function(req,res, next){
     res.json(user);
   });
 });
+router.get('/:unique_token/:user', function(req,res,next){
+  User.findOne({'local.username': req.params.user})
+    .exec(function(err,user){
+      if (err){
+        console.log(err);
+        return next(err);
+      }
+      Whiteboard.findOne({'unique_token':req.params.unique_token})
+        .populate('access')
+        .exec(function(err,board){
+         board.access.push(user.id);
+         board.save(function(err){
+           if (err){
+             return next(err);
+             console.log(err);
+           }
+           user.whiteboards.push(board.id);
+           user.save(function(err){
+             if (err){
+               console.log(err);
+               return next(err);
+             }
+               return res.json("DONE");
+           })
+         });
+      });
+    });
+});
 
 
 router.post('/createboard', isLoggedIn, function(req,res, next){
@@ -218,6 +246,7 @@ function isLoggedIn(req,res,next){
     return res.send(403, "Not logged in");
   }
 }
+
 router.get('/checkIfLoggedIn', isLoggedIn, function(req,res,next){
 });
 
