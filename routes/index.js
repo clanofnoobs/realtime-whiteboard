@@ -82,7 +82,9 @@ router.get('/user/:user/board/:slug', isLoggedInAndAuthorized, function(req,res,
         console.log(err);
         return next(err);
       }
-      res.json(req.whiteboard);
+      var obj = { user: req.user.local.username, whiteboard: req.whiteboard };
+      console.log(obj);
+      res.json(obj);
     });
 });
 
@@ -233,7 +235,6 @@ function isLoggedInAndAuthorized(req,res,next){
         if (board == null){
           return res.send(404,"This board does not exist or has been deleted by the user!");
         }
-        console.log(board);
         var users = [];
         board.access.forEach(function(user){
           users.push(user.local.username);

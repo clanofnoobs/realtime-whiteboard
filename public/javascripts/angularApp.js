@@ -92,7 +92,8 @@ app.factory("user", ["$http","$location","$q", function($http, $location, $q){
 app.factory("whiteboards", ['$http','$q','$location','$filter', function($http, $q, $location, $filter){
   var o = {
     whiteboards : {},
-    board: {}
+    board: {},
+    user: ""
   };
 
   
@@ -136,7 +137,8 @@ app.factory("whiteboards", ['$http','$q','$location','$filter', function($http, 
     return $http.get('/user/'+params.username+'/board/'+params.slug+'?unique_token='+params.unique_token)
       .success(function(data){
         deferred.resolve(data);
-        angular.copy(data, o.board);
+        angular.copy(data.whiteboard, o.board);
+        o.user = data.user;
       })
       .error(function(data, status, headers, config){
         if (status == 401);{
@@ -193,7 +195,8 @@ app.controller('board', ['$scope', 'whiteboards','$timeout', function($scope, wh
   $scope.board = whiteboards.board;
   console.log($scope.board);
   $timeout(function(){
-    socket.emit("user", $scope.board.author.local.username);
+    console.log(whiteboards.user);
+    socket.emit("user", whiteboards.user);
   },500);
 
   socket.on("user", function(user){
