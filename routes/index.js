@@ -168,7 +168,7 @@ router.get('/all', function(req,res, next){
     res.json(user);
   });
 });
-router.get('/:unique_token/:user', function(req,res,next){
+router.get('/access/:unique_token/:user', function(req,res,next){
   User.findOne({'local.username': req.params.user})
     .exec(function(err,user){
       if (err){

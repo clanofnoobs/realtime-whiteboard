@@ -214,13 +214,29 @@ app.controller('board', ['$scope', 'whiteboards','$timeout', function($scope, wh
     var canvas = new fabric.Canvas('c');
     canvas.add(new fabric.Circle({ radius: 30, fill: '#f55', top:canvas.getHeight()/2 - 30,left:canvas.getWidth()/2}));
 
-
-    canvas.on('object:moving', function(e) {
-      var activeObject = e.target;
-      console.log(activeObject.id);
-      console.log(activeObject.get('left'));
-      console.log(activeObject.get('top'));
+    socket.on("objectMove", function(coords){
+      canvas.item(0).set({left:coords.x, top: coords.y});
+      canvas.renderAll();
     });
+function debounce(fn, delay) {
+  var timer = null;
+  return function () {
+    var context = this, args = arguments;
+    clearTimeout(timer);
+    timer = setTimeout(function () {
+      fn.apply(context, args);
+    }, delay);
+  };
+}
+
+    canvas.on('object:moving', debounce(function(e){
+      var activeObject = e.target;
+      console.log(activeObject.get('left'));
+      var coords = { x: activeObject.get('left'), y: activeObject.get('top') }
+      socket.emit("objectMove", coords);
+      console.log(activeObject.get('top'));
+    },12));
+
 }]);
 
 

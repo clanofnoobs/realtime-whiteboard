@@ -60,8 +60,9 @@ io.of('/room').on('connection', function(socket){
     socket.emit("user", obj.user);
     socket.broadcast.to(joinedToken).send(obj.user);
   });
-  socket.on("typing", function(letter){
-    socket.broadcast.to(joinedToken).emit("word", letter);
+  socket.on("objectMove", function(coords){
+    console.log(coords.x + ", " + coords.y);
+    socket.broadcast.to(joinedToken).emit("objectMove", coords);
   });
 });
 
