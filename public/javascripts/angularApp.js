@@ -191,15 +191,28 @@ app.controller('home', ['$scope','whiteboards', function($scope, whiteboards){
 
 app.controller('board', ['$scope', 'whiteboards','$timeout', function($scope, whiteboards, $timeout){
   $scope.users = [];
-  var socket = io();
+  var socket = io.connect('/room');
   $scope.board = whiteboards.board;
   console.log($scope.board);
   $timeout(function(){
-    console.log(whiteboards.user);
-    socket.emit("user", whiteboards.user);
+    var obj = {};
+    obj["unique_token"] = whiteboards.board.unique_token;
+    obj["user"] = whiteboards.user;
+    socket.emit("user", obj);
   },500);
 
   socket.on("user", function(user){
+    $scope.users.push(user);
+    $scope.$apply();
+  });
+  $scope.$watch('type', function(){
+    socket.emit("typing", $scope.type);
+  });
+  socket.on("word", function(letter){
+    $scope.word = letter;
+    $scope.$apply();
+  });
+  socket.on("message", function(user){
     $scope.users.push(user);
     $scope.$apply();
   });

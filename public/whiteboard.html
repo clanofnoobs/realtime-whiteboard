@@ -1,10 +1,10 @@
 <div class="container">
   <div class="col-sm-6 col-sm-offset-3" style="text-align:center;">
-    <h1>{{board.title}}</h1>
+    <h1>{{word}}</h1>
     <div ng-repeat="user in users">
       {{user}}
     </div>
     </hr>
   </div>
 </div>
-<canvas id='c' height="700px" width="1500px" class="whiteboard"></canvas>
+<input ng-model="type" type="text" />

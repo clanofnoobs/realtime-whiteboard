@@ -48,12 +48,20 @@ app.use('/users', users);
 var http = require('http').Server(app);
 var io = require('socket.io')(http);
 
-io.on('connection', function(socket){
-  socket.emit('connected', "You are connected");
+io.of('/room').on('connection', function(socket){
+  var joinedToken = null;
   console.log("User connected");
-  socket.on("user", function(user){
-    console.log(user + " is connected");
-    socket.emit("user", user);
+  socket.on("user", function(obj){
+    socket.join(obj.unique_token);
+
+    joinedToken = obj.unique_token;
+    console.log(obj.user + " is connected");
+
+    socket.emit("user", obj.user);
+    socket.broadcast.to(joinedToken).send(obj.user);
+  });
+  socket.on("typing", function(letter){
+    socket.broadcast.to(joinedToken).emit("word", letter);
   });
 });
 
