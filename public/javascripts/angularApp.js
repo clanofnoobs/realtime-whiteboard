@@ -205,13 +205,6 @@ app.controller('board', ['$scope', 'whiteboards','$timeout', function($scope, wh
     $scope.users.push(user);
     $scope.$apply();
   });
-  $scope.$watch('type', function(){
-    socket.emit("typing", $scope.type);
-  });
-  socket.on("word", function(letter){
-    $scope.word = letter;
-    $scope.$apply();
-  });
   socket.on("message", function(user){
     $scope.users.push(user);
     $scope.$apply();
