@@ -202,7 +202,6 @@ app.controller('board', ['$scope', 'whiteboards','$timeout', function($scope, wh
   },500);
 
   socket.on("user", function(user){
-    $scope.users.push(user);
     $scope.$apply();
   });
   socket.on("message", function(user){
@@ -214,9 +213,33 @@ app.controller('board', ['$scope', 'whiteboards','$timeout', function($scope, wh
     var canvas = new fabric.Canvas('c');
     canvas.add(new fabric.Circle({ radius: 30, fill: '#f55', top:canvas.getHeight()/2 - 30,left:canvas.getWidth()/2}));
 
+    var brush = new fabric.PencilBrush(canvas);
+    brush.width = 10;
+    canvas.freeDrawingBrush = brush;
+    
+
+
+    canvas.renderAll();
+    canvas.on('mouse:down', function(e){
+      point = { x: e.e.offsetX, y: e.e.offsetY};
+      socket.emit("draw", point);
+      brush.onMouseDown(point);
+    });
+    canvas.on("path:created", function(e){
+      var path  = e.path;
+      path.strokeWidth = 20;
+      brush.createPath(path);
+      console.log(JSON.stringify(path));
+      console.log(JSON.stringify(canvas));
+    });
+    canvas.isDrawingMode = true;
+
     socket.on("objectMove", function(coords){
       canvas.item(0).set({left:coords.x, top: coords.y});
       canvas.renderAll();
+    });
+    socket.on("draw", function(point){
+      brush.onMouseDown(point);
     });
 function debounce(fn, delay) {
   var timer = null;
@@ -231,6 +254,7 @@ function debounce(fn, delay) {
 
     canvas.on('object:moving', debounce(function(e){
       var activeObject = e.target;
+      debugger;
       console.log(activeObject.get('left'));
       var coords = { x: activeObject.get('left'), y: activeObject.get('top') }
       socket.emit("objectMove", coords);

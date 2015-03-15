@@ -64,6 +64,10 @@ io.of('/room').on('connection', function(socket){
     console.log(coords.x + ", " + coords.y);
     socket.broadcast.to(joinedToken).emit("objectMove", coords);
   });
+  socket.on("draw", function(point){
+    console.log(point);
+    socket.broadcast.to(joinedToken).emit("draw", point);
+  });
 });
 
 
