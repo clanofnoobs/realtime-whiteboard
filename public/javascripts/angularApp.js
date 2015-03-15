@@ -217,7 +217,7 @@ app.controller('board', ['$scope', 'whiteboards','$timeout', function($scope, wh
     brush.width = 10;
     canvas.freeDrawingBrush = brush;
     
-
+    var isDrawing = false;
 
     canvas.renderAll();
     canvas.on('mouse:down', function(e){
@@ -225,12 +225,12 @@ app.controller('board', ['$scope', 'whiteboards','$timeout', function($scope, wh
       socket.emit("draw", point);
       brush.onMouseDown(point);
     });
+    var path;
     canvas.on("path:created", function(e){
-      var path  = e.path;
-      path.strokeWidth = 20;
-      brush.createPath(path);
-      console.log(JSON.stringify(path));
-      console.log(JSON.stringify(canvas));
+      path  = e.path;
+      var json = JSON.stringify(path);
+      canvas.renderAll();
+      socket.emit("draw", path);
     });
     canvas.isDrawingMode = true;
 
@@ -238,8 +238,10 @@ app.controller('board', ['$scope', 'whiteboards','$timeout', function($scope, wh
       canvas.item(0).set({left:coords.x, top: coords.y});
       canvas.renderAll();
     });
-    socket.on("draw", function(point){
-      brush.onMouseDown(point);
+    socket.on("draw", function(path){
+      brush.createPath(path);
+      canvas.add(path);
+      canvas.renderAll();
     });
 function debounce(fn, delay) {
   var timer = null;
