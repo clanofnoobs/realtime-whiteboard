@@ -234,11 +234,8 @@ app.controller('board', ['$scope', 'whiteboards','$timeout', function($scope, wh
       canvas.renderAll();
     });
     socket.on("draw", function(thePath){
-      var canvasJSON = JSON.stringify(canvas);
-      var canvasObj = JSON.parse(canvasJSON);
-      var path = JSON.stringify(thePath);
-      var pathObj = JSON.parse(path);
-      canvasObj.objects.push(pathObj);
+      var canvasObj = canvas.toObject();
+      canvasObj.objects.push(thePath);
       console.log(JSON.stringify(canvasObj));
       canvas.loadFromJSON(JSON.stringify(canvasObj));
       canvas.renderAll();
