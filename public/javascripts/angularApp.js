@@ -220,17 +220,12 @@ app.controller('board', ['$scope', 'whiteboards','$timeout', function($scope, wh
     var isDrawing = false;
 
     canvas.renderAll();
-    canvas.on('mouse:down', function(e){
-      point = { x: e.e.offsetX, y: e.e.offsetY};
-      socket.emit("draw", point);
-      brush.onMouseDown(point);
-    });
     var path;
     canvas.on("path:created", function(e){
       path  = e.path;
-      var json = JSON.stringify(path);
+      var json = path.toJSON();
       canvas.renderAll();
-      socket.emit("draw", path);
+      socket.emit("draw", json);
     });
     canvas.isDrawingMode = true;
 
@@ -238,9 +233,14 @@ app.controller('board', ['$scope', 'whiteboards','$timeout', function($scope, wh
       canvas.item(0).set({left:coords.x, top: coords.y});
       canvas.renderAll();
     });
-    socket.on("draw", function(path){
-      brush.createPath(path);
-      canvas.add(path);
+    socket.on("draw", function(thePath){
+      var canvasJSON = JSON.stringify(canvas);
+      var canvasObj = JSON.parse(canvasJSON);
+      var path = JSON.stringify(thePath);
+      var pathObj = JSON.parse(path);
+      canvasObj.objects.push(pathObj);
+      console.log(JSON.stringify(canvasObj));
+      canvas.loadFromJSON(JSON.stringify(canvasObj));
       canvas.renderAll();
     });
 function debounce(fn, delay) {
