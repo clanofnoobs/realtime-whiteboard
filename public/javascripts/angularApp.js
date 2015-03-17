@@ -237,12 +237,22 @@ app.controller('board', ['$scope', 'whiteboards','$timeout', function($scope, wh
     canvas.freeDrawingBrush = brush;
     
     var isDrawing = false;
+    canvas.isDrawingMode = true;
 
     canvas.renderAll();
     var path;
     canvas.on("path:created", function(e){
       path  = e.path;
+      path.toObject = (function(toObject){
+        return function(){
+          return fabric.util.object.extend(toObject.call(this),{
+            unique_token: this.unique_token
+          });
+        };
+      })(rect.toObject)
+      path.unique_token = 'test1923';
       var json = path.toJSON();
+      console.log(json);
       canvas.renderAll();
       socket.emit("draw", json);
     });
