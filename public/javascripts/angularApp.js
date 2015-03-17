@@ -211,7 +211,26 @@ app.controller('board', ['$scope', 'whiteboards','$timeout', function($scope, wh
 
 
     var canvas = new fabric.Canvas('c');
-    canvas.add(new fabric.Circle({ radius: 30, fill: '#f55', top:canvas.getHeight()/2 - 30,left:canvas.getWidth()/2}));
+
+    var rect = new fabric.Rect({height: 30, width: 30, fill:'#f55', top:canvas.getHeight()/2 - 30, left:canvas.getWidth()/2});
+
+    rect.toObject = (function(toObject){
+      return function(){
+        return fabric.util.object.extend(toObject.call(this),{
+          unique_token: this.unique_token
+        });
+      };
+    })(rect.toObject)
+
+    rect.unique_token = 'd59sbz1';
+
+    console.log(rect.toObject());
+
+    canvas.add(rect);
+    canvas.forEachObject(function(obj){
+      console.log(obj.toObject());
+    });
+    debugger;
 
     var brush = new fabric.PencilBrush(canvas);
     brush.width = 10;
@@ -227,7 +246,6 @@ app.controller('board', ['$scope', 'whiteboards','$timeout', function($scope, wh
       canvas.renderAll();
       socket.emit("draw", json);
     });
-    canvas.isDrawingMode = true;
 
     socket.on("objectMove", function(coords){
       canvas.item(0).set({left:coords.x, top: coords.y});
@@ -239,6 +257,7 @@ app.controller('board', ['$scope', 'whiteboards','$timeout', function($scope, wh
       console.log(JSON.stringify(canvasObj));
       canvas.loadFromJSON(JSON.stringify(canvasObj));
       canvas.renderAll();
+
     });
 function debounce(fn, delay) {
   var timer = null;
@@ -250,6 +269,11 @@ function debounce(fn, delay) {
     }, delay);
   };
 }
+    // canvas events
+    
+    canvas.on('object:modified', function(object){
+      console.log(object.target);
+    });
 
     canvas.on('object:moving', debounce(function(e){
       var activeObject = e.target;
@@ -259,6 +283,17 @@ function debounce(fn, delay) {
       socket.emit("objectMove", coords);
       console.log(activeObject.get('top'));
     },12));
+  //add circles and squares
+    $scope.addShape = function(){
+      var rect = new fabric.Rect();
+      rect.toObject = (function(toObject){
+        return function(){
+          return fabric.util.object.extend(toObject.call(this),{
+            unique_token: this.unique_token
+          });
+        };
+      })(rect.toObject)
+    }
 
 }]);
 
