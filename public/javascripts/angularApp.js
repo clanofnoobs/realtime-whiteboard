@@ -231,8 +231,16 @@ app.controller('board', ['$scope', 'whiteboards','$timeout', function($scope, wh
     brush.width = 10;
     canvas.freeDrawingBrush = brush;
     
-    var isDrawing = false;
     canvas.isDrawingMode = true;
+
+    $scope.drawingMode = function(){
+      console.log("DANGER");
+      if (!canvas.isDrawingMode){
+      canvas.isDrawingMode = true;
+      } else {
+        canvas.isDrawingMode = false;
+      }
+    };
 
     canvas.renderAll();
     var path;
@@ -253,6 +261,14 @@ app.controller('board', ['$scope', 'whiteboards','$timeout', function($scope, wh
       socket.emit("draw", json);
     });
 
+    if (canvas.isDrawingMode){
+    canvas.on("touch:drag", function(e){
+      console.log(e);
+      var points = { x: e.e.offsetX, y: e.e.offsetY };
+      socket.emit("drawing", points);
+    });
+    }
+
     socket.on("objectMove", function(coords){
       canvas.getObjects().forEach(function(obj){
         if (obj.unique_token == coords.unique_token){
@@ -263,6 +279,13 @@ app.controller('board', ['$scope', 'whiteboards','$timeout', function($scope, wh
         }
       });
     });
+    canvas.on("mouse:up",function(){
+      socket.emit("mouseup");
+    });
+    socket.on("mouseup", function(){
+      brush.onMouseUp();
+      brush._points = [];
+    });
     socket.on("draw", function(thePath){
       var canvasObj = canvas.toObject();
       canvasObj.objects.push(thePath);
@@ -270,6 +293,9 @@ app.controller('board', ['$scope', 'whiteboards','$timeout', function($scope, wh
       canvas.loadFromJSON(JSON.stringify(canvasObj));
       canvas.renderAll();
 
+    });
+    socket.on("drawing",function(points){
+      brush.onMouseMove(points);
     });
     socket.on("setCoords", function(objectMoved){
       canvas.getObjects().forEach(function(obj){
@@ -318,13 +344,6 @@ function debounce(fn, delay) {
       })(rect.toObject)
     }
 
-    $scope.drawingMode = function(){
-      if (!canvas.isDrawingMode){
-      canvas.isDrawingMode = true;
-      } else {
-        canvas.isDrawingMode = false;
-      }
-    };
 
 }]);
 

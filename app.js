@@ -71,6 +71,12 @@ io.of('/room').on('connection', function(socket){
   socket.on("setCoords", function(coords){
     socket.broadcast.to(joinedToken).emit("setCoords", coords);
   });
+  socket.on("drawing", function(coords){
+    socket.broadcast.to(joinedToken).emit("drawing", coords);
+  });
+  socket.on("mouseup", function(){
+    socket.broadcast.to(joinedToken).emit("mouseup");
+  });
 });
 
 
