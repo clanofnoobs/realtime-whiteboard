@@ -256,7 +256,9 @@ app.controller('board', ['$scope', 'whiteboards','$timeout', function($scope, wh
     socket.on("objectMove", function(coords){
       canvas.getObjects().forEach(function(obj){
         if (obj.unique_token == coords.unique_token){
-          obj.set({left:coords.x, top: coords.y});
+          obj.oCoords = coords.coords;
+          obj.left = coords.x;
+          obj.top = coords.y;
           canvas.renderAll();
         }
       });
@@ -268,6 +270,14 @@ app.controller('board', ['$scope', 'whiteboards','$timeout', function($scope, wh
       canvas.loadFromJSON(JSON.stringify(canvasObj));
       canvas.renderAll();
 
+    });
+    socket.on("setCoords", function(objectMoved){
+      canvas.getObjects().forEach(function(obj){
+        if (obj.unique_token == objectMoved.unique_token){
+          obj.oCoords = objectMoved.oCoords;
+          canvas.renderAll();
+        }
+      });
     });
 function debounce(fn, delay) {
   var timer = null;
@@ -282,13 +292,18 @@ function debounce(fn, delay) {
     // canvas events
     
     canvas.on('object:modified', function(object){
-      console.log(object.target);
+      var activeObject = object.target;
+      var obj = { oCoords: activeObject.oCoords, unique_token: activeObject.unique_token }
+
+      socket.emit("setCoords", obj);
     });
 
     canvas.on('object:moving', debounce(function(e){
       var activeObject = e.target;
+      console.log(activeObject.oCoords);
 
-      var coords = { x: activeObject.get('left'), y: activeObject.get('top'), unique_token: activeObject.unique_token }
+      var coords = { x: activeObject.get('left'), y: activeObject.get('top'), unique_token: activeObject.unique_token, coords: activeObject.oCoords }
+      console.log(coords);
       socket.emit("objectMove", coords);
     },12));
   //add circles and squares
