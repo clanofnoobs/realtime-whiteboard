@@ -263,14 +263,21 @@ app.controller('board', ['$scope', 'whiteboards','$timeout', function($scope, wh
       canvas.renderAll();
       socket.emit("draw", json);
     });
+    var isDrawing;
 
-    if (canvas.isDrawingMode){
-    canvas.on("touch:drag", function(e){
-      console.log(e);
-      var points = { x: e.e.offsetX, y: e.e.offsetY };
-      socket.emit("drawing", points);
+    canvas.on("mouse:down", function(){
+      if (canvas.isDrawingMode){
+        isDrawing = true;
+      }
     });
-    }
+
+      canvas.on("mouse:move", function(e){
+      console.log(e);
+      if (canvas.isDrawingMode && isDrawing){
+        var points = { x: e.e.offsetX, y: e.e.offsetY };
+        socket.emit("drawing", points);
+      }
+    });
     
 
     socket.on("objectMove", function(coords){
@@ -284,20 +291,21 @@ app.controller('board', ['$scope', 'whiteboards','$timeout', function($scope, wh
       });
     });
     canvas.on("mouse:up",function(){
+      isDrawing = false;
       socket.emit("mouseup");
     });
     socket.on("mouseup", function(){
       brush.onMouseUp();
       brush._points = [];
     });
-    socket.on("draw", function(thePath){
+    /*socket.on("draw", function(thePath){
       var canvasObj = canvas.toObject();
       canvasObj.objects.push(thePath);
       console.log(JSON.stringify(canvasObj));
       canvas.loadFromJSON(JSON.stringify(canvasObj));
       canvas.renderAll();
 
-    });
+    });*/
     socket.on("drawing",function(points){
       brush.onMouseMove(points);
     });
