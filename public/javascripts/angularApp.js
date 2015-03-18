@@ -193,7 +193,6 @@ app.controller('board', ['$scope', 'whiteboards','$timeout', function($scope, wh
   $scope.users = [];
   var socket = io.connect('/room');
   $scope.board = whiteboards.board;
-  console.log($scope.board);
   $timeout(function(){
     var obj = {};
     obj["unique_token"] = whiteboards.board.unique_token;
@@ -234,7 +233,6 @@ app.controller('board', ['$scope', 'whiteboards','$timeout', function($scope, wh
     canvas.isDrawingMode = true;
 
     $scope.changeMode = function(){
-      alert("HI");
       if (canvas.isDrawingMode){
       canvas.isDrawingMode = false;
       } else {
@@ -243,6 +241,16 @@ app.controller('board', ['$scope', 'whiteboards','$timeout', function($scope, wh
     };
     $scope.test = function(){
       alert("Test");
+    }
+
+    function extendClass(obj){
+      obj.toObject = (function(toObject){
+        return function(){
+          return fabric.util.object.extend(toObject.call(this),{
+            unique_token: this.unique_token
+          });
+        };
+      })(obj.toObject)
     }
 
     canvas.renderAll();
@@ -256,10 +264,8 @@ app.controller('board', ['$scope', 'whiteboards','$timeout', function($scope, wh
           });
         };
       })(path.toObject)
-      path.unique_token = 'test1923';
+      path.unique_token = makeid();
       var json = path.toJSON();
-      console.log(json);
-      debugger;
       canvas.renderAll();
       socket.emit("draw", json);
     });
@@ -272,7 +278,6 @@ app.controller('board', ['$scope', 'whiteboards','$timeout', function($scope, wh
     });
 
       canvas.on("mouse:move", function(e){
-      console.log(e);
       if (canvas.isDrawingMode && isDrawing){
         var points = { x: e.e.offsetX, y: e.e.offsetY };
         socket.emit("drawing", points);
@@ -281,9 +286,9 @@ app.controller('board', ['$scope', 'whiteboards','$timeout', function($scope, wh
     
 
     socket.on("objectMove", function(coords){
+      debugger;
       canvas.getObjects().forEach(function(obj){
         if (obj.unique_token == coords.unique_token){
-          obj.oCoords = coords.coords;
           obj.left = coords.x;
           obj.top = coords.y;
           canvas.renderAll();
@@ -295,17 +300,29 @@ app.controller('board', ['$scope', 'whiteboards','$timeout', function($scope, wh
       socket.emit("mouseup");
     });
     socket.on("mouseup", function(){
-      brush.onMouseUp();
       brush._points = [];
     });
-    /*socket.on("draw", function(thePath){
+    socket.on("draw", function(thePath){
       var canvasObj = canvas.toObject();
+      canvasObj.objects = [];
+      canvas.getObjects().forEach(function(obj){
+        obj.toObject = (function(toObject){
+          return function(){
+            return fabric.util.object.extend(toObject.call(this),{
+              unique_token: this.unique_token
+            });
+          };
+        })(obj.toObject)
+        console.log(obj);
+        canvasObj.objects.push(obj); 
+      });
+      console.log(canvasObj);
       canvasObj.objects.push(thePath);
       console.log(JSON.stringify(canvasObj));
       canvas.loadFromJSON(JSON.stringify(canvasObj));
+      debugger;
       canvas.renderAll();
-
-    });*/
+    });
     socket.on("drawing",function(points){
       brush.onMouseMove(points);
     });
@@ -331,6 +348,7 @@ function debounce(fn, delay) {
 
     canvas.on('object:moving', debounce(function(e){
       var activeObject = e.target;
+      console.log(activeObject);
 
       var coords = { x: activeObject.get('left'), y: activeObject.get('top'), unique_token: activeObject.unique_token }
       socket.emit("objectMove", coords);
@@ -346,6 +364,17 @@ function debounce(fn, delay) {
         };
       })(rect.toObject)
     }
+
+    function makeid()
+      {
+      var text = "";
+      var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+
+      for( var i=0; i < 7; i++ )
+          text += possible.charAt(Math.floor(Math.random() * possible.length));
+
+      return text;
+      }
 
 
 }]);
