@@ -233,14 +233,17 @@ app.controller('board', ['$scope', 'whiteboards','$timeout', function($scope, wh
     
     canvas.isDrawingMode = true;
 
-    $scope.drawingMode = function(){
-      console.log("DANGER");
-      if (!canvas.isDrawingMode){
-      canvas.isDrawingMode = true;
+    $scope.changeMode = function(){
+      alert("HI");
+      if (canvas.isDrawingMode){
+      canvas.isDrawingMode = false;
       } else {
-        canvas.isDrawingMode = false;
+        canvas.isDrawingMode = true;
       }
     };
+    $scope.test = function(){
+      alert("Test");
+    }
 
     canvas.renderAll();
     var path;
@@ -268,6 +271,7 @@ app.controller('board', ['$scope', 'whiteboards','$timeout', function($scope, wh
       socket.emit("drawing", points);
     });
     }
+    
 
     socket.on("objectMove", function(coords){
       canvas.getObjects().forEach(function(obj){
@@ -297,14 +301,7 @@ app.controller('board', ['$scope', 'whiteboards','$timeout', function($scope, wh
     socket.on("drawing",function(points){
       brush.onMouseMove(points);
     });
-    socket.on("setCoords", function(objectMoved){
-      canvas.getObjects().forEach(function(obj){
-        if (obj.unique_token == objectMoved.unique_token){
-          obj.oCoords = objectMoved.oCoords;
-          canvas.renderAll();
-        }
-      });
-    });
+
 function debounce(fn, delay) {
   var timer = null;
   return function () {
@@ -321,15 +318,13 @@ function debounce(fn, delay) {
       var activeObject = object.target;
       var obj = { oCoords: activeObject.oCoords, unique_token: activeObject.unique_token }
 
-      socket.emit("setCoords", obj);
+      socket.emit("objectModded", obj);
     });
 
     canvas.on('object:moving', debounce(function(e){
       var activeObject = e.target;
-      console.log(activeObject.oCoords);
 
-      var coords = { x: activeObject.get('left'), y: activeObject.get('top'), unique_token: activeObject.unique_token, coords: activeObject.oCoords }
-      console.log(coords);
+      var coords = { x: activeObject.get('left'), y: activeObject.get('top'), unique_token: activeObject.unique_token }
       socket.emit("objectMove", coords);
     },12));
   //add circles and squares
