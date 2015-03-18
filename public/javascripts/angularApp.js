@@ -224,13 +224,8 @@ app.controller('board', ['$scope', 'whiteboards','$timeout', function($scope, wh
 
     rect.unique_token = 'd59sbz1';
 
-    console.log(rect.toObject());
 
     canvas.add(rect);
-    canvas.forEachObject(function(obj){
-      console.log(obj.toObject());
-    });
-    debugger;
 
     var brush = new fabric.PencilBrush(canvas);
     brush.width = 10;
@@ -249,17 +244,22 @@ app.controller('board', ['$scope', 'whiteboards','$timeout', function($scope, wh
             unique_token: this.unique_token
           });
         };
-      })(rect.toObject)
+      })(path.toObject)
       path.unique_token = 'test1923';
       var json = path.toJSON();
       console.log(json);
+      debugger;
       canvas.renderAll();
       socket.emit("draw", json);
     });
 
     socket.on("objectMove", function(coords){
-      canvas.item(0).set({left:coords.x, top: coords.y});
-      canvas.renderAll();
+      canvas.getObjects().forEach(function(obj){
+        if (obj.unique_token == coords.unique_token){
+          obj.set({left:coords.x, top: coords.y});
+          canvas.renderAll();
+        }
+      });
     });
     socket.on("draw", function(thePath){
       var canvasObj = canvas.toObject();
@@ -287,11 +287,9 @@ function debounce(fn, delay) {
 
     canvas.on('object:moving', debounce(function(e){
       var activeObject = e.target;
-      debugger;
-      console.log(activeObject.get('left'));
-      var coords = { x: activeObject.get('left'), y: activeObject.get('top') }
+
+      var coords = { x: activeObject.get('left'), y: activeObject.get('top'), unique_token: activeObject.unique_token }
       socket.emit("objectMove", coords);
-      console.log(activeObject.get('top'));
     },12));
   //add circles and squares
     $scope.addShape = function(){
@@ -304,6 +302,14 @@ function debounce(fn, delay) {
         };
       })(rect.toObject)
     }
+
+    $scope.drawingMode = function(){
+      if (!canvas.isDrawingMode){
+      canvas.isDrawingMode = true;
+      } else {
+        canvas.isDrawingMode = false;
+      }
+    };
 
 }]);
 
