@@ -368,6 +368,12 @@ app.controller('board', ['$scope', 'whiteboards','$timeout', function($scope, wh
 
 }]);
 
+app.filter('first', function(){
+  return function(input){
+    var firstLetter = input.charAt(0);
+    return firstLetter;
+  };
+});
 
 app.config([
     '$stateProvider',

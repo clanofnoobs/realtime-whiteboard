@@ -21,6 +21,18 @@ a {
   font-style:bold;
 }
 
+.users {
+  font-size: 28px;
+  text-align:center;
+  height:40px;
+  width:40px;
+  color: white;
+  background: orange;
+  position:absolute;
+  top: 0px;
+  right: 15px;
+}
+
 .nottaken {
   color: green;
   font-style:bold;
