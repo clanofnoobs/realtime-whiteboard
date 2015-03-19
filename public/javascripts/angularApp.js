@@ -291,6 +291,7 @@ app.controller('board', ['$scope', 'whiteboards','$timeout', function($scope, wh
         if (obj.unique_token == coords.unique_token){
           obj.left = coords.x;
           obj.top = coords.y;
+          obj.setCoords();
           canvas.renderAll();
         }
       });
@@ -320,7 +321,6 @@ app.controller('board', ['$scope', 'whiteboards','$timeout', function($scope, wh
       canvasObj.objects.push(thePath);
       console.log(JSON.stringify(canvasObj));
       canvas.loadFromJSON(JSON.stringify(canvasObj));
-      debugger;
       canvas.renderAll();
     });
     socket.on("drawing",function(points){
