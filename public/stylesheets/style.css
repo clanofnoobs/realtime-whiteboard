@@ -32,6 +32,24 @@ a {
   top: 0px;
   right: 15px;
 }
+.drawContainer{
+  position:absolute;
+  top: 150px;;
+  margin-left:20px;
+}
+
+.pencilIcon {
+  background: url('images/indicator.gif') left center no-repeat;
+  padding-left: 15px;
+}
+
+.drawing {
+  background-color: green;
+}
+
+.notDrawing {
+  background-color: red;
+}
 
 .nottaken {
   color: green;
