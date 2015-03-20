@@ -14,7 +14,23 @@
     Toggle drawmode
   </button>
   </br>
+  </br>
+  Shapes
+  </br>
   <button class="btn btn-default">
-    <span class="glyphicon glyphicon-pencil"></span>
+    <img src="images/square.png"/>
   </button>
+  <button class="btn btn-default">
+    <div id="triangle"></div>
+  </button>
+  <button class="btn btn-default">
+    <img src="images/circle.png"/>
+  </button>
+  </br>
+  </br>
+  <label for="shape-stroke">Stroke Width</label>
+  </br>
+  <input ng-model="strokeWidth" type="range" min="1" max="10" value="1" id="shape-stroke">
+  {{strokeWidth || 1}}
+
 </div>

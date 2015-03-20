@@ -21,6 +21,14 @@ a {
   font-style:bold;
 }
 
+#triangle{
+  width: 0;
+  height: 0;
+  border-left: 12.5px solid transparent;
+  border-right: 12.5px solid transparent;
+  border-bottom: 25px solid black;
+}
+
 .users {
   font-size: 28px;
   text-align:center;
