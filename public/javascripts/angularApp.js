@@ -345,16 +345,43 @@ app.controller('board', ['$scope', 'whiteboards','$timeout', function($scope, wh
   });
 
   //add circles and squares
-  $scope.addShape = function(){
-    var rect = new fabric.Rect();
-    rect.toObject = (function(toObject){
+  $scope.addShape = function(shape){
+    var obj;
+    switch(shape){
+      case 'triangle':
+        obj = new fabric.Triangle();
+        break;
+      case 'circle':
+        obj = new fabric.Circle();
+        break;
+      case 'rect':
+        obj = new fabric.Rect();
+        break;
+      default:
+        obj - new fabric.Rect();
+    }
+    obj.toObject = (function(toObject){
       return function(){
         return fabric.util.object.extend(toObject.call(this),{
           unique_token: this.unique_token
         });
       };
-    })(rect.toObject)
+    })(obj.toObject)
+    if (shape == 'circle'){
+      obj.radius = 30;
+    }
+    obj.unique_token = makeid();
+    obj.top = 250;
+    obj.left = 250;
+    obj.width = 30;
+    obj.height = 30;
+    obj.stroke = $scope.strokeColor || 'black';
+    obj.strokeWidth = $scope.strokeWidth || 2;
+    obj.fill = $scope.fillColor || 'black';
+    canvas.add(obj);
+    canvas.renderAll();
   }
+
 
   function makeid(){
     var text = "";

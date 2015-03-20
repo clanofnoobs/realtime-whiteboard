@@ -15,22 +15,40 @@
   </button>
   </br>
   </br>
-  Shapes
+  <label for="drawing-color">Drawing color: </label>
+  <input type="color" ng-model="color" id="drawing-color" style="float:right;"/>
+  {{ color }}
   </br>
-  <button class="btn btn-default">
+  </br>
+  <strong>
+    Shapes
+  </strong>
+  </br>
+  <button ng-click="addShape('rect')" class="btn btn-default">
     <img src="images/square.png"/>
   </button>
-  <button class="btn btn-default">
+  <button ng-click="addShape('triangle')" class="btn btn-default">
     <div id="triangle"></div>
   </button>
-  <button class="btn btn-default">
+  <button ng-click="addShape('circle')" class="btn btn-default">
     <img src="images/circle.png"/>
   </button>
   </br>
   </br>
+
   <label for="shape-stroke">Stroke Width</label>
   </br>
   <input ng-model="strokeWidth" type="range" min="1" max="10" value="1" id="shape-stroke">
   {{strokeWidth || 1}}
+
+  </br>
+  </br>
+  <label for="shape-stroke-color">Stroke Color: </label>
+  <input ng-model="strokeColor" type="color" id="shape-stroke-color" style="float:right;">
+
+  </br>
+  </br>
+  <label for="shape-stroke-color">Fill Color: </label>
+  <input ng-model="fillColor" type="color" id="shape-stroke-color" style="float:right;">
 
 </div>
