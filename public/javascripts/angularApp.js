@@ -218,8 +218,14 @@ app.controller('board', ['$scope', 'whiteboards','$timeout', function($scope, wh
   canvas.add(rect);
 
   var brush = new fabric.PencilBrush(canvas);
-  brush.width = 1;
-  canvas.freeDrawingBrush = brush;
+  var brush1 = new fabric.PencilBrush(canvas);
+  var brush2 = new fabric.PencilBrush(canvas);
+  var testObj = {};
+  testObj['clanofnoobs'] = brush;
+  testObj['cla'] = brush1;
+
+
+  canvas.freeDrawingBrush = brush2;
   
   canvas.isDrawingMode = true;
 
@@ -264,8 +270,8 @@ app.controller('board', ['$scope', 'whiteboards','$timeout', function($scope, wh
     });
   });
 
-  socket.on("mouseup", function(){
-    brush._points = [];
+  socket.on("mouseup", function(user){
+    testObj[user]._points = [];
   });
 
   socket.on("draw", function(thePath){
@@ -289,7 +295,11 @@ app.controller('board', ['$scope', 'whiteboards','$timeout', function($scope, wh
     canvas.renderAll();
   });
   socket.on("drawing",function(points){
-    brush.onMouseMove(points);
+    if (testObj[points.user]){
+    console.log(testObj[points.user].color);
+    testObj[points.user].onMouseMove(points);
+    }
+    //brush.onMouseMove(points);
   });
 
   function debounce(fn, delay) {
@@ -306,7 +316,7 @@ app.controller('board', ['$scope', 'whiteboards','$timeout', function($scope, wh
 
   canvas.on("mouse:move", function(e){
     if (canvas.isDrawingMode && isDrawing){
-      var points = { x: e.e.offsetX, y: e.e.offsetY };
+      var points = { x: e.e.offsetX, y: e.e.offsetY, user: whiteboards.user };
       socket.emit("drawing", points);
     }
   });
@@ -334,7 +344,7 @@ app.controller('board', ['$scope', 'whiteboards','$timeout', function($scope, wh
 
   canvas.on("mouse:up",function(){
     isDrawing = false;
-    socket.emit("mouseup");
+    socket.emit("mouseup", whiteboards.user);
   });
 
   canvas.on("path:created", function(e){
