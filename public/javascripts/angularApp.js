@@ -355,11 +355,14 @@ app.controller('board', ['$scope', 'whiteboards','$timeout', function($scope, wh
     socket.emit("objectModded", obj);
   });
 
+  //TODO - scale path objects on modified:event
   canvas.on('object:scaling', function(e){
     console.log(e.target);
     var scale = { height: e.target.height, width: e.target.width, x: e.target.scaleX, y: e.target.scaleY, unique_token: e.target.unique_token  }
 
-    socket.emit("scale", scale);
+    if (e.target.type != 'path'){
+      socket.emit("scale", scale);
+    }
   });
 
   canvas.on('object:moving', debounce(function(e){
