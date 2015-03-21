@@ -301,7 +301,6 @@ app.controller('board', ['$scope', 'whiteboards','$timeout', function($scope, wh
     canvas.getObjects().forEach(function(obj){
       if (obj.unique_token == angle.unique_token){
         obj.angle = angle.angle;
-        console.log(obj.angle);
         canvas.renderAll();
       }
     });
