@@ -231,7 +231,10 @@ app.controller('board', ['$scope', 'whiteboards','$timeout', function($scope, wh
 
   //owner brush; gets used in draw emission event
   ownerBrush.color = $scope.color || 'black';
-  ownerBrush.width = 5;
+  ownerBrush.width = 1;
+  $scope.$watch('drawingStrokeWidth', function(){
+    ownerBrush.width = $scope.drawingStrokeWidth;
+  });
   
   $scope.$watch('color', function(){
     ownerBrush.color = $scope.color;
@@ -287,6 +290,7 @@ app.controller('board', ['$scope', 'whiteboards','$timeout', function($scope, wh
         console.log(obj.currentHeight);
         obj.height = scale.y*scale.height;
         obj.width = scale.x*scale.width;
+        console.log(obj.height);
         obj.setCoords();
         canvas.renderAll();
       }
@@ -320,7 +324,6 @@ app.controller('board', ['$scope', 'whiteboards','$timeout', function($scope, wh
   });
   socket.on("drawing",function(points){
     if (testObj[points.user]){
-      console.log("exists");
     testObj[points.user].onMouseMove(points);
     }
     //brush.onMouseMove(points);
@@ -353,6 +356,7 @@ app.controller('board', ['$scope', 'whiteboards','$timeout', function($scope, wh
   });
 
   canvas.on('object:scaling', function(e){
+    console.log(e.target);
     var scale = { height: e.target.height, width: e.target.width, x: e.target.scaleX, y: e.target.scaleY, unique_token: e.target.unique_token  }
 
     socket.emit("scale", scale);
@@ -384,6 +388,7 @@ app.controller('board', ['$scope', 'whiteboards','$timeout', function($scope, wh
 
     path.unique_token = makeid();
     path.stroke = $scope.color || 'black';
+    path.strokeWidth = $scope.drawingStrokeWidth || 1;
     var json = path.toJSON();
 
     canvas.renderAll();
@@ -450,7 +455,6 @@ app.controller('board', ['$scope', 'whiteboards','$timeout', function($scope, wh
       text += possible.charAt(Math.floor(Math.random() * possible.length));
     return text;
   }
-
 
 }]);
 

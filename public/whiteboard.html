@@ -21,6 +21,13 @@
   <input type="color" ng-model="color" id="drawing-color" style="float:right;"/>
   </br>
   </br>
+  <label for="shape-stroke">Drawing Stroke Width</label>
+  </br>
+  <input ng-model="drawingStrokeWidth" type="range" min="1" max="10" value="1" id="shape-stroke">
+  {{strokeWidth || 1}}
+
+  </br>
+  </br>
   <strong>
     Shapes
   </strong>
