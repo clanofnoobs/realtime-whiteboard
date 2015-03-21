@@ -197,6 +197,7 @@ app.controller('board', ['$scope', 'whiteboards','$timeout', function($scope, wh
     var obj = {};
     obj["unique_token"] = whiteboards.board.unique_token;
     obj["user"] = whiteboards.user;
+    $scope.users.push(whiteboards.user);
     socket.emit("user", obj);
   },500);
 
@@ -253,10 +254,6 @@ app.controller('board', ['$scope', 'whiteboards','$timeout', function($scope, wh
   var path;
 
   //socket events
-  socket.on("user", function(user){
-    $scope.users.push(user);
-    $scope.$apply();
-  });
 
   socket.on("userEnter", function(user){
     createBrush(user);
@@ -268,6 +265,7 @@ app.controller('board', ['$scope', 'whiteboards','$timeout', function($scope, wh
   socket.on("userAlreadyConnected", function(user){
     createBrush(user);
     $scope.users.push(user);
+    console.log($scope.users);
     $scope.$apply();
   });
   
