@@ -288,8 +288,8 @@ app.controller('board', ['$scope', 'whiteboards','$timeout', function($scope, wh
     canvas.getObjects().forEach(function(obj){
       if (obj.unique_token == scale.unique_token){
         console.log(obj.currentHeight);
-        obj.height = scale.y*scale.height;
-        obj.width = scale.x*scale.width;
+        obj.scaleX = scale.x;
+        obj.scaleY = scale.y;
         console.log(obj.height);
         obj.setCoords();
         canvas.renderAll();
@@ -350,6 +350,7 @@ app.controller('board', ['$scope', 'whiteboards','$timeout', function($scope, wh
   
   canvas.on('object:modified', function(object){
     var activeObject = object.target;
+    console.log(activeObject);
     var obj = { oCoords: activeObject.oCoords, unique_token: activeObject.unique_token }
 
     socket.emit("objectModded", obj);
@@ -357,17 +358,13 @@ app.controller('board', ['$scope', 'whiteboards','$timeout', function($scope, wh
 
   //TODO - scale path objects on modified:event
   canvas.on('object:scaling', function(e){
-    console.log(e.target);
     var scale = { height: e.target.height, width: e.target.width, x: e.target.scaleX, y: e.target.scaleY, unique_token: e.target.unique_token  }
 
-    if (e.target.type != 'path'){
-      socket.emit("scale", scale);
-    }
+    socket.emit("scale", scale);
   });
 
   canvas.on('object:moving', debounce(function(e){
     var activeObject = e.target;
-    console.log(activeObject);
 
     var coords = { x: activeObject.get('left'), y: activeObject.get('top'), unique_token: activeObject.unique_token }
     socket.emit("objectMove", coords);
