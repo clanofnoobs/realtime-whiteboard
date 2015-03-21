@@ -297,6 +297,16 @@ app.controller('board', ['$scope', 'whiteboards','$timeout', function($scope, wh
     });
   });
 
+  socket.on("rotating", function(angle){
+    canvas.getObjects().forEach(function(obj){
+      if (obj.unique_token == angle.unique_token){
+        obj.angle = angle.angle;
+        console.log(obj.angle);
+        canvas.renderAll();
+      }
+    });
+  });
+
   socket.on("mouseup", function(user){
     if (testObj[user]){
       testObj[user]._points = [];
@@ -356,11 +366,16 @@ app.controller('board', ['$scope', 'whiteboards','$timeout', function($scope, wh
     socket.emit("objectModded", obj);
   });
 
-  //TODO - scale path objects on modified:event
   canvas.on('object:scaling', function(e){
-    var scale = { height: e.target.height, width: e.target.width, x: e.target.scaleX, y: e.target.scaleY, unique_token: e.target.unique_token  }
+    var scale = { x: e.target.scaleX, y: e.target.scaleY, unique_token: e.target.unique_token  }
 
     socket.emit("scale", scale);
+  });
+
+  canvas.on('object:rotating', function(e){
+    var obj = { angle: e.target.angle, unique_token: e.target.unique_token }
+    console.log(e.target.angle);
+    socket.emit("rotating", obj);
   });
 
   canvas.on('object:moving', debounce(function(e){

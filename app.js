@@ -73,6 +73,9 @@ io.of('/room').on('connection', function(socket){
     console.log(point);
     socket.broadcast.to(joinedToken).emit("draw", point);
   });
+  socket.on("rotating", function(angle){
+    socket.broadcast.to(joinedToken).emit("rotating", angle);
+  });
   socket.on("setCoords", function(coords){
     socket.broadcast.to(joinedToken).emit("setCoords", coords);
   });
