@@ -218,13 +218,17 @@ app.controller('board', ['$scope', 'whiteboards','$timeout', function($scope, wh
   canvas.add(rect);
 
   var brush = new fabric.PencilBrush(canvas);
-  var brush1 = new fabric.PencilBrush(canvas);
+  //var brush1 = new fabric.PencilBrush(canvas);
   var ownerBrush = new fabric.PencilBrush(canvas);
   var testObj = {};
+  createBrush('cla');
+  createBrush('clanofnoobs');
   //clients brushes
-  testObj['clanofnoobs'] = brush;
+  /*
   testObj['cla'] = brush1;
   brush1.color = 'green';
+  */
+  console.log(testObj);
 
   //owner brush; gets used in draw emission event
   ownerBrush.color = $scope.color || 'black';
@@ -281,7 +285,9 @@ app.controller('board', ['$scope', 'whiteboards','$timeout', function($scope, wh
   });
 
   socket.on("mouseup", function(user){
-    testObj[user]._points = [];
+    if (testObj[user]){
+      testObj[user]._points = [];
+    }
   });
 
   socket.on("draw", function(thePath){
@@ -305,6 +311,7 @@ app.controller('board', ['$scope', 'whiteboards','$timeout', function($scope, wh
   });
   socket.on("drawing",function(points){
     if (testObj[points.user]){
+      console.log("exists");
     testObj[points.user].onMouseMove(points);
     }
     //brush.onMouseMove(points);
@@ -421,6 +428,10 @@ app.controller('board', ['$scope', 'whiteboards','$timeout', function($scope, wh
     canvas.renderAll();
   }
 
+  function createBrush(user){
+    var brush = new fabric.PencilBrush(canvas);
+    testObj[user] = brush;
+  }
 
   function makeid(){
     var text = "";
