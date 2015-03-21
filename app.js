@@ -57,8 +57,10 @@ io.of('/room').on('connection', function(socket){
     joinedToken = obj.unique_token;
     console.log(obj.user + " is connected");
 
-    socket.emit("user", obj.user);
-    socket.broadcast.to(joinedToken).send(obj.user);
+    socket.broadcast.to(joinedToken).emit("userEnter", obj.user);
+  });
+  socket.on("userEnter", function(user){
+    socket.broadcast.to(joinedToken).emit("userAlreadyConnected", user);
   });
   socket.on("objectMove", function(coords){
     console.log(coords.x + ", " + coords.y);

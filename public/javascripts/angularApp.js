@@ -221,8 +221,6 @@ app.controller('board', ['$scope', 'whiteboards','$timeout', function($scope, wh
   //var brush1 = new fabric.PencilBrush(canvas);
   var ownerBrush = new fabric.PencilBrush(canvas);
   var testObj = {};
-  createBrush('cla');
-  createBrush('clanofnoobs');
   //clients brushes
   /*
   testObj['cla'] = brush1;
@@ -256,6 +254,19 @@ app.controller('board', ['$scope', 'whiteboards','$timeout', function($scope, wh
 
   //socket events
   socket.on("user", function(user){
+    $scope.users.push(user);
+    $scope.$apply();
+  });
+
+  socket.on("userEnter", function(user){
+    createBrush(user);
+    $scope.users.push(user);
+    $scope.$apply();
+    socket.emit("userEnter", whiteboards.user); 
+  });
+
+  socket.on("userAlreadyConnected", function(user){
+    createBrush(user);
     $scope.users.push(user);
     $scope.$apply();
   });
