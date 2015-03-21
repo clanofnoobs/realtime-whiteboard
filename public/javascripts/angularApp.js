@@ -221,8 +221,14 @@ app.controller('board', ['$scope', 'whiteboards','$timeout', function($scope, wh
   var brush1 = new fabric.PencilBrush(canvas);
   var brush2 = new fabric.PencilBrush(canvas);
   var testObj = {};
+  //clients brushes
   testObj['clanofnoobs'] = brush;
   testObj['cla'] = brush1;
+  brush1.color = 'green';
+
+  //owner brush; gets used in draw emission event
+  brush2.color = 'green';
+  brush2.width = 5;
 
 
   canvas.freeDrawingBrush = brush2;
@@ -276,6 +282,8 @@ app.controller('board', ['$scope', 'whiteboards','$timeout', function($scope, wh
 
   socket.on("draw", function(thePath){
     var canvasObj = canvas.toObject();
+    thePath.stroke = thePath.color;
+    console.log(thePath);
     canvasObj.objects = [];
     canvas.getObjects().forEach(function(obj){
       obj.toObject = (function(toObject){
@@ -285,18 +293,15 @@ app.controller('board', ['$scope', 'whiteboards','$timeout', function($scope, wh
           });
         };
       })(obj.toObject)
-      console.log(obj);
       canvasObj.objects.push(obj); 
     });
-    console.log(canvasObj);
+
     canvasObj.objects.push(thePath);
-    console.log(JSON.stringify(canvasObj));
     canvas.loadFromJSON(JSON.stringify(canvasObj));
     canvas.renderAll();
   });
   socket.on("drawing",function(points){
     if (testObj[points.user]){
-    console.log(testObj[points.user].color);
     testObj[points.user].onMouseMove(points);
     }
     //brush.onMouseMove(points);
@@ -352,12 +357,14 @@ app.controller('board', ['$scope', 'whiteboards','$timeout', function($scope, wh
     path.toObject = (function(toObject){
       return function(){
         return fabric.util.object.extend(toObject.call(this),{
-          unique_token: this.unique_token
+          unique_token: this.unique_token,
+          color: this.color
         });
       };
     })(path.toObject)
 
     path.unique_token = makeid();
+    path.color = testObj[whiteboards.user].color;
     var json = path.toJSON();
 
     canvas.renderAll();
