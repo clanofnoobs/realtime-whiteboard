@@ -252,6 +252,18 @@ app.controller('board', ['$scope', 'whiteboards','$timeout', function($scope, wh
     });
   });
 
+  socket.on("scale", function(scale){
+    canvas.getObjects().forEach(function(obj){
+      if (obj.unique_token == scale.unique_token){
+        console.log(obj.currentHeight);
+        obj.height = scale.y*scale.height;
+        obj.width = scale.x*scale.width;
+        obj.setCoords();
+        canvas.renderAll();
+      }
+    });
+  });
+
   socket.on("mouseup", function(){
     brush._points = [];
   });
@@ -304,6 +316,12 @@ app.controller('board', ['$scope', 'whiteboards','$timeout', function($scope, wh
     var obj = { oCoords: activeObject.oCoords, unique_token: activeObject.unique_token }
 
     socket.emit("objectModded", obj);
+  });
+
+  canvas.on('object:scaling', function(e){
+    var scale = { height: e.target.height, width: e.target.width, x: e.target.scaleX, y: e.target.scaleY, unique_token: e.target.unique_token  }
+
+    socket.emit("scale", scale);
   });
 
   canvas.on('object:moving', debounce(function(e){
@@ -378,6 +396,7 @@ app.controller('board', ['$scope', 'whiteboards','$timeout', function($scope, wh
     obj.stroke = $scope.strokeColor || 'black';
     obj.strokeWidth = $scope.strokeWidth || 2;
     obj.fill = $scope.fillColor || 'black';
+    obj.setCoords();
     canvas.add(obj);
     canvas.renderAll();
   }
