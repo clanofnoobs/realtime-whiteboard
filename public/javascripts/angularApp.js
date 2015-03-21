@@ -219,7 +219,7 @@ app.controller('board', ['$scope', 'whiteboards','$timeout', function($scope, wh
 
   var brush = new fabric.PencilBrush(canvas);
   var brush1 = new fabric.PencilBrush(canvas);
-  var brush2 = new fabric.PencilBrush(canvas);
+  var ownerBrush = new fabric.PencilBrush(canvas);
   var testObj = {};
   //clients brushes
   testObj['clanofnoobs'] = brush;
@@ -227,11 +227,15 @@ app.controller('board', ['$scope', 'whiteboards','$timeout', function($scope, wh
   brush1.color = 'green';
 
   //owner brush; gets used in draw emission event
-  brush2.color = 'green';
-  brush2.width = 5;
+  ownerBrush.color = $scope.color || 'black';
+  ownerBrush.width = 5;
+  
+  $scope.$watch('color', function(){
+    ownerBrush.color = $scope.color;
+  });
 
 
-  canvas.freeDrawingBrush = brush2;
+  canvas.freeDrawingBrush = ownerBrush;
   
   canvas.isDrawingMode = true;
 
@@ -282,7 +286,6 @@ app.controller('board', ['$scope', 'whiteboards','$timeout', function($scope, wh
 
   socket.on("draw", function(thePath){
     var canvasObj = canvas.toObject();
-    thePath.stroke = thePath.color;
     console.log(thePath);
     canvasObj.objects = [];
     canvas.getObjects().forEach(function(obj){
@@ -364,7 +367,7 @@ app.controller('board', ['$scope', 'whiteboards','$timeout', function($scope, wh
     })(path.toObject)
 
     path.unique_token = makeid();
-    path.color = testObj[whiteboards.user].color;
+    path.stroke = $scope.color || 'black';
     var json = path.toJSON();
 
     canvas.renderAll();
