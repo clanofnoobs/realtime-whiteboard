@@ -359,6 +359,15 @@ app.controller('board', ['$scope', 'whiteboards','$timeout', function($scope, wh
     socket.emit("objectModded", obj);
   });
 
+  canvas.on('object:added', function(obj){
+    var target = obj.target;
+    if ($scope.shapeAdded == true){
+      console.log("added obj");
+      socket.emit("objectAdded", target);
+      $scope.shapeAdded = false;
+    }
+  });
+
   canvas.on('object:scaling', function(e){
     var scale = { x: e.target.scaleX, y: e.target.scaleY, unique_token: e.target.unique_token  }
 
@@ -448,6 +457,7 @@ app.controller('board', ['$scope', 'whiteboards','$timeout', function($scope, wh
     obj.strokeWidth = $scope.strokeWidth || 2;
     obj.fill = $scope.fillColor || 'black';
     obj.setCoords();
+    $scope.shapeAdded = true;
     canvas.add(obj);
     canvas.renderAll();
   }

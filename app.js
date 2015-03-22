@@ -93,6 +93,24 @@ io.of('/room').on('connection', function(socket){
       });
     });
   });
+  socket.on("objectAdded", function(obj){
+    Whiteboard.findOne({'unique_token':joinedToken}).exec(function(err,board){
+      if (err){
+        console.log(err);
+        return;
+      }
+
+      board.objects.push(obj);
+      board.markModified("objects");
+      board.save(function(err){
+        if (err){
+          console.log(err);
+          return;
+        }
+        console.log("added obj");
+      });
+    });
+  });
   socket.on("scale", function(scale){
     socket.broadcast.to(joinedToken).emit("scale", scale);
   });
