@@ -354,7 +354,7 @@ app.controller('board', ['$scope', 'whiteboards','$timeout', function($scope, wh
   canvas.on('object:modified', function(object){
     var activeObject = object.target;
     console.log(activeObject);
-    var obj = { oCoords: activeObject.oCoords, unique_token: activeObject.unique_token }
+    var obj = { object: activeObject, unique_token: activeObject.unique_token }
 
     socket.emit("objectModded", obj);
   });
@@ -374,6 +374,7 @@ app.controller('board', ['$scope', 'whiteboards','$timeout', function($scope, wh
   canvas.on('object:moving', debounce(function(e){
     var activeObject = e.target;
 
+    console.log(activeObject.unique_token);
     var coords = { x: activeObject.get('left'), y: activeObject.get('top'), unique_token: activeObject.unique_token }
     socket.emit("objectMove", coords);
   },12));

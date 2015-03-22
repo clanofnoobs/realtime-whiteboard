@@ -66,6 +66,33 @@ io.of('/room').on('connection', function(socket){
     console.log(coords.x + ", " + coords.y);
     socket.broadcast.to(joinedToken).emit("objectMove", coords);
   });
+  socket.on("objectModded", function(obj){
+    Whiteboard.findOne({'unique_token':joinedToken}).exec(function(err,board){
+      var counter = 0;
+      if (err){
+        console.log(err);
+        return;
+      }
+      for (i=0;i<board.objects.length;i++){
+        if (board.objects[i].unique_token == obj.unique_token){
+          counter++;
+          break;
+        }
+        counter++;
+      }
+      console.log(counter);
+      console.log(board.objects[counter-1].unique_token);
+      board.objects[counter-1] = obj.object;
+      board.markModified("objects");
+      board.save(function(err){
+        if (err){
+          console.log(err);
+          return;
+        }
+        console.log("saved modified obj");
+      });
+    });
+  });
   socket.on("scale", function(scale){
     socket.broadcast.to(joinedToken).emit("scale", scale);
   });
