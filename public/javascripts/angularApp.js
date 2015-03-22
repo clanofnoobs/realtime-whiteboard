@@ -359,6 +359,10 @@ app.controller('board', ['$scope', 'whiteboards','$timeout', function($scope, wh
     socket.emit("objectModded", obj);
   });
 
+  canvas.on('object:added', function(object){
+    socket.emit("objectAdded", object.target);
+  });
+
   canvas.on('object:scaling', function(e){
     var scale = { x: e.target.scaleX, y: e.target.scaleY, unique_token: e.target.unique_token  }
 
@@ -399,7 +403,6 @@ app.controller('board', ['$scope', 'whiteboards','$timeout', function($scope, wh
     path.stroke = $scope.color || 'black';
     path.strokeWidth = $scope.drawingStrokeWidth || 1;
     var json = path.toJSON();
-    debugger;
 
     canvas.renderAll();
 
