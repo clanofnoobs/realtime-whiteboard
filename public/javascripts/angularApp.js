@@ -192,31 +192,26 @@ app.controller('home', ['$scope','whiteboards', function($scope, whiteboards){
 app.controller('board', ['$scope', 'whiteboards','$timeout', function($scope, whiteboards, $timeout){
   $scope.users = [];
   var socket = io.connect('/room');
+  var canvas = new fabric.Canvas('c');
   $scope.board = whiteboards.board;
+
   $timeout(function(){
     var obj = {};
     obj["unique_token"] = whiteboards.board.unique_token;
     obj["user"] = whiteboards.user;
     $scope.users.push(whiteboards.user);
     socket.emit("user", obj);
-  },500);
 
-  var canvas = new fabric.Canvas('c');
-
-  var rect = new fabric.Rect({height: 30, width: 30, fill:'#f55', top:canvas.getHeight()/2 - 30, left:canvas.getWidth()/2});
-
-  rect.toObject = (function(toObject){
-    return function(){
-      return fabric.util.object.extend(toObject.call(this),{
-        unique_token: this.unique_token
-      });
-    };
-  })(rect.toObject)
-
-  rect.unique_token = 'd59sbz1';
-
-
-  canvas.add(rect);
+    var canvasJSON = canvas.toObject();
+    canvasJSON.objects = [];
+    $scope.board.objects.forEach(function(canvasObj){
+      canvasJSON.objects.push(canvasObj);
+    });
+    console.log(canvasJSON);
+    canvas.loadFromJSON(JSON.stringify(canvasJSON));
+    canvas.renderAll();
+    
+  },200);
 
   var brush = new fabric.PencilBrush(canvas);
   //var brush1 = new fabric.PencilBrush(canvas);
@@ -326,7 +321,6 @@ app.controller('board', ['$scope', 'whiteboards','$timeout', function($scope, wh
       })(obj.toObject)
       canvasObj.objects.push(obj); 
     });
-
     canvasObj.objects.push(thePath);
     canvas.loadFromJSON(JSON.stringify(canvasObj));
     canvas.renderAll();
@@ -404,6 +398,7 @@ app.controller('board', ['$scope', 'whiteboards','$timeout', function($scope, wh
     path.stroke = $scope.color || 'black';
     path.strokeWidth = $scope.drawingStrokeWidth || 1;
     var json = path.toJSON();
+    debugger;
 
     canvas.renderAll();
 

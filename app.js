@@ -71,6 +71,21 @@ io.of('/room').on('connection', function(socket){
   });
   socket.on("draw", function(point){
     console.log(point);
+    Whiteboard.findOne({'unique_token':joinedToken}).exec(function(err,board){
+      if (err){
+        console.log(err);
+        return;
+      }
+      board.objects.push(point);
+      board.save(function(err){
+        if (err){
+          console.log(err);
+          return;
+        }
+        console.log("saved obj");
+
+      });
+    });
     socket.broadcast.to(joinedToken).emit("draw", point);
   });
   socket.on("rotating", function(angle){

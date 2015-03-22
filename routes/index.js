@@ -83,7 +83,6 @@ router.get('/user/:user/board/:slug', isLoggedInAndAuthorized, function(req,res,
         return next(err);
       }
       var obj = { user: req.user.local.username, whiteboard: req.whiteboard };
-      console.log(obj);
       res.json(obj);
     });
 });
