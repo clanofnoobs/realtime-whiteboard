@@ -359,12 +359,18 @@ app.controller('board', ['$scope', 'whiteboards','$timeout', function($scope, wh
     socket.emit("objectModded", obj);
   });
 
+<<<<<<< HEAD
   canvas.on('object:added', function(obj){
     var target = obj.target;
     if ($scope.shapeAdded == true){
       console.log("added obj");
       socket.emit("objectAdded", target);
       $scope.shapeAdded = false;
+=======
+  canvas.on('object:added', function(object){
+    if (object.target.type != 'path'){
+      socket.emit("objectAdded", object.target);
+>>>>>>> 89c64e3df76a3120c01353b2a775196920e31266
     }
   });
 
@@ -408,7 +414,6 @@ app.controller('board', ['$scope', 'whiteboards','$timeout', function($scope, wh
     path.stroke = $scope.color || 'black';
     path.strokeWidth = $scope.drawingStrokeWidth || 1;
     var json = path.toJSON();
-    debugger;
 
     canvas.renderAll();
 

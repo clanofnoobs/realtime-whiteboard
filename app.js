@@ -93,15 +93,16 @@ io.of('/room').on('connection', function(socket){
       });
     });
   });
-  socket.on("objectAdded", function(obj){
-    Whiteboard.findOne({'unique_token':joinedToken}).exec(function(err,board){
+  socket.on("objectAdded", function(object){
+    Whiteboard.findOne({'unique_token':joinedToken}).exec(function(err, board){
       if (err){
         console.log(err);
         return;
       }
 
-      board.objects.push(obj);
+      board.objects.push(object);
       board.markModified("objects");
+
       board.save(function(err){
         if (err){
           console.log(err);
