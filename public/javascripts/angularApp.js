@@ -360,7 +360,9 @@ app.controller('board', ['$scope', 'whiteboards','$timeout', function($scope, wh
   });
 
   canvas.on('object:added', function(object){
-    socket.emit("objectAdded", object.target);
+    if (object.target.type != 'path'){
+      socket.emit("objectAdded", object.target);
+    }
   });
 
   canvas.on('object:scaling', function(e){
