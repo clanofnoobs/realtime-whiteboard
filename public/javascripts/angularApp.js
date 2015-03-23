@@ -289,25 +289,16 @@ app.controller('board', ['$scope', 'whiteboards','$timeout', function($scope, wh
   });
 
   socket.on("scale", function(scale){
-    canvas.getObjects().forEach(function(obj){
-      if (obj.unique_token == scale.unique_token){
-        console.log(obj.currentHeight);
-        obj.scaleX = scale.x;
-        obj.scaleY = scale.y;
-        console.log(obj.height);
-        obj.setCoords();
-        canvas.renderAll();
-      }
-    });
+    //TODO - bugfix: scaling left, not showing up on client
+    hash[scale.unique_token].scaleX = scale.x;
+    hash[scale.unique_token].scaleY = scale.y;
+    hash[scale.unique_token].setCoords();
+    canvas.renderAll();
   });
 
   socket.on("rotating", function(angle){
-    canvas.getObjects().forEach(function(obj){
-      if (obj.unique_token == angle.unique_token){
-        obj.angle = angle.angle;
-        canvas.renderAll();
-      }
-    });
+    hash[angle.unique_token].angle = angle.angle;
+    canvas.renderAll();
   });
 
   socket.on("mouseup", function(user){
