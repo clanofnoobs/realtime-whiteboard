@@ -21,7 +21,8 @@ router.get('/user/:user', function(req,res, next){
         return next(err);
       }
       if (user == null){
-        return next(new Error("Could not find user"));
+        console.log("Can't find user");
+        return res.send(404, "Could not find user");
       }
       User.getWhiteBoards(req.params.user, function(err, whiteboards){
         if (err){

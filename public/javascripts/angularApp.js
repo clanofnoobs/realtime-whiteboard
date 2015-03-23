@@ -124,13 +124,18 @@ app.factory("whiteboards", ['$http','$q','$location','$filter', function($http, 
   }
 
   o.getUsersWhiteboards = function(username){
+    var deferred = $q.defer();
     return $http.get('/user/'+ username)
       .success(function(data){
+        deferred.resolve(data);
         angular.copy(data, o.whiteboards);
-        console.log(o.whiteboards);
-      }).error(function(data){
-        alert(data);
+      }).error(function(data, status, headers, config){
+        if (status == 404){
+          $location.url("/404");
+          deferred.reject(data);
+        }
       });
+    return deferred.promise;
   }
   o.getBoard = function(params){
     var deferred = $q.defer();
@@ -353,6 +358,13 @@ app.controller('board', ['$scope', 'whiteboards','$timeout', function($scope, wh
   
   canvas.on('object:modified', function(object){
     var activeObject = object.target;
+    activeObject.toObject = (function(toObject){
+      return function(){
+        return fabric.util.object.extend(toObject.call(this),{
+          unique_token: this.unique_token
+        });
+      };
+    })(activeObject.toObject)
     console.log(activeObject);
     var obj = { object: activeObject, unique_token: activeObject.unique_token }
 
@@ -513,6 +525,11 @@ app.config([
               user.checkIfLoggedIn();
             }]
           }
+        })
+        .state('404', {
+          url: '/404',
+          controller: 'signup',
+          templateUrl: '404.html'
         })
         .state('signup', {
           url:'/signup',

@@ -69,18 +69,20 @@ io.of('/room').on('connection', function(socket){
   socket.on("objectModded", function(obj){
     Whiteboard.findOne({'unique_token':joinedToken}).exec(function(err,board){
       var counter = 0;
+      var found = false;
       if (err){
         console.log(err);
         return;
       }
       for (i=0;i<board.objects.length;i++){
         if (board.objects[i].unique_token == obj.unique_token){
+          console.log("the index is " + i);
+          found = true;
           counter++;
           break;
         }
         counter++;
       }
-      console.log(counter);
       console.log(board.objects[counter-1].unique_token);
       board.objects[counter-1] = obj.object;
       board.markModified("objects");
