@@ -96,6 +96,7 @@ io.of('/room').on('connection', function(socket){
     });
   });
   socket.on("objectAdded", function(object){
+    socket.broadcast.to(joinedToken).emit("objectAdded", object);
     Whiteboard.findOne({'unique_token':joinedToken}).exec(function(err, board){
       if (err){
         console.log(err);

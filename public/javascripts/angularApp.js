@@ -92,6 +92,7 @@ app.factory("user", ["$http","$location","$q", function($http, $location, $q){
 app.factory("whiteboards", ['$http','$q','$location','$filter', function($http, $q, $location, $filter){
   var o = {
     whiteboards : {},
+    canvas: {},
     board: {},
     user: ""
   };
@@ -207,13 +208,12 @@ app.controller('board', ['$scope', 'whiteboards','$timeout', function($scope, wh
     $scope.users.push(whiteboards.user);
     socket.emit("user", obj);
 
-    var canvasJSON = canvas.toObject();
-    canvasJSON.objects = [];
+    whiteboards.canvas = canvas.toObject();
+    whiteboards.canvas.objects = [];
     $scope.board.objects.forEach(function(canvasObj){
-      canvasJSON.objects.push(canvasObj);
+      whiteboards.canvas.objects.push(canvasObj);
     });
-    console.log(canvasJSON);
-    canvas.loadFromJSON(JSON.stringify(canvasJSON));
+    canvas.loadFromJSON(JSON.stringify(whiteboards.canvas));
     canvas.renderAll();
     
   },200);
@@ -284,6 +284,11 @@ app.controller('board', ['$scope', 'whiteboards','$timeout', function($scope, wh
     });
   });
 
+  socket.on("objectAdded", function(object){
+    debugger;
+    canvas.renderAll();
+  });
+
   socket.on("scale", function(scale){
     canvas.getObjects().forEach(function(obj){
       if (obj.unique_token == scale.unique_token){
@@ -313,21 +318,12 @@ app.controller('board', ['$scope', 'whiteboards','$timeout', function($scope, wh
   });
 
   socket.on("draw", function(thePath){
+
     var canvasObj = canvas.toObject();
     console.log(thePath);
-    canvasObj.objects = [];
-    canvas.getObjects().forEach(function(obj){
-      obj.toObject = (function(toObject){
-        return function(){
-          return fabric.util.object.extend(toObject.call(this),{
-            unique_token: this.unique_token
-          });
-        };
-      })(obj.toObject)
-      canvasObj.objects.push(obj); 
-    });
-    canvasObj.objects.push(thePath);
-    canvas.loadFromJSON(JSON.stringify(canvasObj));
+
+    whiteboards.canvas.objects.push(thePath);
+    canvas.loadFromJSON(JSON.stringify(whiteboards.canvas));
     canvas.renderAll();
   });
   socket.on("drawing",function(points){
