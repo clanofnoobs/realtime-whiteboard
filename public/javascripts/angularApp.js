@@ -197,6 +197,7 @@ app.controller('home', ['$scope','whiteboards', function($scope, whiteboards){
 
 app.controller('board', ['$scope', 'whiteboards','$timeout', function($scope, whiteboards, $timeout){
   $scope.users = [];
+  var hash = {};
   var socket = io.connect('/room');
   var canvas = new fabric.Canvas('c');
   $scope.board = whiteboards.board;
@@ -215,6 +216,9 @@ app.controller('board', ['$scope', 'whiteboards','$timeout', function($scope, wh
     });
     canvas.loadFromJSON(JSON.stringify(whiteboards.canvas));
     canvas.renderAll();
+    canvas.getObjects().forEach(function(obj){
+      hash[obj.unique_token] = obj;
+    });
     
   },200);
 
@@ -273,19 +277,14 @@ app.controller('board', ['$scope', 'whiteboards','$timeout', function($scope, wh
   });
   
   socket.on("objectMove", function(coords){
-    debugger;
-    canvas.getObjects().forEach(function(obj){
-      if (obj.unique_token == coords.unique_token){
-        obj.left = coords.x;
-        obj.top = coords.y;
-        obj.setCoords();
-        canvas.renderAll();
-      }
-    });
+    hash[coords.unique_token].left = coords.x;
+    hash[coords.unique_token].top = coords.y;
+    canvas.renderAll();
   });
 
   socket.on("objectAdded", function(object){
-    debugger;
+    whiteboards.canvas.objects.push(object);
+    canvas.loadFromJSON(JSON.stringify(whiteboards.canvas));
     canvas.renderAll();
   });
 
