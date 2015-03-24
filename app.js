@@ -66,6 +66,15 @@ io.of('/room').on('connection', function(socket){
     console.log(coords.x + ", " + coords.y);
     socket.broadcast.to(joinedToken).emit("objectMove", coords);
   });
+  socket.on("clear", function(coords){
+    Whiteboard.findOne({'unique_token':joinedToken}).exec(function(err, board){
+      board.objects = [];
+      board.markModified("objects");
+      board.save(function(err){
+        console.log("cleared obj");
+      });
+    });
+  });
   socket.on("objectModded", function(obj){
     Whiteboard.findOne({'unique_token':joinedToken}).exec(function(err,board){
       var counter = 0;

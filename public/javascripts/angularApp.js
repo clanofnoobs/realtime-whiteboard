@@ -256,6 +256,9 @@ app.controller('board', ['$scope', 'whiteboards','$timeout', function($scope, wh
       canvas.isDrawingMode = true;
     }
   };
+  $scope.clearCanvas = function(){
+    socket.emit("clear");
+  };
 
   canvas.renderAll();
   var path;
