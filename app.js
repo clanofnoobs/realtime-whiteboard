@@ -19,7 +19,6 @@ var routes = require('./routes/index');
 
 var app = express();
 
-//passport config
 var passport = require('passport');
 var expressSession = require('express-session');
 app.use(expressSession({secret:'mySecretKey'}));
