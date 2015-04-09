@@ -319,12 +319,12 @@ app.controller('board', ['$scope', 'whiteboards','$timeout', function($scope, wh
     canvas.loadFromJSON(JSON.stringify(whiteboards.canvas));
     canvas.renderAll();
   });
-  socket.on("drawing",function(points){
+  /*socket.on("drawing",function(points){
     if (testObj[points.user]){
     testObj[points.user].onMouseMove(points);
     }
     //brush.onMouseMove(points);
-  });
+  });*/
 
   function debounce(fn, delay) {
     var timer = null;
@@ -341,7 +341,7 @@ app.controller('board', ['$scope', 'whiteboards','$timeout', function($scope, wh
   canvas.on("mouse:move", function(e){
     if (canvas.isDrawingMode && isDrawing){
       var points = { x: e.e.offsetX, y: e.e.offsetY, user: whiteboards.user };
-      socket.emit("drawing", points);
+      //socket.emit("drawing", points);
     }
   });
   
