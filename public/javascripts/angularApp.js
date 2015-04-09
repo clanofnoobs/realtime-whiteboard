@@ -49,7 +49,6 @@ app.controller('signup', ['$scope', '$http','$timeout', function($scope, $http, 
             $scope.loadingUser = false;
             $scope.userFree = false;
             $scope.userNotFree = true;
-            console.log($scope.usernameFree);
           }
         }, 200);
       });
@@ -197,6 +196,7 @@ app.controller('home', ['$scope','whiteboards', function($scope, whiteboards){
 
 app.controller('board', ['$scope', 'whiteboards','$timeout', function($scope, whiteboards, $timeout){
   $scope.users = [];
+  var count = 0;
   var hash = {};
   var socket = io.connect('/room');
   var canvas = new fabric.Canvas('c');
@@ -218,6 +218,10 @@ app.controller('board', ['$scope', 'whiteboards','$timeout', function($scope, wh
     canvas.renderAll();
     canvas.getObjects().forEach(function(obj){
       hash[obj.unique_token] = obj;
+      if (count < 2){
+        console.log(hash[obj.unique_token]);
+      }
+      count++;
     });
     
   },200);
@@ -231,7 +235,6 @@ app.controller('board', ['$scope', 'whiteboards','$timeout', function($scope, wh
   testObj['cla'] = brush1;
   brush1.color = 'green';
   */
-  console.log(testObj);
 
   //owner brush; gets used in draw emission event
   ownerBrush.color = $scope.color || 'black';
@@ -275,7 +278,6 @@ app.controller('board', ['$scope', 'whiteboards','$timeout', function($scope, wh
   socket.on("userAlreadyConnected", function(user){
     createBrush(user);
     $scope.users.push(user);
-    console.log($scope.users);
     $scope.$apply();
   });
   
@@ -286,9 +288,16 @@ app.controller('board', ['$scope', 'whiteboards','$timeout', function($scope, wh
   });
 
   socket.on("objectAdded", function(object){
+    console.log(object);
+
     whiteboards.canvas.objects.push(object);
     canvas.loadFromJSON(JSON.stringify(whiteboards.canvas));
+
     canvas.renderAll();
+
+    canvas.getObjects().forEach(function(obj){
+      hash[obj.unique_token] = obj;
+    });
   });
 
   socket.on("scale", function(scale){
@@ -313,7 +322,6 @@ app.controller('board', ['$scope', 'whiteboards','$timeout', function($scope, wh
   socket.on("draw", function(thePath){
 
     var canvasObj = canvas.toObject();
-    console.log(thePath);
 
     whiteboards.canvas.objects.push(thePath);
     canvas.loadFromJSON(JSON.stringify(whiteboards.canvas));
@@ -354,7 +362,6 @@ app.controller('board', ['$scope', 'whiteboards','$timeout', function($scope, wh
         });
       };
     })(activeObject.toObject)
-    console.log(activeObject);
     var obj = { object: activeObject, unique_token: activeObject.unique_token }
 
     socket.emit("objectModded", obj);
@@ -363,8 +370,9 @@ app.controller('board', ['$scope', 'whiteboards','$timeout', function($scope, wh
   canvas.on('object:added', function(obj){
     var target = obj.target;
     if ($scope.shapeAdded == true && obj.target.type != 'path'){
-      console.log("added obj");
-      socket.emit("objectAdded", target);
+
+      console.log(target.toObject());
+      socket.emit("objectAdded", target.toObject());
       $scope.shapeAdded = false;
     }
   });
@@ -377,14 +385,12 @@ app.controller('board', ['$scope', 'whiteboards','$timeout', function($scope, wh
 
   canvas.on('object:rotating', function(e){
     var obj = { angle: e.target.angle, unique_token: e.target.unique_token }
-    console.log(e.target.angle);
     socket.emit("rotating", obj);
   });
 
   canvas.on('object:moving', debounce(function(e){
     var activeObject = e.target;
 
-    console.log(activeObject.unique_token);
     var coords = { x: activeObject.get('left'), y: activeObject.get('top'), unique_token: activeObject.unique_token }
     socket.emit("objectMove", coords);
   },12));
