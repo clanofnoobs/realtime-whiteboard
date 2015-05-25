@@ -288,6 +288,7 @@ app.controller('board', ['$scope', 'whiteboards','$timeout', function($scope, wh
   socket.on("objectMove", function(coords){
     hash[coords.unique_token].left = coords.x;
     hash[coords.unique_token].top = coords.y;
+    hash[coords.unique_token].setCoords();
     canvas.renderAll();
   });
 
@@ -314,6 +315,7 @@ app.controller('board', ['$scope', 'whiteboards','$timeout', function($scope, wh
 
   socket.on("rotating", function(angle){
     hash[angle.unique_token].angle = angle.angle;
+    hash[angle.unique_token].setCoords();
     canvas.renderAll();
   });
 
