@@ -431,6 +431,11 @@ app.controller('board', ['$scope', 'whiteboards','$timeout', function($scope, wh
     whiteboards.canvas.objects.push(path);
     canvas.loadFromJSON(JSON.stringify(whiteboards.canvas));
 
+    //add to hash to that other users can controll newly created path/object
+    canvas.getObjects().forEach(function(obj){
+      hash[obj.unique_token] = obj;
+    });
+
     canvas.renderAll();
 
     socket.emit("draw", json);
