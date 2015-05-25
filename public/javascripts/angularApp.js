@@ -200,6 +200,7 @@ app.controller('board', ['$scope', 'whiteboards','$timeout', function($scope, wh
   var hash = {};
   var socket = io.connect('/room');
   var canvas = new fabric.Canvas('c');
+
   canvas.setWidth(window.innerWidth-205);
   canvas.setHeight(window.innerHeight-55);
   canvas.calcOffset();
@@ -425,6 +426,10 @@ app.controller('board', ['$scope', 'whiteboards','$timeout', function($scope, wh
     path.stroke = $scope.color || 'black';
     path.strokeWidth = $scope.drawingStrokeWidth || 1;
     var json = path.toJSON();
+
+    //adds path to current array of objects so that any incoming changes doesn't override the user/clients prior changes
+    whiteboards.canvas.objects.push(path);
+    canvas.loadFromJSON(JSON.stringify(whiteboards.canvas));
 
     canvas.renderAll();
 
