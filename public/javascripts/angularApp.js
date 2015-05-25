@@ -332,6 +332,10 @@ app.controller('board', ['$scope', 'whiteboards','$timeout', function($scope, wh
     whiteboards.canvas.objects.push(thePath);
     canvas.loadFromJSON(JSON.stringify(whiteboards.canvas));
     canvas.renderAll();
+
+    canvas.getObjects().forEach(function(obj){
+      hash[obj.unique_token] = obj;
+    });
   });
   /*socket.on("drawing",function(points){
     if (testObj[points.user]){
