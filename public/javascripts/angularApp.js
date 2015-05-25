@@ -200,6 +200,9 @@ app.controller('board', ['$scope', 'whiteboards','$timeout', function($scope, wh
   var hash = {};
   var socket = io.connect('/room');
   var canvas = new fabric.Canvas('c');
+  canvas.setWidth(window.innerWidth-205);
+  canvas.setHeight(window.innerHeight-55);
+  canvas.calcOffset();
   $scope.board = whiteboards.board;
 
   $timeout(function(){
@@ -261,6 +264,7 @@ app.controller('board', ['$scope', 'whiteboards','$timeout', function($scope, wh
   };
   $scope.clearCanvas = function(){
     socket.emit("clear");
+    
   };
 
   canvas.renderAll();
