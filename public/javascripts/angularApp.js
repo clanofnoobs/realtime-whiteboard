@@ -108,18 +108,24 @@ app.factory("whiteboards", ['$http','$q','$location','$filter', function($http, 
   }
 
   o.deleteBoard = function(unique_token){
+    var deferred = $q.defer();
     return $http.delete('/board/delete/'+unique_token)
       .success(function(data){
-        var boa = $filter('filter')(o.whiteboards.whiteboards, function(boards){
-          return boards.unique_token == unique_token;})[0];
-        delete boa;
+        deferred.resolve(data);
+        o.whiteboards.whiteboards = o.whiteboards.whiteboards.filter(function(sBoard){
+          return (sBoard.unique_token != unique_token);
+        });
+        return deferred.promise;
       }).error(function(data, status, headers, config){
         if (status == 403){
+          deferred.reject(data);
           alert("you are not logged in");
           $location.url("/login");
         } else if (status == 401){
+          deferred.reject(data);
           alert("You are not authorized");
         }
+        return deferred.promise;
       });
   }
 
@@ -178,7 +184,7 @@ app.controller('create_whiteboard', ['whiteboards','$scope', '$http', function(w
   }
 }]);
 
-app.controller('home', ['$scope','whiteboards', function($scope, whiteboards){
+app.controller('home', ['$scope','whiteboards','$timeout', function($scope, whiteboards, $timeout){
   $scope.user = whiteboards.whiteboards;
   $scope.whiteboards = whiteboards.whiteboards.whiteboards;
 
@@ -188,8 +194,9 @@ app.controller('home', ['$scope','whiteboards', function($scope, whiteboards){
     }
   });
   $scope.deleteBoard = function(unique_token){
-    alert(unique_token);
-    whiteboards.deleteBoard(unique_token);
+    whiteboards.deleteBoard(unique_token).then(function(data){
+      $scope.whiteboards = whiteboards.whiteboards.whiteboards;
+    });
   }
 
 }]);
