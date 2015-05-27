@@ -266,6 +266,7 @@ app.controller('board', ['$scope', 'whiteboards','$timeout', function($scope, wh
   $scope.clearCanvas = function(){
     canvas.clear();
     canvas.renderAll();
+    whiteboards.canvas.objects = [];
     socket.emit("clear");
     
   };
