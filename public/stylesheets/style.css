@@ -43,9 +43,13 @@ a {
   margin-top: -35px;
 }
 .drawContainer{
-  width: 160px;
   position:absolute;
-  top: 150px;;
+  margin:0px auto;
+  width: 160px;
+  height: 500px;
+  padding:0;
+  top: 50%;
+  margin-top: -250px;
   margin-left:20px;
 }
 

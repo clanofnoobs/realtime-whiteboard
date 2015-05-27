@@ -1,0 +1,55 @@
+a
+  color: #00B7FF
+
+.board
+  background: white
+  transition: background 0.08s ease-in
+  &:hover
+    background: rgba(255, 245, 245, 1)
+
+.whiteboard
+  border: 1px solid rgba(215, 215, 215, 1)
+  margin-left: 200px
+
+.taken
+  color: red
+  font-style: bold
+
+#triangle
+  width: 0
+  height: 0
+  border-left: 12.5px solid transparent
+  border-right: 12.5px solid transparent
+  border-bottom: 25px solid black
+
+.users
+  font: monospace
+  border-radius: 10px
+  font-size: 28px
+  text-align: center
+  color: white
+  float: right
+  width: 40px
+  margin-right: 5px
+  background: orange
+  margin-top: -35px
+
+.drawContainer
+  width: 160px
+  position: absolute
+  top: 150px
+  margin-left: 20px
+
+.pencilIcon
+  background: url('images/indicator.gif') left center no-repeat
+  padding-left: 15px
+
+.drawing
+  background-color: green
+
+.notDrawing
+  background-color: red
+
+.nottaken
+  color: green
+  font-style: bold
