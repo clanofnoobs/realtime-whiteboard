@@ -163,7 +163,7 @@ app.factory("whiteboards", ['$http','$q','$location','$filter', function($http, 
         o.user = data.user;
       })
       .error(function(data, status, headers, config){
-        if (status == 401);{
+        if (status == 401){
           alert("You are not authorized");
           $location.url("/login");
           deferred.reject(data);
