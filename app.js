@@ -5,7 +5,6 @@ var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var flash = require('connect-flash');
-var sass = require("node-sass");
 
 var users = require('./routes/users');
 
@@ -28,6 +27,7 @@ app.use(passport.session());
 
 var initPassport = require('./passport/init');
 initPassport(passport);
+
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));

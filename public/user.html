@@ -7,6 +7,8 @@
     <button class="btn">create</button>
   </a>
     </h1>
+    <p class="log">logged in as {{ user.theUser ? user.theUser : "a guest" }}</p>
+    <a ng-if="user.theUser" ng-click="logOut()"> (logout)</a>
     </div>
     <h1 ng-show="empty">
       Empty!
@@ -15,7 +17,7 @@
       <div class="board">
         <a href="#/user/{{user.local.username}}/board/{{whiteboard.slug}}?unique_token={{whiteboard.unique_token}}">
           {{whiteboard.title}}
-        </a> - <span class="label label-danger" ng-click="deleteBoard(whiteboard.unique_token)" style="float:right;cursor:pointer;">Delete</span>
+        </a> - <span ng-if="user.theUser" class="label label-danger" ng-click="deleteBoard(whiteboard.unique_token)" style="float:right;cursor:pointer;">Delete</span>
       </div>
     </div>
   </div>

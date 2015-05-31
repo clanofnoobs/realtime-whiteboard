@@ -17,6 +17,11 @@ a {
   margin-left: 200px;
 }
 
+.log {
+  color: rgb(215,215,215);
+  margin-left: 15px;
+}
+
 .taken {
   color: red;
   font-style: bold;

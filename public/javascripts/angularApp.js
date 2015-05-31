@@ -73,6 +73,16 @@ app.factory("user", ["$http","$location","$q", function($http, $location, $q){
       });
   }
 
+  o.logOut = function(){
+    return $http.get('/logout')
+      .success(function(){
+        $location.url('/login');
+      })
+      .error(function(err){
+        console.log(err);
+      });
+  }
+
   o.checkIfLoggedIn = function(){
     var deferred = $q.defer();
     return $http.get('/checkIfLoggedIn')
@@ -184,9 +194,15 @@ app.controller('create_whiteboard', ['whiteboards','$scope', '$http', function(w
   }
 }]);
 
-app.controller('home', ['$scope','whiteboards','$timeout', function($scope, whiteboards, $timeout){
+app.controller('home', ['$scope','whiteboards','$timeout','user', function($scope, whiteboards, $timeout, user){
   $scope.user = whiteboards.whiteboards;
+  $scope.user["theUser"] = whiteboards.whiteboards.theUser;
+  console.log(whiteboards.whiteboards);
   $scope.whiteboards = whiteboards.whiteboards.whiteboards;
+
+  $scope.logOut = function(){
+    user.logOut();
+  }
 
   $scope.$watch('whiteboards', function(){
     if ($scope.whiteboards == ''){
