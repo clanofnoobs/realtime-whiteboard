@@ -20,22 +20,23 @@ router.get('/user/:user', function(req,res, next){
         console.log(err);
         return next(err);
       }
+
       if (user == null){
         console.log("Can't find user");
         return res.send(404, "Could not find user");
       }
+
       User.getWhiteBoards(req.params.user, function(err, whiteboards){
-        var test = whiteboards;
         if (err){
           console.log(err);
           return next(err);
         }
+
         if (req.user){
-          whiteboards = whiteboards.toObject();
           whiteboards["theUser"] = req.user.local.username;
           return res.json(whiteboards);
         } else {
-          return res.json(test);
+          return res.json(whiteboards);
         }
       });
     });

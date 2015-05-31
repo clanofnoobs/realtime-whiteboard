@@ -159,6 +159,7 @@ app.factory("whiteboards", ['$http','$q','$location','$filter', function($http, 
       .success(function(data){
         deferred.resolve(data);
         angular.copy(data.whiteboard, o.board);
+        console.log(o.board);
         o.user = data.user;
       })
       .error(function(data, status, headers, config){
@@ -199,6 +200,10 @@ app.controller('home', ['$scope','whiteboards','$timeout','user', function($scop
   $scope.user["theUser"] = whiteboards.whiteboards.theUser;
   console.log(whiteboards.whiteboards);
   $scope.whiteboards = whiteboards.whiteboards.whiteboards;
+
+  if ($scope.user["theUser"] == $scope.user.local.username){
+    $scope.isAuthor = true; 
+  }
 
   $scope.logOut = function(){
     user.logOut();
