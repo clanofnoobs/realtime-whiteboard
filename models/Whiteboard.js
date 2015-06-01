@@ -7,7 +7,8 @@ var WhiteboardSchema = new mongoose.Schema({
   unique_token: String,
   created: { type: Date, default: Date.now() },
   author: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
-  access: [{type: mongoose.Schema.Types.ObjectId, ref: 'User' }]
+  access: [{type: mongoose.Schema.Types.ObjectId, ref: 'User' }],
+  controlled_access: [{type: mongoose.Schema.Types.ObjectId, ref: 'User' }]
 });
 
 mongoose.model('Whiteboard', WhiteboardSchema);

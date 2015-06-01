@@ -94,6 +94,7 @@ router.get('/user/:user/board/:slug', isLoggedInAndAuthorized, function(req,res,
     });
 });
 
+
 router.get('/checkusername', function(req,res){
   var credential = '';
   var query;
@@ -174,7 +175,7 @@ router.get('/all', function(req,res, next){
     res.json(user);
   });
 });
-router.get('/access/:unique_token/:user', function(req,res,next){
+router.get('/permissions/:unique_token/:user', function(req,res,next){
   User.findOne({'local.username': req.params.user})
     .exec(function(err,user){
       if (err){
@@ -182,9 +183,13 @@ router.get('/access/:unique_token/:user', function(req,res,next){
         return next(err);
       }
       Whiteboard.findOne({'unique_token':req.params.unique_token})
-        .populate('access')
+        .populate('access controlled_access')
         .exec(function(err,board){
-         board.access.push(user.id);
+         if (req.query.permission == 'access'){
+           board.access.push(user.id);
+         } else {
+           board.controlled_access.push(user.id);
+         }
          board.save(function(err){
            if (err){
              return next(err);
@@ -255,12 +260,15 @@ function isLoggedIn(req,res,next){
 router.get('/checkIfLoggedIn', isLoggedIn, function(req,res,next){
 });
 
+router.get('/board/authorized/:unique_token', isLoggedInAndAuthorized, function(req,res,next){
+});
+
 function isLoggedInAndAuthorized(req,res,next){
   var unique_token = req.query.unique_token || req.params.unique_token
   console.log(unique_token);
   if (req.isAuthenticated()){
     Whiteboard.findOne({'unique_token':unique_token })
-      .populate('access')
+      .populate('access controlled_access')
       .exec(function(err, board){
         if (err){
           console.log(err);
@@ -270,15 +278,25 @@ function isLoggedInAndAuthorized(req,res,next){
           return res.send(404,"This board does not exist or has been deleted by the user!");
         }
         var users = [];
+        var cUsers = [];
+        board.controlled_access.forEach(function(user){
+          cUsers.push(user.local.username);
+        });
+
         board.access.forEach(function(user){
           users.push(user.local.username);
         });
+
         if (users.indexOf(req.user.local.username) != -1){
           console.log("Has access");
           req.whiteboard = board;
           return next();
 
-        } else {
+        } else if (cUsers.indexOf(req.user.local.username) != -1){
+          req.whiteboard = board;
+          return next();
+        }
+        else {
           return res.send(401, "You are not authorized");
         }
       });

@@ -65,7 +65,6 @@ app.factory("user", ["$http","$location","$q", function($http, $location, $q){
     return $http.post('/login',credentials)
       .success(function(data){
         angular.copy(data,o.user);
-        console.log(data);
         $location.url('/user/'+data.local.username);
       })
       .error(function(err){
@@ -110,7 +109,6 @@ app.factory("whiteboards", ['$http','$q','$location','$filter', function($http, 
   o.create = function(whiteboard){
     return $http.post('/createboard', whiteboard)
       .success(function(data){
-       console.log(data);   
        $location.url("/user/"+data.author.local.username+"/board/"+data.slug+"?unique_token="+data.unique_token);
       }).error(function(data){
        console.log(data);
@@ -134,6 +132,7 @@ app.factory("whiteboards", ['$http','$q','$location','$filter', function($http, 
         } else if (status == 401){
           deferred.reject(data);
           alert("You are not authorized");
+          $location('/login');
         }
         return deferred.promise;
       });
@@ -159,13 +158,11 @@ app.factory("whiteboards", ['$http','$q','$location','$filter', function($http, 
       .success(function(data){
         deferred.resolve(data);
         angular.copy(data.whiteboard, o.board);
-        console.log(o.board);
         o.user = data.user;
       })
       .error(function(data, status, headers, config){
-        if (status == 401){
-          alert("You are not authorized");
-          $location.url("/login");
+        if (status == 401);{
+          alert("You are not authorized!!");
           deferred.reject(data);
         }
       });
@@ -198,8 +195,8 @@ app.controller('create_whiteboard', ['whiteboards','$scope', '$http', function(w
 app.controller('home', ['$scope','whiteboards','$timeout','user', function($scope, whiteboards, $timeout, user){
   $scope.user = whiteboards.whiteboards;
   $scope.user["theUser"] = whiteboards.whiteboards.theUser;
-  console.log(whiteboards.whiteboards);
   $scope.whiteboards = whiteboards.whiteboards.whiteboards;
+
 
   if ($scope.user["theUser"] == $scope.user.local.username){
     $scope.isAuthor = true; 
@@ -227,36 +224,47 @@ app.controller('board', ['$scope', 'whiteboards','$timeout', function($scope, wh
   var count = 0;
   var hash = {};
   var socket = io.connect('/room');
-  var canvas = new fabric.Canvas('c');
+
+  console.log(whiteboards.board);
+  debugger;
+
+
+  var cUsers = [];
+  whiteboards.board.controlled_access.map(function(controlledUsers){
+    cUsers.push(controlledUsers.local.username);
+  });
+  if (cUsers.indexOf(whiteboards.user) != -1){
+    var canvas = new fabric.StaticCanvas('c');
+  } else {
+    var canvas = new fabric.Canvas('c');
+  }
 
   canvas.setWidth(window.innerWidth-205);
   canvas.setHeight(window.innerHeight-55);
   canvas.calcOffset();
   $scope.board = whiteboards.board;
 
-  $timeout(function(){
-    var obj = {};
-    obj["unique_token"] = whiteboards.board.unique_token;
-    obj["user"] = whiteboards.user;
-    $scope.users.push(whiteboards.user);
-    socket.emit("user", obj);
+  var obj = {};
+  obj["unique_token"] = whiteboards.board.unique_token;
+  obj["user"] = whiteboards.user;
+  $scope.users.push(whiteboards.user);
+  socket.emit("user", obj);
 
-    whiteboards.canvas = canvas.toObject();
-    whiteboards.canvas.objects = [];
-    $scope.board.objects.forEach(function(canvasObj){
-      whiteboards.canvas.objects.push(canvasObj);
-    });
-    canvas.loadFromJSON(JSON.stringify(whiteboards.canvas));
-    canvas.renderAll();
-    canvas.getObjects().forEach(function(obj){
-      hash[obj.unique_token] = obj;
-      if (count < 2){
-        console.log(hash[obj.unique_token]);
-      }
-      count++;
-    });
+  whiteboards.canvas = canvas.toObject();
+  whiteboards.canvas.objects = [];
+  $scope.board.objects.forEach(function(canvasObj){
+    whiteboards.canvas.objects.push(canvasObj);
+  });
+  canvas.loadFromJSON(JSON.stringify(whiteboards.canvas));
+  canvas.renderAll();
+  canvas.getObjects().forEach(function(obj){
+    hash[obj.unique_token] = obj;
+    if (count < 2){
+      console.log(hash[obj.unique_token]);
+    }
+    count++;
+  });
     
-  },200);
 
   var brush = new fabric.PencilBrush(canvas);
   //var brush1 = new fabric.PencilBrush(canvas);
@@ -280,7 +288,11 @@ app.controller('board', ['$scope', 'whiteboards','$timeout', function($scope, wh
   });
 
 
-  canvas.freeDrawingBrush = ownerBrush;
+  /*if (whiteboards.board.controlled_access.indexOf(whiteboards.user) == -1){
+    canvas.freeDrawingBrush = null;
+  } else {
+    canvas.freeDrawingBrush = ownerBrush;
+  }*/
   
   canvas.isDrawingMode = true;
 
@@ -330,7 +342,6 @@ app.controller('board', ['$scope', 'whiteboards','$timeout', function($scope, wh
   });
 
   socket.on("objectAdded", function(object){
-    console.log(object);
 
     whiteboards.canvas.objects.push(object);
     canvas.loadFromJSON(JSON.stringify(whiteboards.canvas));
@@ -418,7 +429,6 @@ app.controller('board', ['$scope', 'whiteboards','$timeout', function($scope, wh
     var target = obj.target;
     if ($scope.shapeAdded == true && obj.target.type != 'path'){
 
-      console.log(target.toObject());
       socket.emit("objectAdded", target.toObject());
       $scope.shapeAdded = false;
     }
@@ -593,7 +603,7 @@ app.config([
           templateUrl: 'whiteboard.html',
           resolve: {
             getBoard: ['whiteboards', '$stateParams', function(whiteboards, $stateParams){
-              whiteboards.getBoard($stateParams);
+              return whiteboards.getBoard($stateParams);
             }]
           }
         })
