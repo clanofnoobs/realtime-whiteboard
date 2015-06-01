@@ -7,8 +7,7 @@
         <button class="btn">create</button>
   </a>
     </h1>
-    <p class="log">logged in as {{ user.theUser ? user.theUser : "a guest" }}</p>
-    <a ng-if="user.theUser" ng-click="logOut()"> (logout)</a>
+    <p class="log">logged in as {{ user.theUser ? user.theUser : "a guest" }} <a ng-if="user.theUser" ng-click="logOut()"> (logout)</a></p>
     </div>
     <h1 ng-show="empty">
       Empty!

@@ -226,13 +226,12 @@ app.controller('board', ['$scope', 'whiteboards','$timeout', function($scope, wh
   var socket = io.connect('/room');
 
   console.log(whiteboards.board);
-  debugger;
-
 
   var cUsers = [];
   whiteboards.board.controlled_access.map(function(controlledUsers){
     cUsers.push(controlledUsers.local.username);
   });
+
   if (cUsers.indexOf(whiteboards.user) != -1){
     var canvas = new fabric.StaticCanvas('c');
   } else {
@@ -287,14 +286,11 @@ app.controller('board', ['$scope', 'whiteboards','$timeout', function($scope, wh
     ownerBrush.color = $scope.color;
   });
 
-
-  /*if (whiteboards.board.controlled_access.indexOf(whiteboards.user) == -1){
-    canvas.freeDrawingBrush = null;
-  } else {
-    canvas.freeDrawingBrush = ownerBrush;
-  }*/
-  
   canvas.isDrawingMode = true;
+
+  $scope.showModal = function(){
+    $("#exampleModal").modal('show');
+  }
 
   $scope.changeMode = function(){
     if (canvas.isDrawingMode){
