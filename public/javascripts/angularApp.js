@@ -211,6 +211,18 @@ app.controller('home', ['$scope','whiteboards','$timeout','user', function($scop
       $scope.empty = true;
     }
   });
+
+  $scope.cloneBoard = function(unique_token){
+
+    $("#exampleModal").modal('show');
+    $("#tes1").fadeIn("500");
+
+    $timeout(function(){
+      $("#tes1").fadeOut("500");
+      //$("#exampleModal").modal('hide');
+    },2500);
+  }
+
   $scope.deleteBoard = function(unique_token){
     whiteboards.deleteBoard(unique_token).then(function(data){
       $scope.whiteboards = whiteboards.whiteboards.whiteboards;
@@ -288,9 +300,6 @@ app.controller('board', ['$scope', 'whiteboards','$timeout', function($scope, wh
 
   canvas.isDrawingMode = true;
 
-  $scope.showModal = function(){
-    $("#exampleModal").modal('show');
-  }
 
   $scope.changeMode = function(){
     if (canvas.isDrawingMode){

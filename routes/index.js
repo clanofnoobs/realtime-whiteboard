@@ -6,8 +6,13 @@ var User = mongoose.model('User');
 var Whiteboard = mongoose.model('Whiteboard');
 var passport = require("passport");
 var crypto = require("crypto");
+var mailer = require("../mail/mail");
 
 //GET home page. 
+router.get('/test',function(req,res,next){
+  mailer.setMailOptions();
+  res.send("test");
+});
 router.get('/', function(req, res) {
   res.render('index', {failure: req.flash('signupMessage'), success: req.flash('success'), message: req.flash('failure'), loginMessage: req.flash('loginMessage')});
 });

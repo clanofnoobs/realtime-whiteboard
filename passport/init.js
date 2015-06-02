@@ -1,15 +1,9 @@
 var LocalStrategy = require('passport-local').Strategy;
 var mongoose = require("mongoose");
 var User = mongoose.model('User');
-var mailer = require('nodemailer');
 var crypto = require('crypto');
-var transporter = mailer.createTransport({
-  service: 'Gmail',
-    auth: {
-      user: 'testsami1994@gmail.com',
-      pass: 'baklavabinsukar'
-    }
-});
+
+var mailer = require("../mail/mail");
 
 module.exports = function(passport){
 
@@ -55,19 +49,8 @@ module.exports = function(passport){
             if (err) {
               throw err;
             }
-            var mailOptions = {
-              from: 'Realtime Whiteboard <samiulg3@gmail.com>',
-              to: newUser.local.email,
-              subject: 'Email confirmation - RealtimeWhiteboard',
-              html: 'Thank you for registering at Realtime Whiteboards. </br> Click <a href="http://localhost:3000/activate?token='+newUser.token+'">here</a> to activate your profile.'
-            };
-            transporter.sendMail(mailOptions, function(err,info){
-              if (err){
-                console.log(err);
-              } else {
-                console.log('Message sent: ' + info.response);
-              }
-            });
+            mailer.setMailOptions(newUser);
+            mailer.sendUserActivationMail();
             return done(null, user, req.flash('success', 'Email sent to ' + newUser.local.email));
           });
         }
