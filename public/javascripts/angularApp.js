@@ -501,13 +501,17 @@ app.controller('board', ['$scope', 'whiteboards','$timeout', function($scope, wh
   });
   var isDrawing;
 
+  function showNotification(){
+    $("#tes1").fadeIn(500);
+    $timeout(function(){
+      $("#tes1").fadeOut(500);
+    },3500);
+  }
+
   //canvas.on("mouse:down"...
   $("#c").on("click", function(){
     if ($scope.isControlled == true){
-      $("#tes1").fadeIn(500);
-      $timeout(function(){
-        $("#tes1").fadeOut(500);
-      },3500);
+      showNotification();
     }
 
     if (canvas.isDrawingMode){
@@ -517,10 +521,7 @@ app.controller('board', ['$scope', 'whiteboards','$timeout', function($scope, wh
 
   $scope.canvasActions = function(shape, callback){
     if ($scope.isControlled == true){
-      $("#tes1").fadeIn(500);
-      $timeout(function(){
-        $("#tes1").fadeOut(500);
-      },3500);
+      showNotification();
       return;
     }
 
