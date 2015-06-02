@@ -76,10 +76,10 @@ app.factory("user", ["$http","$location","$q","$timeout","notification", functio
           $("#tes1 div").addClass("alert-warning");
         }
 
-        notification.showNotification();
-
         $("#tes1 div p").text("");
         $("#tes1 div p").append(err);
+
+        notification.showNotification();
 
       });
   }
