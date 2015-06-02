@@ -56,7 +56,7 @@ app.controller('signup', ['$scope', '$http','$timeout', function($scope, $http, 
 
 }]);
 
-app.factory("user", ["$http","$location","$q", function($http, $location, $q){
+app.factory("user", ["$http","$location","$q","$timeout", function($http, $location, $q,$timeout){
   var o = {
     user: {}
   }
@@ -67,8 +67,22 @@ app.factory("user", ["$http","$location","$q", function($http, $location, $q){
         angular.copy(data,o.user);
         $location.url('/user/'+data.local.username);
       })
-      .error(function(err){
-        alert(err);
+    .error(function(err, status, headers, config){
+        if (status == 403){
+          $("#tes1 div").removeClass("alert-warning");
+          $("#tes1 div").addClass("alert-danger");
+        } else if (status == 401) {
+          $("#tes1 div").removeClass("alert-danger");
+          $("#tes1 div").addClass("alert-warning");
+        }
+
+        $("#tes1 div p").text("");
+        $("#tes1 div p").append(err);
+        $("#tes1").fadeIn(500);
+
+        $timeout(function(){
+          $("#tes1").fadeOut(500);
+        },5000);
       });
   }
 

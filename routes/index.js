@@ -65,8 +65,13 @@ router.post('/login', function(req,res,next) {
       return next(err);
     }
     if (!user){
+      console.log(user);
       return res.json(403, "Your username or password is incorrect");
     }
+    if (!user.active){
+      return res.json(401, "Your account is not active, please go to your email to activate your account");
+    }
+
     req.login(user, function(err){
       if (err){
         console.log(err);

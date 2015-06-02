@@ -70,15 +70,15 @@ module.exports = function(passport){
           return done(err);
         }
         if (!user){
-          return done(null, false, req.flash('loginMessage', 'No user found with the user name' + username));
+          return done(null, false);
         }
         if (!user.validPassword(password)){
-          return done(null, false, req.flash('loginMessage', 'Wrong password'));
+          return done(null, false);
         }
         if (user.active){
           return done(null, user, req.flash('success', 'Success login!'));
         } else {
-          return done(null, false, req.flash('loginMessage', 'You haven\'t confirmed your account yet. Please visit your e-mail account and confirm'));
+          return done(null, user);
         }
       });
     });
