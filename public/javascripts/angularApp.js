@@ -323,13 +323,6 @@ app.controller('board', ['$scope', 'whiteboards','$timeout', function($scope, wh
       canvas.isDrawingMode = true;
     }
   };
-  $scope.clearCanvas = function(){
-    canvas.clear();
-    canvas.renderAll();
-    whiteboards.canvas.objects = [];
-    socket.emit("clear");
-    
-  };
 
   canvas.renderAll();
   var path;
@@ -522,8 +515,32 @@ app.controller('board', ['$scope', 'whiteboards','$timeout', function($scope, wh
     }
   });
 
+  $scope.canvasActions = function(shape, callback){
+    if ($scope.isControlled == true){
+      $("#tes1").fadeIn(500);
+      $timeout(function(){
+        $("#tes1").fadeOut(500);
+      },3500);
+      return;
+    }
+
+    if (shape){
+      callback(shape);
+    } else {
+      callback();
+    }
+
+  };
+
+  function clearCanvas(){
+    canvas.clear();
+    canvas.renderAll();
+    whiteboards.canvas.objects = [];
+    socket.emit("clear");
+  };
+
   //add circles and squares
-  $scope.addShape = function(shape){
+  function addShape(shape){
     var obj;
     switch(shape){
       case 'triangle':
