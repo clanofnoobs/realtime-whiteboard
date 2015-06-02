@@ -56,7 +56,7 @@ app.controller('signup', ['$scope', '$http','$timeout', function($scope, $http, 
 
 }]);
 
-app.factory("user", ["$http","$location","$q","$timeout", function($http, $location, $q,$timeout){
+app.factory("user", ["$http","$location","$q","$timeout","notification", function($http, $location, $q,$timeout, notification){
   var o = {
     user: {}
   }
@@ -76,13 +76,11 @@ app.factory("user", ["$http","$location","$q","$timeout", function($http, $locat
           $("#tes1 div").addClass("alert-warning");
         }
 
+        notification.showNotification();
+
         $("#tes1 div p").text("");
         $("#tes1 div p").append(err);
-        $("#tes1").fadeIn(500);
 
-        $timeout(function(){
-          $("#tes1").fadeOut(500);
-        },5000);
       });
   }
 
@@ -245,7 +243,7 @@ app.controller('home', ['$scope','whiteboards','$timeout','user', function($scop
 
 }]);
 
-app.controller('board', ['$scope', 'whiteboards','$timeout', function($scope, whiteboards, $timeout){
+app.controller('board', ['$scope', 'whiteboards','$timeout','notification', function($scope, whiteboards, $timeout, notification){
   $scope.users = [];
   var count = 0;
   var hash = {};
@@ -501,17 +499,10 @@ app.controller('board', ['$scope', 'whiteboards','$timeout', function($scope, wh
   });
   var isDrawing;
 
-  function showNotification(){
-    $("#tes1").fadeIn(500);
-    $timeout(function(){
-      $("#tes1").fadeOut(500);
-    },3500);
-  }
-
   //canvas.on("mouse:down"...
   $("#c").on("click", function(){
     if ($scope.isControlled == true){
-      showNotification();
+      notification.showNotification();
     }
 
     if (canvas.isDrawingMode){
@@ -521,7 +512,7 @@ app.controller('board', ['$scope', 'whiteboards','$timeout', function($scope, wh
 
   $scope.canvasActions = function(shape, callback){
     if ($scope.isControlled == true){
-      showNotification();
+      notification.showNotification();
       return;
     }
 
@@ -666,6 +657,15 @@ app.config([
     $urlRouterProvider.otherwise('');
     }
 ]);
+
+app.service("notification",function($timeout){
+  this.showNotification = function(){
+    $("#tes1").fadeIn(500);
+    $timeout(function(){
+      $("#tes1").fadeOut(500);
+    },3500);
+  }
+});
 
 
 
