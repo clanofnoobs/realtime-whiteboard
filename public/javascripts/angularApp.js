@@ -260,6 +260,7 @@ app.controller('board', ['$scope', 'whiteboards','$timeout', function($scope, wh
 
   if (cUsers.indexOf(whiteboards.user) != -1){
     var canvas = new fabric.StaticCanvas('c');
+    $scope.isControlled = true;
   } else {
     var canvas = new fabric.Canvas('c');
   }
@@ -507,7 +508,15 @@ app.controller('board', ['$scope', 'whiteboards','$timeout', function($scope, wh
   });
   var isDrawing;
 
-  canvas.on("mouse:down", function(){
+  //canvas.on("mouse:down"...
+  $("#c").on("click", function(){
+    if ($scope.isControlled == true){
+      $("#tes1").fadeIn(500);
+      $timeout(function(){
+        $("#tes1").fadeOut(500);
+      },3500);
+    }
+
     if (canvas.isDrawingMode){
       isDrawing = true;
     }
