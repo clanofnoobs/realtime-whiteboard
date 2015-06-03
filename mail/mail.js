@@ -14,11 +14,8 @@ module.exports = {
   mailOptions: {
     from: 'Realtime Whiteboard <samiulg3@gmail.com>',
     to: '',
-    subject: 'Email confirmation - RealtimeWhiteboard',
+    subject: '',
     html: ''
-  },
-  testFunc: function(){
-    console.log("hello!");
   },
   sendUserActivationMail: function(){
 
@@ -31,12 +28,14 @@ module.exports = {
     });
   
   },
-  setMailOptions: function(user){
+  setMailOptions: function(obj){
     this.token = user.token;
-
+    this.subject = obj.subject;
     this.mailOptions.to = user.local.email;
 
-    this.mailOptions.html = 'Thank you for registering at Realtime Whiteboards. </br> Click <a href="http://localhost:3000/activate?token='+this.token+'">here</a> to activate your profile.'
+  },
+  setMailBody: function(body){
+    this.mailOptions.html = body;
   }
 
 }

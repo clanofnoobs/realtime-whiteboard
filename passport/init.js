@@ -49,7 +49,14 @@ module.exports = function(passport){
             if (err) {
               throw err;
             }
-            mailer.setMailOptions(newUser);
+            var body = 'Thank you for registering at Realtime Whiteboards. </br> Click <a href="http://localhost:3000/activate?token='+newUser.token+'">here</a> to activate your profile.'
+            mailer.setMailOptions({
+              token: newUser.token,
+              email: newUser.local.email,
+              subject: "Email confirmation - RealtimeWhiteboard"
+            });
+            mailer.setMailBody(body);
+
             mailer.sendUserActivationMail();
             return done(null, user, req.flash('success', 'Email sent to ' + newUser.local.email));
           });
