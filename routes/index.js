@@ -149,7 +149,11 @@ router.get('/signup', function(req,res){
 router.get('/activate', function(req, res, next){
   User.findOne({'token':req.query.token}, function(err, user){
     console.log(err);
-    if (user.active == true) {
+    if (!user){
+      req.flash('failure', 'User not found'); 
+      return res.redirect('/');
+    }
+    if (user && user.active == true) {
       req.flash('failure', 'You have already activated your account'); 
       req.login(user,function(err){
       if (err){

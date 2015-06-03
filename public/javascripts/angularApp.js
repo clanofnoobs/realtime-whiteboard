@@ -186,7 +186,12 @@ app.factory("whiteboards", ['$http','$q','$location','$filter', function($http, 
   return o;
 }]);
 
-app.controller('login', ['$scope', 'user', '$http', function($scope, user, $http){
+app.controller('login', ['$scope', 'user', '$http','$timeout', function($scope, user, $http, $timeout){
+  $scope.$on('$viewContentLoaded', function(e){
+    $timeout(function(){
+      $("#notification div").fadeOut(500);
+    },5000);
+  });
   $scope.login = function(){
     user.login({
       username: $scope.username,

@@ -76,7 +76,7 @@ module.exports = function(passport){
           return done(null, false);
         }
         if (user.active){
-          return done(null, user, req.flash('success', 'Success login!'));
+          return done(null, user);
         } else {
           return done(null, user);
         }
