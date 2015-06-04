@@ -7,7 +7,7 @@ require("./Whiteboard");
 var User = mongoose.model('User');
 var Whiteboard = mongoose.model('Whiteboard');
 
-var Request = new mongoose.Schema({
+var RequestSchema = new mongoose.Schema({
   request: String,
   from: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
   to: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
@@ -16,7 +16,11 @@ var Request = new mongoose.Schema({
   token: { type: String, default: token_generator.randomValueBase64(6), unique: true }
 });
 
-Request.pre("save", function(next){
+RequestSchema.static("findWithPopulated", function(cb){
+  return this.find().populate("to from").exec(cb);
+});
+
+RequestSchema.pre("save", function(next){
   var self = this;
   User.findById(self.to, function(err, user){
     if (err){
@@ -32,7 +36,7 @@ Request.pre("save", function(next){
         return next(err);
       }
 
-      var body = user.local.username + " would like to get full access to your board:"+board.title+". Click <a href='http://localhost:3000/permissions/"+self.token+"/"+user.local.username+"?permission=access&board_unique_token="+board.unique_token+"'> here</a> to give full access or <a href='http://localhost:3000/permissions/"+self.token+"/"+user.local.username+"/?board_token="+board.unique_token+"'>"+"here </a> to give controlled access";
+      var body = user.local.username + " would like to get full access to your board:"+board.title+". Click <a href='http://localhost:3000/permissions/"+self.token+"/"+self.from.local.username+"?permission=access&board_unique_token="+board.unique_token+"'> here</a> to give full access or <a href='http://localhost:3000/permissions/"+self.token+"/"+self.from.local.username+"/?board_token="+board.unique_token+"'>"+"here </a> to give controlled access";
 
       mailer.setMailOptions({
         token: user.token,
@@ -47,4 +51,4 @@ Request.pre("save", function(next){
   });
 });
 
-mongoose.model("Request", Request);
+mongoose.model("Request", RequestSchema);
