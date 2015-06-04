@@ -59,7 +59,7 @@ app.controller('signup', ['$scope', '$http','$timeout', function($scope, $http, 
 app.factory("user", ["$http","$location","$q","$timeout","notification", function($http, $location, $q,$timeout, notification){
   var o = {
     user: {},
-    requestedBoard: {}
+    requestedBoardToken: ""
   }
 
   o.login = function(credentials){
@@ -108,7 +108,7 @@ app.factory("user", ["$http","$location","$q","$timeout","notification", functio
   }
 
   o.requestAuthor = function(object){
-    return $http.get('/request/'+object.user+'/'+object.unique_token)
+    return $http.get('/request/'+object)
       .success(function(data){
         $("#exampleModal").modal('hide');
          notification.setNotificationMessage(data); 
@@ -249,7 +249,7 @@ app.controller('home', ['$scope','whiteboards','$timeout','user', function($scop
 
     $("#exampleModal").modal('show');
 
-    user.requestedBoard = { "unique_token": boardObj.unique_token, "user": $scope.user.local.username };
+    user.requestedBoard = boardObj.unique_token
     console.log(user.requestedBoard);
   }
 

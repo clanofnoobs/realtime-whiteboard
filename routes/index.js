@@ -47,7 +47,10 @@ router.get('/user/:user', function(req,res, next){
     });
 });
 
-router.get('/request/:user/:unique_token', isLoggedIn, function(req,res,next){
+router.get('/request/:unique_token', isLoggedIn, function(req,res,next){
+  console.log("original");
+  console.log(req.originalUrl);
+  console.log("original");
 
   Whiteboard.findOne({"unique_token":req.params.unique_token}).exec(function(err, board){
     if (err){
@@ -55,7 +58,7 @@ router.get('/request/:user/:unique_token', isLoggedIn, function(req,res,next){
       return next();
     }
     if (!board){
-      res.send(404, "Board not found");
+      return res.send(404, "Board not found");
     }
 
     var request = new Request();
