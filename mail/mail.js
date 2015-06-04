@@ -17,7 +17,7 @@ module.exports = {
     subject: '',
     html: ''
   },
-  sendUserActivationMail: function(){
+  sendUserMail: function(){
 
     transporter.sendMail(this.mailOptions, function(err,info){
       if (err){
@@ -29,9 +29,9 @@ module.exports = {
   
   },
   setMailOptions: function(obj){
-    this.token = user.token;
+    this.token = obj.token;
     this.subject = obj.subject;
-    this.mailOptions.to = user.local.email;
+    this.mailOptions.to = obj.email;
 
   },
   setMailBody: function(body){

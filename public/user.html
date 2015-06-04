@@ -1,7 +1,7 @@
 <div id="tes1" style="position:absolute;bottom:150px;width:500px;margin:0px auto;left:50%;margin-left: -250px;text-align:center;display:none;z-index:5;">
   <div class="alert alert-success alert-dismissible fade in" role="alert">
     <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button>
-    Request sent!
+    <p></p>
   </div>
 </div>
 <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -16,7 +16,7 @@
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary">Request</button>
+        <button ng-click="requestAuthor()" type="button" class="btn btn-primary">Request</button>
       </div>
     </div>
   </div>
@@ -41,7 +41,7 @@
           {{whiteboard.title}}
         </a> - 
         <span ng-if="isAuthor" class="label label-danger" ng-click="deleteBoard(whiteboard.unique_token)" style="float:right;cursor:pointer;margin-left:5px;">Delete</span>
-        <span ng-if="!isAuthor" class="label label-info" ng-click="cloneBoard(whiteboard.unique_token)" style="float:right;cursor:pointer;">Clone</span>
+        <span ng-if="!isAuthor" class="label label-info" ng-click="cloneBoard(whiteboard)" style="float:right;cursor:pointer;">Clone</span>
       </div>
     </div>
   </div>

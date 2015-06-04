@@ -3,6 +3,7 @@ var router = express.Router();
 var slug = require('slug');
 var mongoose = require('mongoose');
 var User = mongoose.model('User');
+var Request = mongoose.model('Request');
 var Whiteboard = mongoose.model('Whiteboard');
 var passport = require("passport");
 var crypto = require("crypto");
@@ -27,7 +28,8 @@ router.get('/user/:user', function(req,res, next){
       }
       if (user == null){
         console.log("Can't find user");
-        return res.send(404, "Could not find user");
+        req.flash("failure","Could not find user");
+        return res.redirect('/');
       }
       User.getWhiteBoards(req.params.user, function(err, whiteboards){
         if (err){
@@ -43,6 +45,35 @@ router.get('/user/:user', function(req,res, next){
         }
       });
     });
+});
+
+router.get('/request/:user/:unique_token', isLoggedIn, function(req,res,next){
+
+  Whiteboard.findOne({"unique_token":req.params.unique_token}).exec(function(err, board){
+    if (err){
+      console.log(err);
+      return next();
+    }
+    if (!board){
+      res.send(404, "Board not found");
+    }
+
+    var request = new Request();
+    request.request = req.user.local.username+" would like access to your board: "+board.title;
+    request.to = board.author;
+    request.from = req.user;
+    request.whiteboard = board;
+
+    request.save(function(err){
+      if (err){
+        console.log(err);
+        return next(err);
+      }
+      console.log("HI");
+      return res.send(200, "Request sent!");
+    });
+  });
+
 });
 
 router.get('/get/:user', function(req,res,next){
@@ -189,16 +220,22 @@ router.get('/all', function(req,res, next){
     res.json(user);
   });
 });
-router.get('/permissions/:unique_token/:user', function(req,res,next){
+router.get('/permissions/:unique_token/:user', isLoggedIn, function(req,res,next){
   User.findOne({'local.username': req.params.user})
     .exec(function(err,user){
       if (err){
         console.log(err);
         return next(err);
       }
-      Whiteboard.findOne({'unique_token':req.params.unique_token})
+      Whiteboard.findOne({'unique_token':req.query.board_unique_token})
         .populate('access controlled_access')
         .exec(function(err,board){
+         if (err){
+           return next(err);
+         }
+         if (!board){
+           return res.send(404, "Board not found");
+         }
          if (req.query.permission == 'access'){
            board.access.push(user.id);
          } else {

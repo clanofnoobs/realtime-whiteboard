@@ -9,7 +9,8 @@ var UserSchema = new mongoose.Schema({
   },
   active: { type: Boolean, default: false },
   whiteboards: [{type: mongoose.Schema.Types.ObjectId, ref: 'Whiteboard'}],
-  token: { type: String, unique: true, required: true }
+  token: { type: String, unique: true, required: true },
+  requests: [{type: mongoose.Schema.Types.ObjectId, ref: 'Request'}]
 });
 
 UserSchema.static('getWhiteBoards', function(username, callback){

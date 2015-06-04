@@ -57,7 +57,7 @@ module.exports = function(passport){
             });
             mailer.setMailBody(body);
 
-            mailer.sendUserActivationMail();
+            mailer.sendUserMail();
             return done(null, user, req.flash('success', 'Email sent to ' + newUser.local.email));
           });
         }

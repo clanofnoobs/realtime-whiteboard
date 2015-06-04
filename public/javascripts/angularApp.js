@@ -58,7 +58,8 @@ app.controller('signup', ['$scope', '$http','$timeout', function($scope, $http, 
 
 app.factory("user", ["$http","$location","$q","$timeout","notification", function($http, $location, $q,$timeout, notification){
   var o = {
-    user: {}
+    user: {},
+    requestedBoard: {}
   }
 
   o.login = function(credentials){
@@ -104,6 +105,21 @@ app.factory("user", ["$http","$location","$q","$timeout","notification", functio
         $location.url("/login");
       });
     return deferred.promise;
+  }
+
+  o.requestAuthor = function(object){
+    return $http.get('/request/'+object.user+'/'+object.unique_token)
+      .success(function(data){
+        $("#exampleModal").modal('hide');
+         notification.setNotificationMessage(data); 
+         notification.changeToSuccess();
+         notification.showNotification();
+      }).error(function(data){
+      $("#exampleModal").modal('hide');
+       notification.setNotificationMessage(data); 
+       notification.changeToDanger();
+       notification.showNotification();
+      });
   }
 
   return o;
@@ -229,15 +245,17 @@ app.controller('home', ['$scope','whiteboards','$timeout','user', function($scop
     }
   });
 
-  $scope.cloneBoard = function(unique_token){
+  $scope.cloneBoard = function(boardObj){
 
     $("#exampleModal").modal('show');
-    $("#tes1").fadeIn("500");
 
-    $timeout(function(){
-      $("#tes1").fadeOut("500");
-      //$("#exampleModal").modal('hide');
-    },2500);
+    user.requestedBoard = { "unique_token": boardObj.unique_token, "user": $scope.user.local.username };
+    console.log(user.requestedBoard);
+  }
+
+  $scope.requestAuthor = function(){
+    console.log(user.requestedBoard);
+    user.requestAuthor(user.requestedBoard); 
   }
 
   $scope.deleteBoard = function(unique_token){
@@ -664,11 +682,30 @@ app.config([
 ]);
 
 app.service("notification",function($timeout){
+  this.setNotificationMessage = function(message){
+    $("#tes1 div p").text("");
+    $("#tes1 div p").append(message);
+  }
   this.showNotification = function(){
     $("#tes1").fadeIn(500);
     $timeout(function(){
       $("#tes1").fadeOut(500);
     },3500);
+  }
+  this.changeToWarning = function(){
+    $("#tes1 div").removeClass("alert-success");
+    $("#tes1 div").removeClass("alert-danger");
+    $("#tes1 div").addClass("alert-warning");
+  }
+  this.changeToDanger = function(){
+    $("#tes1 div").removeClass("alert-success");
+    $("#tes1 div").removeClass("alert-warning");
+    $("#tes1 div").addClass("alert-danger");
+  }
+  this.changeToSuccess = function(){
+    $("#tes1 div").removeClass("alert-danger");
+    $("#tes1 div").removeClass("alert-warning");
+    $("#tes1 div").addClass("alert-success");
   }
 });
 
