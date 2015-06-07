@@ -8,6 +8,7 @@ var Whiteboard = mongoose.model('Whiteboard');
 var passport = require("passport");
 var crypto = require("crypto");
 var mailer = require("../mail/mail");
+var _ = require("lodash-node");
 
 //GET home page. 
 router.get('/test',function(req,res,next){
@@ -47,36 +48,61 @@ router.get('/user/:user', function(req,res, next){
     });
 });
 
-router.get('/request/:unique_token', isLoggedIn, function(req,res,next){
-  console.log("original");
-  console.log(req.originalUrl);
-  console.log("original");
-
-  Whiteboard.findOne({"unique_token":req.params.unique_token}).exec(function(err, board){
-    if (err){
-      console.log(err);
-      return next();
-    }
-    if (!board){
-      return res.send(404, "Board not found");
-    }
-
-    var request = new Request();
-    request.request = req.user.local.username+" would like access to your board: "+board.title;
-    request.to = board.author;
-    request.from = req.user;
-    request.whiteboard = board;
-
-    request.save(function(err){
-      if (err){
-        console.log(err);
-        return next(err);
-      }
-      console.log("HI");
-      return res.send(200, "Request sent!");
+router.get('/test/:user', function(req,res){
+  User.findOne({"local.username":req.params.user}).populate("requests")
+    .exec(function(err,user){
+      res.json(user);
     });
-  });
+});
 
+router.get('/request/:unique_token', isLoggedIn, function(req,res,next){
+  Request.findDuplicate(req.user.id, function(err, reqs){
+    console.log(reqs);
+    console.log("HELO");
+    //var exists = _.result(_.findWhere(reqs,{'whiteboard.unique_token':req.params.unique_token}), 'token');
+    var exists = reqs.filter(function(sReq){
+      return (sReq.whiteboard.unique_token == req.params.unique_token);
+    });
+    console.log(exists);
+    if (exists.length > 0){
+      console.log(reqs);
+      if (req.get('Content-Type') == 'application/json'){
+        return res.json(409, 'You"ve already requested!');
+      } else {
+        req.flash("failure", "You've already requested for this board!");
+        return res.redirect('/');
+      }
+    } else {
+        Whiteboard.findOne({"unique_token":req.params.unique_token}).exec(function(err, board){
+          if (err){
+            console.log(err);
+            return next();
+          }
+          if (!board){
+            return res.send(404, "Board not found");
+          }
+
+          var request = new Request();
+          request.request = req.user.local.username+" would like access to your board: "+board.title;
+          request.to = board.author;
+          request.from = req.user;
+          request.whiteboard = board;
+
+          request.save(function(err){
+            if (err){
+              console.log(err);
+              return next(err);
+            }
+            if (req.get('Content-Type') == 'application/json'){
+              return res.send(200, "Request sent!");
+            } else {
+              req.flash("success", "Request sent!");
+              return res.redirect('/');
+            }
+          });
+        });
+    }
+  });
 });
 
 router.get('/get/:user', function(req,res,next){
@@ -223,16 +249,20 @@ router.get('/all', function(req,res, next){
     res.json(user);
   });
 });
-router.get('/permissions/:unique_token/:user', isLoggedIn, function(req,res,next){
-  User.findOne({'local.username': req.params.user})
-    .exec(function(err,user){
-      if (err){
-        console.log(err);
-        return next(err);
-      }
-      Whiteboard.findOne({'unique_token':req.query.board_unique_token})
+router.get('/permissions/:unique_token/:user', function(req,res,next){
+  Request.findWithPopulated(req.params.unique_token, function(err, request){
+    if (!request){
+       if (req.get('Content-Type') == 'application/json'){
+        return res.send(404,"Request not found or user has declined it");
+       } else {
+        req.flash("failure", "Request not found or user has declined it!");
+        return res.redirect("/");
+       }
+    }
+    User.findById(request.from, function(err, user){
+      Whiteboard.findOne({"unique_token":request.whiteboard.unique_token})
         .populate('access controlled_access')
-        .exec(function(err,board){
+        .exec(function(err, board){
          if (err){
            return next(err);
          }
@@ -255,11 +285,17 @@ router.get('/permissions/:unique_token/:user', isLoggedIn, function(req,res,next
                console.log(err);
                return next(err);
              }
-               return res.json("DONE");
-           })
-         });
-      });
+             if (req.get('Content-Type') == 'application/json'){
+              return res.json("DONE");
+             } else {
+              req.flash("success", "Request granted!");
+              return res.redirect("/");
+             }
+           });
+        });
     });
+  });
+  });
 });
 
 

@@ -13,11 +13,16 @@ var RequestSchema = new mongoose.Schema({
   to: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
   sent: { type: Date, defaut: Date.now },
   whiteboard: { type: mongoose.Schema.Types.ObjectId, ref: "Whiteboard" },
-  token: { type: String, default: token_generator.randomValueBase64(6), unique: true }
+  token: { type: String, default: token_generator.randomValueBase64(6) }
 });
 
-RequestSchema.static("findWithPopulated", function(cb){
-  return this.find().populate("to from").exec(cb);
+RequestSchema.static("findDuplicate", function(userId, cb){
+  return this.find().populate('from whiteboard')
+    .exec(cb);
+});
+
+RequestSchema.static("findWithPopulated", function(token, cb){
+  return this.findOne({"token":token}).populate("to from whiteboard").exec(cb);
 });
 
 RequestSchema.pre("save", function(next){
@@ -27,6 +32,11 @@ RequestSchema.pre("save", function(next){
       console.log(err);
     }
     user.requests.push(self.id);
+    user.save(function(err){
+      if (err){
+        return next(err);
+      }
+    });
     Whiteboard.findOne({"unique_token":self.whiteboard.unique_token}).exec(function(err, board){
       if (err){
         console.log(err);

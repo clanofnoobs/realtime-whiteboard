@@ -14,7 +14,7 @@ var UserSchema = new mongoose.Schema({
 });
 
 UserSchema.static('getWhiteBoards', function(username, callback){
-  return this.findOne({'local.username':username}).select('local.username whiteboards').populate('whiteboards')
+  return this.findOne({'local.username':username}).populate('whiteboards requests').select('local.username whiteboards requests')
     .exec(callback);
 });
 

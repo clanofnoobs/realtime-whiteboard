@@ -108,7 +108,12 @@ app.factory("user", ["$http","$location","$q","$timeout","notification", functio
   }
 
   o.requestAuthor = function(object){
-    return $http.get('/request/'+object)
+    return $http({
+      method: 'GET',
+      url: '/request/'+object,
+      data: "",
+      headers: { 'Content-Type': 'application/json'}
+    })
       .success(function(data){
         $("#exampleModal").modal('hide');
          notification.setNotificationMessage(data); 
@@ -230,6 +235,7 @@ app.controller('home', ['$scope','whiteboards','$timeout','user', function($scop
   $scope.user["theUser"] = whiteboards.whiteboards.theUser;
   $scope.whiteboards = whiteboards.whiteboards.whiteboards;
 
+  console.log($scope.user);
 
   if ($scope.user["theUser"] == $scope.user.local.username){
     $scope.isAuthor = true; 

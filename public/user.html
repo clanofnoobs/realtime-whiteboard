@@ -26,6 +26,7 @@
     <div class="page-header">
       <h1>
       {{user.local.username}}  
+      <span class="badge" style="height:30px;width:30px;margin-top:-15px;">{{user.requests.length}}</span>
       <a ng-if="isAuthor" href="#/createboard">
         <button class="btn">create</button>
   </a>
