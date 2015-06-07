@@ -11,10 +11,6 @@ var mailer = require("../mail/mail");
 var _ = require("lodash-node");
 
 //GET home page. 
-router.get('/test',function(req,res,next){
-  mailer.setMailOptions();
-  res.send("test");
-});
 router.get('/', function(req, res) {
   res.render('index', {failure: req.flash('signupMessage'), success: req.flash('success'), message: req.flash('failure'), loginMessage: req.flash('loginMessage')});
 });
@@ -57,8 +53,6 @@ router.get('/test/:user', function(req,res){
 
 router.get('/request/:unique_token', isLoggedIn, function(req,res,next){
   Request.findDuplicate(req.user.id, function(err, reqs){
-    console.log(reqs);
-    console.log("HELO");
     //var exists = _.result(_.findWhere(reqs,{'whiteboard.unique_token':req.params.unique_token}), 'token');
     var exists = reqs.filter(function(sReq){
       return (sReq.whiteboard.unique_token == req.params.unique_token);
@@ -285,8 +279,9 @@ router.get('/permissions/:unique_token/:user', function(req,res,next){
                console.log(err);
                return next(err);
              }
+             request.remove();
              if (req.get('Content-Type') == 'application/json'){
-              return res.json("DONE");
+              return res.json("Request granted");
              } else {
               req.flash("success", "Request granted!");
               return res.redirect("/");
@@ -367,15 +362,8 @@ function isLoggedInAndAuthorized(req,res,next){
         if (board == null){
           return res.send(404,"This board does not exist or has been deleted by the user!");
         }
-        var users = [];
-        var cUsers = [];
-        board.controlled_access.forEach(function(user){
-          cUsers.push(user.local.username);
-        });
-
-        board.access.forEach(function(user){
-          users.push(user.local.username);
-        });
+        var users = _.pluck(board.access, 'local.username');
+        var cUsers =  _.pluck(board.controlled_access, 'local.username');
 
         if (users.indexOf(req.user.local.username) != -1){
           console.log("Has access");
