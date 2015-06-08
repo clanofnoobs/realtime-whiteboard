@@ -25,8 +25,8 @@
   <div ng-controller="home">
     <div class="page-header">
       <h1>
+        <span ng-show="user.requests.length" ng-if="user.isAuthor" ng-click="showRequests()" class="badge" style="background-color:rgb(230,50,50);display:inline-block;vertical-align:middle">{{user.requests.length}}</span>
         {{user.local.username}}  
-        <span ng-if="user.isAuthor" ng-click="showRequests()" class="badge bounce" style="background-color:rgb(230,50,50);display:inline-block;vertical-align:middle">{{user.requests.length}}</span>
         <a ng-if="user.isAuthor" href="#/createboard">
           <button class="btn">create</button>
         </a>

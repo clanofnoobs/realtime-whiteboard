@@ -11,7 +11,6 @@ var mailer = require("../mail/mail");
 var _ = require("lodash-node");
 var Q = require("q");
 
-//GET home page. 
 function getRequests(username){
   var deferred = Q.defer();
   User.getRequests(username).then(function(user){
@@ -19,12 +18,8 @@ function getRequests(username){
   });
   return deferred.promise;
 }
-router.get('/test', function(req,res){
-  var test = getRequests("cla");
-  test.then(function(data){
-    return res.json(data);
-  });
-});
+
+//GET home page. 
 router.get('/', function(req, res) {
   res.render('index', {failure: req.flash('signupMessage'), success: req.flash('success'), message: req.flash('failure'), loginMessage: req.flash('loginMessage')});
 });
@@ -65,13 +60,6 @@ router.get('/user/:user', function(req,res, next){
           return res.json(whiteboards);
         }
       });
-    });
-});
-
-router.get('/test/:user', function(req,res){
-  User.findOne({"local.username":req.params.user}).populate("requests")
-    .exec(function(err,user){
-      res.json(user);
     });
 });
 

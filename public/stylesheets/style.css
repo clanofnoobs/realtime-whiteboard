@@ -20,9 +20,7 @@ a:hover{
 }
 
 .bounce {
-  margin-left: -70px;
   cursor: pointer;
-  position:absolute;
   -webkit-animation: bump 1.1s infinite;
 }
 
