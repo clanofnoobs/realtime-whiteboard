@@ -234,6 +234,7 @@ app.controller('home', ['$scope','whiteboards','$timeout','user', function($scop
   $scope.user = whiteboards.whiteboards;
   $scope.user["theUser"] = whiteboards.whiteboards.theUser;
   $scope.whiteboards = whiteboards.whiteboards.whiteboards;
+  $scope.template = "boards.html";
 
   console.log($scope.user);
 
@@ -260,6 +261,14 @@ app.controller('home', ['$scope','whiteboards','$timeout','user', function($scop
     user.requestAuthor(user.requestedBoard); 
   }
 
+  $scope.showRequests = function(){
+    $scope.template = "requests.html";
+  }
+
+  $scope.showBoards = function(){
+    $scope.template = "boards.html";
+  }
+
   $scope.deleteBoard = function(unique_token){
     whiteboards.deleteBoard(unique_token).then(function(data){
       $scope.whiteboards = whiteboards.whiteboards.whiteboards;
@@ -268,7 +277,7 @@ app.controller('home', ['$scope','whiteboards','$timeout','user', function($scop
 
 }]);
 
-app.controller('board', ['$scope', 'whiteboards','$timeout','notification', function($scope, whiteboards, $timeout, notification){
+app.controller('board', ['$scope', 'whiteboards','$timeout','notification','$window', function($scope, whiteboards, $timeout, notification, $window){
   $scope.users = [];
   var count = 0;
   var hash = {};
@@ -534,6 +543,10 @@ app.controller('board', ['$scope', 'whiteboards','$timeout','notification', func
       isDrawing = true;
     }
   });
+
+  $scope.getPhoto = function(){
+    $window.open(canvas.toDataURL('png'));
+  }
 
   $scope.canvasActions = function(shape, callback){
     if ($scope.isControlled == true){
