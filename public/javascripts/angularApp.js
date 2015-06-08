@@ -127,6 +127,19 @@ app.factory("user", ["$http","$location","$q","$timeout","notification", functio
       });
   }
 
+  o.grantAccess = function(req){
+    return $http.get('/permissions/'+req.token+'/?permission='+req.type)
+      .success(function(data){
+        notification.setNotificationMessage(data);
+        notification.changeToSuccess();
+        notification.showNotification();
+      }).error(function(err){
+        notification.setNotificationMessage(err);
+        notification.changeToDanger();
+        notification.showNotification();
+      });
+  }
+
   return o;
 }]);
 
@@ -269,6 +282,13 @@ app.controller('home', ['$scope','whiteboards','$timeout','user', function($scop
     $scope.template = "boards.html";
   }
 
+  $scope.grantAccess = function(request,event){
+    if (event.target.getAttribute("id") == "complete"){
+      request["type"] = "access";
+    }     
+    user.grantAccess(request);
+  }
+
   $scope.deleteBoard = function(unique_token){
     whiteboards.deleteBoard(unique_token).then(function(data){
       $scope.whiteboards = whiteboards.whiteboards.whiteboards;
@@ -323,6 +343,7 @@ app.controller('board', ['$scope', 'whiteboards','$timeout','notification','$win
     count++;
   });
     
+  debugger;
 
   var brush = new fabric.PencilBrush(canvas);
   //var brush1 = new fabric.PencilBrush(canvas);
