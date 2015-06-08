@@ -237,10 +237,6 @@ app.controller('home', ['$scope','whiteboards','$timeout','user', function($scop
 
   console.log($scope.user);
 
-  if ($scope.user["theUser"] == $scope.user.local.username){
-    $scope.isAuthor = true; 
-  }
-
   $scope.logOut = function(){
     user.logOut();
   }

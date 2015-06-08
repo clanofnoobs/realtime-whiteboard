@@ -9,15 +9,29 @@ var passport = require("passport");
 var crypto = require("crypto");
 var mailer = require("../mail/mail");
 var _ = require("lodash-node");
+var Q = require("q");
 
 //GET home page. 
+function getRequests(username){
+  var deferred = Q.defer();
+  User.getRequests(username).then(function(user){
+    deferred.resolve(user);
+  });
+  return deferred.promise;
+}
+router.get('/test', function(req,res){
+  var test = getRequests("cla");
+  test.then(function(data){
+    return res.json(data);
+  });
+});
 router.get('/', function(req, res) {
   res.render('index', {failure: req.flash('signupMessage'), success: req.flash('success'), message: req.flash('failure'), loginMessage: req.flash('loginMessage')});
 });
 
 router.get('/user/:user', function(req,res, next){
   User.findOne({'local.username':req.params.user})
-    .select('local.username whiteboards')
+    .select('local.username whiteboards requests')
     .exec(function(err,user){
       if (err){
         console.log(err);
@@ -36,7 +50,17 @@ router.get('/user/:user', function(req,res, next){
         if (req.user){
           whiteboards = whiteboards.toObject();
           whiteboards["theUser"] = req.user.local.username;
-          return res.json(whiteboards);
+          if (req.user.local.username == user.local.username){
+            whiteboards["isAuthor"] = true;
+            var requestPromise = getRequests(req.user.local.username);
+            requestPromise.then(function(userRequest){
+              whiteboards["requests"] = userRequest.requests;
+              console.log(userRequest);
+              return res.json(whiteboards);
+            });
+          } else {
+            return res.json(whiteboards);
+          }
         } else {
           return res.json(whiteboards);
         }

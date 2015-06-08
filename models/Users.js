@@ -1,5 +1,6 @@
 var mongoose = require("mongoose");
 var bcrypt = require('bcrypt-nodejs');
+var Q = require("q");
 
 var UserSchema = new mongoose.Schema({
   local : { 
@@ -14,8 +15,17 @@ var UserSchema = new mongoose.Schema({
 });
 
 UserSchema.static('getWhiteBoards', function(username, callback){
-  return this.findOne({'local.username':username}).populate('whiteboards requests').select('local.username whiteboards requests')
+  return this.findOne({'local.username':username}).populate('whiteboards').select('local.username whiteboards requests')
     .exec(callback);
+});
+
+UserSchema.static('getRequests', function(username){
+  var deferred = Q.defer();
+  this.findOne({'local.username':username}).populate('requests').select('requests')
+    .exec(function(err, request){
+      deferred.resolve(request);
+    });
+  return deferred.promise;
 });
 
 UserSchema.methods.generateHash = function(password) {
