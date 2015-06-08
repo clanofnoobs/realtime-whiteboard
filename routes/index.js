@@ -255,6 +255,7 @@ router.get('/all', function(req,res, next){
     res.json(user);
   });
 });
+
 router.get('/permissions/:unique_token', function(req,res,next){
   Request.findWithPopulated(req.params.unique_token, function(err, request){
     if (!request){

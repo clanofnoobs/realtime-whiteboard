@@ -128,16 +128,20 @@ app.factory("user", ["$http","$location","$q","$timeout","notification", functio
   }
 
   o.grantAccess = function(req){
-    return $http.get('/permissions/'+req.token+'/?permission='+req.type)
+    var deferred = $q.defer();
+    $http.get('/permissions/'+req.token+'/?permission='+req.type)
       .success(function(data){
         notification.setNotificationMessage(data);
         notification.changeToSuccess();
         notification.showNotification();
+        deferred.resolve(data);
       }).error(function(err){
         notification.setNotificationMessage(err);
         notification.changeToDanger();
         notification.showNotification();
+        deferred.reject(data);
       });
+    return deferred.promise;
   }
 
   return o;
@@ -286,7 +290,11 @@ app.controller('home', ['$scope','whiteboards','$timeout','user', function($scop
     if (event.target.getAttribute("id") == "complete"){
       request["type"] = "access";
     }     
-    user.grantAccess(request);
+    user.grantAccess(request).then(function(data){
+      $scope.user.requests = $scope.user.requests.filter(function(sRequest){
+        return sRequest.token != request.token;
+      });
+    });
   }
 
   $scope.deleteBoard = function(unique_token){
@@ -343,8 +351,6 @@ app.controller('board', ['$scope', 'whiteboards','$timeout','notification','$win
     count++;
   });
     
-  debugger;
-
   var brush = new fabric.PencilBrush(canvas);
   //var brush1 = new fabric.PencilBrush(canvas);
   var ownerBrush = new fabric.PencilBrush(canvas);
