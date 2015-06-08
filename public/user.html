@@ -26,12 +26,12 @@
     <div class="page-header">
       <h1>
       {{user.local.username}}  
-      <span ng-if="user.isAuthor" class="badge" style="height:30px;width:30px;margin-top:-15px;">{{user.requests.length}}</span>
+      <span ng-if="user.isAuthor" class="badge" style="background-color:rgb(230,50,50);display:inline-block;vertical-align:middle">{{user.requests.length}}</span>
       <a ng-if="user.isAuthor" href="#/createboard">
         <button class="btn">create</button>
   </a>
     </h1>
-    <p class="log">logged in as {{ user.theUser ? user.theUser : "a guest" }} <a ng-if="user.theUser" ng-click="logOut()"> (logout)</a></p>
+    <p ng-if="!user.isAuthor" class="log">logged in as {{ user.theUser ? user.theUser : "a guest" }} <a ng-if="user.theUser" ng-click="logOut()"> (logout)</a></p>
     </div>
     <h1 ng-show="empty">
       Empty!
