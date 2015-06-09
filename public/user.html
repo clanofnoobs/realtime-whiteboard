@@ -1,7 +1,8 @@
 <nav class="navbar navbar-default navbar-fixed-top">
 <div class="sub-nav">
   <a href="#/user/{{user.theUser}}" class="navbar-text" style="font-size:16px;">{{ user.theUser ? user.theUser : "Guest"}} <span class="caret" style="cursor:pointer;"></span></a>
-  <a ng-click="logOut()" class="navbar-text logout" style="float:right;font-size:16px;">logout</a>
+  <a ng-if="user.theUser" ng-click="logOut()" class="navbar-text logout" style="float:right;font-size:16px;">{{ user.theUser ? "logout" : "login" }}</a>
+  <a ng-if="!user.theUser" class="navbar-text logout" href="#/login" style="float:right;font-size:16px;">{{ user.theUser ? "logout" : "login" }}</a>
 </div>
 </nav>
 <div id="tes1" style="position:absolute;bottom:150px;width:500px;margin:0px auto;left:50%;margin-left: -250px;text-align:center;display:none;z-index:10;">
