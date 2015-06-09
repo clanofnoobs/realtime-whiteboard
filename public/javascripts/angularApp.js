@@ -203,7 +203,7 @@ app.factory("whiteboards", ['$http','$q','$location','$filter', function($http, 
   }
   o.getBoard = function(params){
     var deferred = $q.defer();
-    $http.get('/user/'+params.username+'/board/'+params.slug+'?unique_token='+params.unique_token)
+    return $http.get('/user/'+params.username+'/board/'+params.slug+'?unique_token='+params.unique_token)
       .success(function(data){
         deferred.resolve(data);
         angular.copy(data.whiteboard, o.board);
@@ -211,6 +211,7 @@ app.factory("whiteboards", ['$http','$q','$location','$filter', function($http, 
       })
       .error(function(data, status, headers, config){
         if (status == 401);{
+          alert("You are not authorized");
           deferred.reject(data);
         }
       });
@@ -236,6 +237,10 @@ app.controller('login', ['$scope', 'user', '$http','$timeout', function($scope, 
       password: $scope.password
     });
   }
+
+  $scope.logOut = function(){
+    user.logOut();
+  }
 }]);
 
 app.controller('create_whiteboard', ['whiteboards','$scope', '$http', function(whiteboards,$scope, $http){
@@ -248,6 +253,11 @@ app.controller('create_whiteboard', ['whiteboards','$scope', '$http', function(w
 }]);
 
 app.controller('home', ['$scope','whiteboards','$timeout','user', function($scope, whiteboards, $timeout, user){
+  $('a').click(function(e){
+   if($(e.target).hasClass('caret')){
+     return false;
+      }
+  });
   $scope.user = whiteboards.whiteboards;
   $scope.user["theUser"] = whiteboards.whiteboards.theUser;
   $scope.whiteboards = whiteboards.whiteboards.whiteboards;
@@ -257,6 +267,10 @@ app.controller('home', ['$scope','whiteboards','$timeout','user', function($scop
 
   $scope.logOut = function(){
     user.logOut();
+  }
+
+  $scope.test = function(){
+    alert("test");
   }
 
   $scope.$watch('whiteboards', function(){
@@ -560,6 +574,7 @@ app.controller('board', ['$scope', 'whiteboards','$timeout','notification','$win
 
     canvas.renderAll();
 
+    console.log(json);
     socket.emit("draw", json);
   });
   var isDrawing;
@@ -723,19 +738,10 @@ app.config([
           controller: 'board',
           templateUrl: 'whiteboard.html',
           resolve: {
-            getBoard: ['whiteboards', '$stateParams','notification','$location','$timeout', function(whiteboards, $stateParams,notification,$location,$timeout){
-              whiteboards.getBoard($stateParams).then(function(data){
-                return;
-              }).catch(function(data){
-                $location.url("/login");
-              });
+            getBoard: ['whiteboards', '$stateParams','$timeout', function(whiteboards, $stateParams,notification,$location,$timeout){
+              return whiteboards.getBoard($stateParams);
             }]
-          },
-          checkIfLoggedInAndAuth: ['user',function(user){
-            user.checkIfLoggedIn().then(function(data){
-              user.user = req.user;
-            });
-          }]
+          }
         })
         .state('user_homepage', {
           url: '/user/{username}',

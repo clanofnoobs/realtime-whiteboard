@@ -15,9 +15,13 @@ a:hover{
   background-color: rgb(240,240,240);
 }
 
+@media screen and (min-width: 0px) and (max-width: 1150px) {
+  img { display: none; }  /* show it on small screens */
+}
+
 .logout{
   border-radius: 5px;
-  padding: 3px;
+  padding: 8px;
   transition: all 0.2s ease-in-out;
 }
 
