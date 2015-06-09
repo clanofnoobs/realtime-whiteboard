@@ -203,7 +203,7 @@ app.factory("whiteboards", ['$http','$q','$location','$filter', function($http, 
   }
   o.getBoard = function(params){
     var deferred = $q.defer();
-    return $http.get('/user/'+params.username+'/board/'+params.slug+'?unique_token='+params.unique_token)
+    $http.get('/user/'+params.username+'/board/'+params.slug+'?unique_token='+params.unique_token)
       .success(function(data){
         deferred.resolve(data);
         angular.copy(data.whiteboard, o.board);
@@ -211,7 +211,6 @@ app.factory("whiteboards", ['$http','$q','$location','$filter', function($http, 
       })
       .error(function(data, status, headers, config){
         if (status == 401);{
-          alert("You are not authorized");
           deferred.reject(data);
         }
       });
@@ -738,8 +737,12 @@ app.config([
           controller: 'board',
           templateUrl: 'whiteboard.html',
           resolve: {
-            getBoard: ['whiteboards', '$stateParams','$timeout', function(whiteboards, $stateParams,notification,$location,$timeout){
-              return whiteboards.getBoard($stateParams);
+            getBoard: ['whiteboards', '$stateParams','notification','$location','$timeout', function(whiteboards, $stateParams,notification,$location,$timeout){
+              return whiteboards.getBoard($stateParams).then(function(data){
+                return;
+              }).catch(function(data){
+                $location.url("/login");
+              });
             }]
           }
         })
