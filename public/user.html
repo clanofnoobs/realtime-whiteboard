@@ -1,3 +1,9 @@
+<nav class="navbar navbar-default navbar-fixed-top">
+<div class="sub-nav">
+  <a href="#/user/{{user.theUser}}" class="navbar-text" style="font-size:16px;">{{ user.theUser ? user.theUser : "Guest"}} <span class="caret" style="cursor:pointer;"></span></a>
+  <a ng-click="logOut()" class="navbar-text logout" style="float:right;font-size:16px;">logout</a>
+</div>
+</nav>
 <div id="tes1" style="position:absolute;bottom:150px;width:500px;margin:0px auto;left:50%;margin-left: -250px;text-align:center;display:none;z-index:10;">
   <div class="alert alert-success alert-dismissible fade in" role="alert">
     <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button>
@@ -28,10 +34,9 @@
         <span ng-show="user.requests.length" ng-if="user.isAuthor" ng-click="showRequests()" class="badge" style="cursor:pointer;background-color:rgb(230,50,50);display:inline-block;vertical-align:middle">{{user.requests.length}}</span>
         {{user.local.username}}  
         <a ng-if="user.isAuthor" href="#/createboard">
-          <button class="btn">create</button>
+          <button class="btn" style="color:white;font-size:12px;padding:3px;background-color:rgb(0,200,200);border:0px;">create</button>
         </a>
       </h1>
-    <p ng-if="!user.isAuthor" class="log">logged in as {{ user.theUser ? user.theUser : "a guest" }} <a ng-if="user.theUser" ng-click="logOut()"> (logout)</a></p>
     </div>
     <h1 ng-show="empty">
       Empty!

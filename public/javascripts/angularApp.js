@@ -97,12 +97,11 @@ app.factory("user", ["$http","$location","$q","$timeout","notification", functio
 
   o.checkIfLoggedIn = function(){
     var deferred = $q.defer();
-    return $http.get('/checkIfLoggedIn')
+    $http.get('/checkIfLoggedIn')
       .success(function(data){
         deferred.resolve(data);
       }).error(function(data){
         deferred.reject(data);
-        $location.url("/login");
       });
     return deferred.promise;
   }
@@ -204,7 +203,7 @@ app.factory("whiteboards", ['$http','$q','$location','$filter', function($http, 
   }
   o.getBoard = function(params){
     var deferred = $q.defer();
-    return $http.get('/user/'+params.username+'/board/'+params.slug+'?unique_token='+params.unique_token)
+    $http.get('/user/'+params.username+'/board/'+params.slug+'?unique_token='+params.unique_token)
       .success(function(data){
         deferred.resolve(data);
         angular.copy(data.whiteboard, o.board);
@@ -212,7 +211,6 @@ app.factory("whiteboards", ['$http','$q','$location','$filter', function($http, 
       })
       .error(function(data, status, headers, config){
         if (status == 401);{
-          alert("You are not authorized!!");
           deferred.reject(data);
         }
       });
@@ -228,8 +226,10 @@ app.controller('login', ['$scope', 'user', '$http','$timeout', function($scope, 
   $scope.$on('$viewContentLoaded', function(e){
     $timeout(function(){
       $("#notification div").fadeOut(500);
-    },5000);
+    },3500);
   });
+  $scope.user = user.user;
+
   $scope.login = function(){
     user.login({
       username: $scope.username,
@@ -314,9 +314,11 @@ app.controller('board', ['$scope', 'whiteboards','$timeout','notification','$win
   console.log(whiteboards.board);
 
   var cUsers = [];
-  whiteboards.board.controlled_access.map(function(controlledUsers){
-    cUsers.push(controlledUsers.local.username);
-  });
+  if (whiteboards.board.controlled_access){
+    whiteboards.board.controlled_access.map(function(controlledUsers){
+      cUsers.push(controlledUsers.local.username);
+    });
+  }
 
   if (cUsers.indexOf(whiteboards.user) != -1){
     var canvas = new fabric.StaticCanvas('c');
@@ -338,9 +340,11 @@ app.controller('board', ['$scope', 'whiteboards','$timeout','notification','$win
 
   whiteboards.canvas = canvas.toObject();
   whiteboards.canvas.objects = [];
-  $scope.board.objects.forEach(function(canvasObj){
-    whiteboards.canvas.objects.push(canvasObj);
-  });
+  if ($scope.board.objects){
+    $scope.board.objects.forEach(function(canvasObj){
+      whiteboards.canvas.objects.push(canvasObj);
+    });
+  }
   canvas.loadFromJSON(JSON.stringify(whiteboards.canvas));
   canvas.renderAll();
   canvas.getObjects().forEach(function(obj){
@@ -667,15 +671,28 @@ app.config([
         .state('root',{
           url:'',
           controller: 'login',
-          templateUrl: 'test1.html'
+          templateUrl: 'test1.html',
+          resolve: {
+            checkIfLoggedInAndAuth: ['user',function(user){
+              user.checkIfLoggedIn().then(function(data){
+                user.user = data;
+              }).catch(function(){
+                return;
+              });
+            }]
+          }
         })
         .state('login',{
           url:'/login',
           controller: 'login',
           templateUrl: 'login.ejs',
-          resolve : {
-            getPromise: ['user', function(user){
-
+          resolve: {
+            getPromise: ['user','$location', function(user,$location){
+              user.checkIfLoggedIn().then(function(data){
+                return $location.url("/user/"+data.local.username);
+              }).catch(function(){
+                return;
+              });
             }]
           }
         })
@@ -685,7 +702,9 @@ app.config([
           templateUrl: 'create.html',
           resolve: {
             checkIfLoggedInAndAuth: ['user',function(user){
-              user.checkIfLoggedIn();
+              user.checkIfLoggedIn().then(function(data){
+                user.user = req.user;
+              });
             }]
           }
         })
@@ -704,10 +723,19 @@ app.config([
           controller: 'board',
           templateUrl: 'whiteboard.html',
           resolve: {
-            getBoard: ['whiteboards', '$stateParams', function(whiteboards, $stateParams){
-              return whiteboards.getBoard($stateParams);
+            getBoard: ['whiteboards', '$stateParams','notification','$location','$timeout', function(whiteboards, $stateParams,notification,$location,$timeout){
+              whiteboards.getBoard($stateParams).then(function(data){
+                return;
+              }).catch(function(data){
+                $location.url("/login");
+              });
             }]
-          }
+          },
+          checkIfLoggedInAndAuth: ['user',function(user){
+            user.checkIfLoggedIn().then(function(data){
+              user.user = req.user;
+            });
+          }]
         })
         .state('user_homepage', {
           url: '/user/{username}',
@@ -717,7 +745,12 @@ app.config([
             getPromise : ['whiteboards', '$stateParams', function(whiteboards, $stateParams){
               return whiteboards.getUsersWhiteboards($stateParams.username);
             }]
-          }
+          },
+          checkIfLoggedInAndAuth: ['user',function(user){
+            user.checkIfLoggedIn().then(function(data){
+              user.user = req.user;
+            });
+          }]
         });
     $urlRouterProvider.otherwise('');
     }

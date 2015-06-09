@@ -9,6 +9,23 @@ a:hover{
   cursor: pointer;
 }
 
+.customButton {
+  color: black;
+  border: none;
+  background-color: rgb(240,240,240);
+}
+
+.logout{
+  border-radius: 5px;
+  padding: 3px;
+  transition: all 0.2s ease-in-out;
+}
+
+.logout:hover{
+  color: black;
+  background-color: white;
+}
+
 
 @-webkit-keyframes bump{
   0%, 100% {
@@ -23,6 +40,11 @@ a:hover{
   background: white;
   transition: background 0.08s ease-in;
   
+}
+
+.sub-nav {
+  width: 80%;
+  margin:0px auto;
 }
 
 .board:hover{

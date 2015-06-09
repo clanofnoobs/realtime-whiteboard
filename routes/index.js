@@ -356,6 +356,7 @@ function isLoggedIn(req,res,next){
 }
 
 router.get('/checkIfLoggedIn', isLoggedIn, function(req,res,next){
+  res.json(req.user);
 });
 
 router.get('/board/authorized/:unique_token', isLoggedInAndAuthorized, function(req,res,next){
