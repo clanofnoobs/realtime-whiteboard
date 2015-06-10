@@ -5,6 +5,8 @@ var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var flash = require('connect-flash');
+var fabric = require('fabric').fabric;
+var fs = require("fs-extra");
 
 var users = require('./routes/users');
 
@@ -35,6 +37,7 @@ initPassport(passport);
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
 
+app.use('/thumbnails',express.static(path.join(__dirname, 'thumbnails')));
 // uncomment after placing your favicon in /public
 //app.use(favicon(__dirname + '/public/favicon.ico'));
 app.use(logger('dev'));
@@ -159,6 +162,50 @@ io.of('/room').on('connection', function(socket){
   });
   socket.on("mouseup", function(user){
     socket.broadcast.to(joinedToken).emit("mouseup", user);
+  });
+  socket.on("disconnect", function(){
+    console.log("Disconnected!");
+
+    Whiteboard.findOne({'unique_token':joinedToken})
+      .populate('author')
+      .exec(function(err,board){
+        console.log(board);
+      if (!board){
+        console.log("Board not found");
+        return;
+      }
+      var canvas = fabric.createCanvasForNode(1000,800);
+      var tmp_loc = '/' + board.author.local.username + '-' + board.unique_token+'.png';
+      var out = fs.createWriteStream(__dirname + tmp_loc);
+      var canvasObj = canvas.toObject();
+      canvasObj.objects = [];
+      board.objects.forEach(function(s){
+        canvasObj.objects.push(s);
+      });
+      canvas.loadFromJSON(JSON.stringify(canvasObj), function() {
+        canvas.renderAll();
+        var stream = canvas.createPNGStream();
+        stream.on('data', function(chunk) {
+          out.write(chunk);
+        });
+        stream.on('end', function(){
+          fs.copy(__dirname + tmp_loc, './thumbnails'+tmp_loc, function(err){
+            if (err){
+              console.log(err);
+            } else {
+              console.log( ' uploaded to ' );
+              fs.unlink('.'+tmp_loc, function(err){
+                if (err){
+                  console.log(err);
+                  return;
+                }
+                console.log("Deleted");
+              });
+            }
+          });
+        });
+      });
+    });
   });
 });
 

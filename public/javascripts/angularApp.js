@@ -742,6 +742,11 @@ app.config([
                 return;
               }).catch(function(data){
                 $location.url("/login");
+                $timeout(function(){
+                  notification.setNotificationMessage("Not authorized");
+                  notification.changeToWarning();
+                  notification.showNotification();
+                },200)
               });
             }]
           }
