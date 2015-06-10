@@ -2,11 +2,14 @@
 a {
   color: #00B7FF;
   text-decoration: none;
+  transition: all 0.2s ease-in;
 }
 
 a:hover{
   text-decoration: none;
+  color: white;
   cursor: pointer;
+  opacity:0.9;
 }
 
 .myContainer {
@@ -14,14 +17,33 @@ a:hover{
   width:100%;
   height: 500px;
   margin-top: -30px;
-  background-color: rgba(20,20,20,0.8);
+  background:url(../images/whiteboard.jpeg) no-repeat;
+  background-size: 100%;
+  background-color: rgba(0,0,0,0.7);
 }
+
+.myContainer a,h1 {
+  z-index: 500;
+}
+
+.myContainer:after{
+  content:'\A';
+  position:absolute;
+  width:100%; height:570px;
+  top:0; left:0;
+  background:rgba(0,0,0,0.75);
+  opacity:1;
+}
+
 
 .smallContainer{
   text-align:center; 
   width:100%;
-  height: 275px;
   background-color: rgba(245,245,245,1);
+}
+
+.smallContainer p{
+  color: rgba(0,0,0,0.45);
 }
 
 .smallContainer div div {
@@ -34,6 +56,7 @@ a:hover{
   position:relative;
   vertical-align: middle;
   font-size: 100px;
+  padding-bottom: 50px;
 }
 
 .myContainer h1 {
