@@ -17,9 +17,9 @@ a:hover{
   width:100%;
   height: 500px;
   margin-top: -30px;
-  background:url(../images/whiteboard.jpeg) no-repeat;
+  background:url(../images/whiteboard1.jpg) no-repeat;
   background-size: 100%;
-  background-color: rgba(0,0,0,0.7);
+  background-color: rgba(0,0,0,0.8);
 }
 
 .myContainer a,h1 {
@@ -31,7 +31,7 @@ a:hover{
   position:absolute;
   width:100%; height:570px;
   top:0; left:0;
-  background:rgba(0,0,0,0.75);
+  background:rgba(0,0,0,0.8);
   opacity:1;
 }
 
