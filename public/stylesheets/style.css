@@ -9,6 +9,59 @@ a:hover{
   cursor: pointer;
 }
 
+.myContainer {
+  text-align:center; 
+  width:100%;
+  height: 500px;
+  margin-top: -30px;
+  background-color: rgba(20,20,20,0.8);
+}
+
+.smallContainer{
+  text-align:center; 
+  width:100%;
+  height: 275px;
+  background-color: rgba(245,245,245,1);
+}
+
+.smallContainer div div {
+  width: 33.33%;
+  float: left;
+}
+
+.smallContainer span {
+  margin-left: 120px;
+  color: rgba(50,50,50,0.2);
+  position:relative;
+  vertical-align: middle;
+  font-size: 100px;
+}
+
+.myContainer h1 {
+  font-size: 62px;
+  position: relative;
+  top: 10%;
+  color: white;
+  font-weight:100;
+}
+
+.cButton {
+  font-size: 22px;
+  position: relative;
+  width: 250px;
+  top:25%;
+  margin:0px auto;
+  display:block;
+  border-radius: 1px;
+  color: white;
+  text-decoration: none;
+  padding: 15px;
+  background-color: rgba(00,200,50,1);
+  border:0px;
+  outline: 0;
+  box-shadow:inset 0 1px 1px #000000;
+}
+
 .customButton {
   color: black;
   border: none;
