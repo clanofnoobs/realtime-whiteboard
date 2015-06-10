@@ -194,12 +194,11 @@ io.of('/room').on('connection', function(socket){
               console.log(err);
             } else {
               console.log( ' uploaded to ' );
-              fs.unlink('.'+tmp_loc, function(err){
+              board.img_url = 'thumbnails'+tmp_loc;
+              board.save(function(err){
                 if (err){
                   console.log(err);
-                  return;
                 }
-                console.log("Deleted");
               });
             }
           });
