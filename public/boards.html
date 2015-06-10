@@ -6,4 +6,9 @@
     <span ng-if="user.isAuthor" class="label label-danger" ng-click="deleteBoard(whiteboard.unique_token)" style="float:right;cursor:pointer;margin-left:5px;">Delete</span>
     <span ng-if="!user.isAuthor" class="label label-info" ng-click="cloneBoard(whiteboard)" style="float:right;cursor:pointer;">Clone</span>
   </div>
+  <div class="col-xs-6 col-md-6">
+    <a href="#" class="thumbnail">
+      <img src="{{ whiteboard.img_url ? whiteboard.img_url : 'images/placeholder.png' }}" alt="thumb">
+    </a>
+  </div>
 </div>
