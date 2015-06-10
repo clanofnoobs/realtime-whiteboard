@@ -70,18 +70,12 @@ app.factory("user", ["$http","$location","$q","$timeout","notification", functio
       })
     .error(function(err, status, headers, config){
         if (status == 403){
-          $("#tes1 div").removeClass("alert-warning");
-          $("#tes1 div").addClass("alert-danger");
+          notification.changeToDanger();
         } else if (status == 401) {
-          $("#tes1 div").removeClass("alert-danger");
-          $("#tes1 div").addClass("alert-warning");
+          notification.changeToWarning();
         }
-
-        $("#tes1 div p").text("");
-        $("#tes1 div p").append(err);
-
+        notification.setNotificationMessage(err);
         notification.showNotification();
-
       });
   }
 
@@ -226,9 +220,14 @@ app.controller('login', ['$scope', 'user', '$http','$timeout', function($scope, 
   $scope.$on('$viewContentLoaded', function(e){
     $timeout(function(){
       $("#notification div").fadeOut(500);
-    },3500);
+    },3000);
   });
   $scope.user = user.user;
+  $scope.navbar = "navbar.html";
+
+  if (user.user && user.user.local){
+    $scope.user["theUser"] = user.user.local.username;
+  }
 
   $scope.login = function(){
     user.login({
@@ -261,6 +260,7 @@ app.controller('home', ['$scope','whiteboards','$timeout','user', function($scop
   $scope.user["theUser"] = whiteboards.whiteboards.theUser;
   $scope.whiteboards = whiteboards.whiteboards.whiteboards;
   $scope.template = "boards.html";
+  $scope.navbar = "navbar.html";
 
   console.log($scope.user);
 
@@ -779,7 +779,7 @@ app.service("notification",function($timeout){
     $("#tes1").fadeIn(500);
     $timeout(function(){
       $("#tes1").fadeOut(500);
-    },3500);
+    },3000);
   }
   this.changeToWarning = function(){
     $("#tes1 div").removeClass("alert-success");

@@ -1,0 +1,18 @@
+<nav class="navbar navbar-default navbar-fixed-top" style="box-shadow:2px 0px 1px 0 rgba(0,0,0,0.5)">
+  <div class="sub-nav">
+    <a ng-href="#/user/{{user.theUser}}" class="navbar-text" style="font-size:16px;padding:8px;">{{ user.theUser ? user.theUser : "Guest"}} <span ng-if="user.theUser" class="caret" style="cursor:pointer;"></span></a>
+    <a ng-if="user.theUser" ng-click="logOut()" class="navbar-text logout" style="float:right;font-size:16px;">{{ user.theUser ? "logout" : "login" }}
+      <span class="glyphicon glyphicon-off" style="vertical-align:middle;"></span>
+    </a>
+    <a ng-if="!user.theUser" class="navbar-text logout" href="#/login" style="float:right;font-size:16px;">{{ user.theUser ? "logout" : "login" }}
+      <span class="glyphicon glyphicon-log-in" style="vertical-align:middle;"></span>
+    </a>
+    
+  </div>
+  <div style="width:18%;margin:0px auto;">
+    <div class="navbar-brand">
+      <img height=40 src="images/board1.png"/>
+    </div>
+    <p class="navbar-text" style="font-size:16px;padding:8px;margin-left:-10px;">Whiteboard</p>
+  </div>
+</nav>

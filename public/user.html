@@ -1,16 +1,5 @@
-<nav class="navbar navbar-default navbar-fixed-top" style="box-shadow:2px 0px 1px 0 rgba(0,0,0,0.5)">
-  <div class="sub-nav">
-    <a ng-href="#/user/{{user.theUser}}" class="navbar-text" style="font-size:16px;padding:8px;">{{ user.theUser ? user.theUser : "Guest"}} <span ng-if="user.theUser" class="caret" style="cursor:pointer;"></span></a>
-    <a ng-if="user.theUser" ng-click="logOut()" class="navbar-text logout" style="float:right;font-size:16px;">{{ user.theUser ? "logout" : "login" }}</a>
-    <a ng-if="!user.theUser" class="navbar-text logout" href="#/login" style="float:right;font-size:16px;">{{ user.theUser ? "logout" : "login" }}</a>
-  </div>
-  <div style="width:18%;margin:0px auto;">
-    <div class="navbar-brand">
-      <img height=40 src="images/board1.png"/>
-    </div>
-    <p class="navbar-text" style="font-size:16px;padding:8px;margin-left:-10px;">Whiteboard</p>
-  </div>
-</nav>
+<div ng-include="navbar">
+</div>
 <div id="tes1" style="position:absolute;bottom:150px;width:500px;margin:0px auto;left:50%;margin-left: -250px;text-align:center;display:none;z-index:10;">
   <div class="alert alert-success alert-dismissible fade in" role="alert">
     <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button>
