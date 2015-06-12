@@ -10,6 +10,8 @@ var crypto = require("crypto");
 var mailer = require("../mail/mail");
 var _ = require("lodash-node");
 var Q = require("q");
+var fabric = require("fabric").fabric;
+var fs = require("fs-extra");
 
 function getRequests(username){
   var deferred = Q.defer();
@@ -305,7 +307,9 @@ router.get('/permissions/:unique_token', function(req,res,next){
   });
   });
 });
-
+router.get('/createimage', function(req,res,next){
+  createImage();
+});
 
 router.post('/createboard', isLoggedIn, function(req,res, next){
    var user = req.user;
@@ -316,6 +320,7 @@ router.post('/createboard', isLoggedIn, function(req,res, next){
      newWhiteboard.author = user._id;
      newWhiteboard.unique_token = randomValueBase64(7);
      newWhiteboard.access.push(user.id);
+     newWhiteboard.img_url = "thumbnails/placeholder.png";
      newWhiteboard.save(function(err){
        if (err){
          console.log(err);

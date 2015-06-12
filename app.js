@@ -165,49 +165,46 @@ io.of('/room').on('connection', function(socket){
   });
   socket.on("disconnect", function(){
     console.log("Disconnected!");
+    saveThumb(joinedToken);
+  });
+});
 
-    Whiteboard.findOne({'unique_token':joinedToken})
-      .populate('author')
-      .exec(function(err,board){
-        console.log(board);
-      if (!board){
-        console.log("Board not found");
-        return;
-      }
-      var canvas = fabric.createCanvasForNode(1000,800);
-      var tmp_loc = '/' + board.author.local.username + '-' + board.unique_token+'.png';
-      var out = fs.createWriteStream(__dirname + tmp_loc);
-      var canvasObj = canvas.toObject();
-      canvasObj.objects = [];
-      board.objects.forEach(function(s){
-        canvasObj.objects.push(s);
+function saveThumb(uniq){
+  Whiteboard.findOne({'unique_token':uniq})
+    .populate('author')
+    .exec(function(err,board){
+      console.log(board);
+    if (!board){
+      console.log("Board not found");
+      return;
+    }
+    var canvas = fabric.createCanvasForNode(1000,800);
+    var tmp_loc = '/' + board.author.local.username + '-' + board.unique_token+'.png';
+    var out = fs.createWriteStream(__dirname + tmp_loc);
+    var canvasObj = canvas.toObject();
+    canvasObj.objects = [];
+    board.objects.forEach(function(s){
+      canvasObj.objects.push(s);
+    });
+    canvas.loadFromJSON(JSON.stringify(canvasObj), function() {
+      canvas.renderAll();
+      var stream = canvas.createPNGStream();
+      stream.on('data', function(chunk) {
+        out.write(chunk);
       });
-      canvas.loadFromJSON(JSON.stringify(canvasObj), function() {
-        canvas.renderAll();
-        var stream = canvas.createPNGStream();
-        stream.on('data', function(chunk) {
-          out.write(chunk);
-        });
-        stream.on('end', function(){
-          fs.copy(__dirname + tmp_loc, './thumbnails'+tmp_loc, function(err){
-            if (err){
-              console.log(err);
-            } else {
-              console.log( ' uploaded to ' );
-              board.img_url = 'thumbnails'+tmp_loc;
-              board.save(function(err){
-                if (err){
-                  console.log(err);
-                }
-              });
-            }
-          });
+      stream.on('end', function(){
+        fs.renameSync(__dirname + tmp_loc, './thumbnails'+tmp_loc);
+        board.img_url = 'thumbnails'+tmp_loc;
+        board.save(function(err){
+          if (err){
+            console.log(err);
+          }
+          console.log("Updated thumbnail!");
         });
       });
     });
   });
-});
-
+}
 
 http.listen(3000,function(socket){
   console.log("connected");

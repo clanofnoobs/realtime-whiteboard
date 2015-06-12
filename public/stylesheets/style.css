@@ -51,8 +51,19 @@ position:absolute;
   transition: all 0.2s ease-in-out;
 }
 
-.holder:hover .overlay{
+.holder:hover .overlay, #cog{
   opacity: 1;
+}
+
+.author button {
+  font-size:12px;
+  border-radius:none;
+}
+
+.customButton{
+  border-radius:0px;
+  border:0px;
+  outline: none;
 }
 
 .test,.topBar {
