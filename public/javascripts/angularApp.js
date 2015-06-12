@@ -607,6 +607,10 @@ app.controller('board', ['$scope', 'whiteboards','$timeout','notification','$win
 
   };
 
+$scope.test = function(){
+ alert("Test");
+}
+
   function clearCanvas(){
     canvas.clear();
     canvas.renderAll();

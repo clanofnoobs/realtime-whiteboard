@@ -1,7 +1,16 @@
 <div ng-repeat="whiteboard in whiteboards">
   <div class="col-xs-6 col-md-6">
-    <a href="#/user/{{user.local.username}}/board/{{whiteboard.slug}}?unique_token={{whiteboard.unique_token}}" class="thumbnail show">
-      <img src="{{ whiteboard.img_url ? whiteboard.img_url : 'images/placeholder.png' }}" alt="thumb">
-    </a>
+    <div class="holder">
+      <div class="topBar">
+        <p>{{ whiteboard.title }}</p>
+      </div>
+      <div href="#/user/{{user.local.username}}/board/{{whiteboard.slug}}?unique_token={{whiteboard.unique_token}}" style="border-top:none;border-top-left-radius:0px;border-top-right-radius:0px;" class="thumbnail test">
+        <img src="{{ whiteboard.img_url ? whiteboard.img_url : 'images/placeholder.png' }}" alt="thumb">
+      </div>
+      <div class="overlay">
+        <button ng-if="!user.isAuthor" ng-click="cloneBoard(whiteboard)" class="btn btn-primary" style="font-size:8px;">Clone</button>
+        <button ng-if="user.isAuthor" ng-click="deleteBoard(whiteboard.unique_token)" class="btn btn-danger">Delete</button>
+      </div>
+    </div>
   </div>
 </div>
