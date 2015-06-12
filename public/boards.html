@@ -5,9 +5,9 @@
         <p>{{ whiteboard.title }} 
         </p>
       </div>
-      <a href="#/user/{{user.local.username}}/board/{{whiteboard.slug}}?unique_token={{whiteboard.unique_token}}" style="border-top:none;border-top-left-radius:0px;border-top-right-radius:0px;" class="thumbnail test">
+      <div ng-click="board(whiteboard)" href="#/user/{{user.local.username}}/board/{{whiteboard.slug}}?unique_token={{whiteboard.unique_token}}" style="border-top:none;border-top-left-radius:0px;border-top-right-radius:0px;cursor:pointer;" class="thumbnail test">
         <img src="{{ whiteboard.img_url ? whiteboard.img_url : 'images/placeholder.png' }}" alt="thumb">
-      </a>
+      </div>
       <div class="overlay">
         <div ng-if="!user.isAuthor">
           <button ng-if="!user.isAuthor" ng-click="cloneBoard(whiteboard)" class="btn btn-primary">Clone</button>

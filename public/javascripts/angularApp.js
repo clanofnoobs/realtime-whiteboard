@@ -250,7 +250,7 @@ app.controller('create_whiteboard', ['whiteboards','$scope', '$http', function(w
   }
 }]);
 
-app.controller('home', ['$scope','whiteboards','$timeout','user', function($scope, whiteboards, $timeout, user){
+app.controller('home', ['$scope','whiteboards','$timeout','user','$location', function($scope, whiteboards, $timeout, user,$location){
   $('a').click(function(e){
    if($(e.target).hasClass('caret')){
      return false;
@@ -297,6 +297,10 @@ app.controller('home', ['$scope','whiteboards','$timeout','user', function($scop
 
   $scope.showBoards = function(){
     $scope.template = "boards.html";
+  }
+
+  $scope.board = function(board){
+    $location.url("/user/"+$scope.user.local.username+"/board/"+board.slug+"?unique_token="+board.unique_token);
   }
 
   $scope.grantAccess = function(request,event){
