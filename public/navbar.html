@@ -6,12 +6,8 @@
     </div>
     <div id="test123" class="sub"ng-mouseover="$emit('show')"ng-mouseleave="">
       <a href="#/user/{{user.theUser}}"><li>Home</li></a>
-      <li>
-        <a href="#">Change username/password</a>
-      </li>
-      <li>
-        <a>Delete account</a>
-      </li>
+      <a href="#"><li>Change username/password</li></a>
+      <a><li>Delete account</li></a>
     </div>
     <a ng-if="user.theUser" ng-click="logOut()" class="navbar-text logout" style="float:right;font-size:16px;">{{ user.theUser ? "logout" : "login" }}
       <span class="glyphicon glyphicon-off" style="vertical-align:middle;"></span>

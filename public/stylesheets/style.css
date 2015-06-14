@@ -280,12 +280,13 @@ display:none;
 
 .sub li {
   list-style-type:none;
-  transition: all 0.2s ease-in-out;
+  transition: all 0.08s ease-in-out;
   padding:15px;
 }
 
-.sub li a {
+.sub a li {
   font-size: 12px;
+  color: rgba(20,150,240,0.65);
 }
 
 .sub li:hover{
