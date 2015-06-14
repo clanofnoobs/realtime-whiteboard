@@ -11,9 +11,7 @@ a {
 
 a:hover{
   text-decoration: none;
-  color: white;
   cursor: pointer;
-  opacity:0.9;
 }
 
 .myContainer {
@@ -248,6 +246,7 @@ position:absolute;
   margin-left:20px;
 }
 
+
 .pencilIcon {
   background: url('images/indicator.gif') left center no-repeat;
   padding-left: 15px;
@@ -264,4 +263,31 @@ position:absolute;
 .nottaken {
   color: green;
   font-style:bold;
+}
+
+.sub{
+  position:absolute;
+  width:150px;
+  text-align:center;
+  background:rgba(245,245,245,1);
+  top:100%;
+  z-index:800;
+}
+
+#test123{
+display:none;
+}
+
+.sub li {
+  list-style-type:none;
+  transition: all 0.2s ease-in-out;
+  padding:15px;
+}
+
+.sub li a {
+  font-size: 12px;
+}
+
+.sub li:hover{
+  background-color:white;
 }

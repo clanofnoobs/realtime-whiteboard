@@ -216,7 +216,7 @@ app.factory("whiteboards", ['$http','$q','$location','$filter', function($http, 
   return o;
 }]);
 
-app.controller('login', ['$scope', 'user', '$http','$timeout', function($scope, user, $http, $timeout){
+app.controller('login', ['$scope', 'user', '$http','$timeout','dropdown', function($scope, user, $http, $timeout,dropdown){
   $scope.$on('$viewContentLoaded', function(e){
     $timeout(function(){
       $("#notification div").fadeOut(500);
@@ -229,13 +229,20 @@ app.controller('login', ['$scope', 'user', '$http','$timeout', function($scope, 
     $scope.user["theUser"] = user.user.local.username;
   }
 
+  $scope.$on('show',function(event){
+    dropdown.showDropDown();
+  });
+  $scope.$on('hide',function(event){
+    dropdown.hideDropDown();
+  });
+
   $scope.login = function(){
     user.login({
       username: $scope.username,
       password: $scope.password
     });
   }
-
+  
   $scope.logOut = function(){
     user.logOut();
   }
@@ -250,12 +257,23 @@ app.controller('create_whiteboard', ['whiteboards','$scope', '$http', function(w
   }
 }]);
 
-app.controller('home', ['$scope','whiteboards','$timeout','user','$location', function($scope, whiteboards, $timeout, user,$location){
-  $('a').click(function(e){
-   if($(e.target).hasClass('caret')){
-     return false;
-      }
+app.controller('home', ['$scope','whiteboards','$timeout','user','$location','dropdown', function($scope, whiteboards, $timeout, user,$location,dropdown){
+
+  $(document.body).click(function(e){
+    if ($(e.target).hasClass("caret")){
+    return;
+    }
+    $("#test123").hide();
+    $("#user").css("background","rgb(248,248,248)");
   });
+
+  $scope.$on('show',function(event){
+    dropdown.showDropDown();
+  });
+  $scope.$on('hide',function(event){
+    dropdown.hideDropDown();
+  });
+
   $scope.user = whiteboards.whiteboards;
   $scope.user["theUser"] = whiteboards.whiteboards.theUser;
   $scope.whiteboards = whiteboards.whiteboards.whiteboards;
@@ -611,11 +629,7 @@ app.controller('board', ['$scope', 'whiteboards','$timeout','notification','$win
 
   };
 
-$scope.test = function(){
- alert("Test");
-}
-
-  function clearCanvas(){
+  $scope.clearCanvas = function(){
     canvas.clear();
     canvas.renderAll();
     whiteboards.canvas.objects = [];
@@ -623,7 +637,7 @@ $scope.test = function(){
   };
 
   //add circles and squares
-  function addShape(shape){
+  $scope.addShape = function(shape){
     var obj;
     switch(shape){
       case 'triangle':
@@ -777,6 +791,19 @@ app.config([
     $urlRouterProvider.otherwise('');
     }
 ]);
+
+app.service("dropdown", function(){
+  this.showDropDown = function(){
+    angular.element(document.querySelector("#test123")).css("display","block");
+    angular.element(document.querySelector("#user")).css("background","rgba(245,245,245,1)");
+    angular.element(document.querySelector(".caret")).css("color","white");
+  } 
+  this.hideDropDown = function(){
+    angular.element(document.querySelector("#test123")).css("display","none");
+    angular.element(document.querySelector("#user")).css("background","rgb(248,248,248)");
+    angular.element(document.querySelector(".caret")).css("color","black");
+  }
+});
 
 app.service("notification",function($timeout){
   this.setNotificationMessage = function(message){

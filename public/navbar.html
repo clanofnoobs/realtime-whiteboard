@@ -1,6 +1,18 @@
 <nav class="navbar navbar-default navbar-fixed-top" style="box-shadow:2px 0px 1px 0 rgba(0,0,0,0.5)">
   <div class="sub-nav">
-    <a ng-href="#/user/{{user.theUser}}" class="navbar-text" style="font-size:16px;padding:8px;">{{ user.theUser ? user.theUser : "Guest"}} <span ng-if="user.theUser" class="caret" style="cursor:pointer;"></span></a>
+    <div id="user" style="position:absolute;height:100%;" ng-mouseleave="">
+    <p class="navbar-text user" style="font-size:16px;padding:8px;">{{ user.theUser ? user.theUser : "Guest"}} <span ng-click="$emit('show')" ng-if="user.theUser" id="dropdown" class="caret" style="cursor:pointer;color:white;"></span>
+    </p>
+    </div>
+    <div id="test123" class="sub"ng-mouseover="$emit('show')"ng-mouseleave="">
+      <a href="#/user/{{user.theUser}}"><li>Home</li></a>
+      <li>
+        <a href="#">Change username/password</a>
+      </li>
+      <li>
+        <a>Delete account</a>
+      </li>
+    </div>
     <a ng-if="user.theUser" ng-click="logOut()" class="navbar-text logout" style="float:right;font-size:16px;">{{ user.theUser ? "logout" : "login" }}
       <span class="glyphicon glyphicon-off" style="vertical-align:middle;"></span>
     </a>
