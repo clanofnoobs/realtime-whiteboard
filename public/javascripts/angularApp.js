@@ -217,6 +217,29 @@ app.factory("whiteboards", ['$http','$q','$location','$filter', function($http, 
 }]);
 
 app.controller('login', ['$scope', 'user', '$http','$timeout','dropdown', function($scope, user, $http, $timeout,dropdown){
+  var isShown = false;
+  
+  $(window).scroll(function(){
+    if ($(window).scrollTop() >= 50 && !isShown){
+      isShown = true;
+      $('.title div').css("top","-20%");
+      $('.title').css("height","105%");
+      $('.title').css("border-bottom-right-radius","0px");
+    } else if ($(window).scrollTop() <= 50 && isShown){
+      isShown = false;
+      $('.title div').css("top","50%");
+      $('.title').css("height","200%");
+      $('.title').css("border-bottom-right-radius","30px");
+    }
+  });
+  $(document.body).click(function(e){
+    if ($(e.target).hasClass("caret")){
+    return;
+    }
+    $("#test123").hide();
+    $("#user").css("background","rgb(248,248,248)");
+  });
+
   $scope.$on('$viewContentLoaded', function(e){
     $timeout(function(){
       $("#notification div").fadeOut(500);
@@ -672,6 +695,7 @@ app.controller('board', ['$scope', 'whiteboards','$timeout','notification','$win
     obj.fill = $scope.fillColor || 'black';
     obj.setCoords();
     $scope.shapeAdded = true;
+    whiteboards.canvas.objects.push(obj);
     canvas.add(obj);
     canvas.renderAll();
   }
@@ -795,7 +819,7 @@ app.config([
 app.service("dropdown", function(){
   this.showDropDown = function(){
     angular.element(document.querySelector("#test123")).css("display","block");
-    angular.element(document.querySelector("#user")).css("background","rgba(245,245,245,1)");
+    angular.element(document.querySelector("#user")).css("background","rgba(240,240,240,0.95)");
     angular.element(document.querySelector(".caret")).css("color","white");
   } 
   this.hideDropDown = function(){

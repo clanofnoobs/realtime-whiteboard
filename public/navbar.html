@@ -1,26 +1,28 @@
-<nav class="navbar navbar-default navbar-fixed-top" style="box-shadow:2px 0px 1px 0 rgba(0,0,0,0.5)">
+<nav class="navbar navbar-default navbar-fixed-top" style="box-shadow:2px 0px 1px 0 rgba(0,0,0,0.5);height:10px;">
   <div class="sub-nav">
-    <div id="user" style="position:absolute;height:100%;" ng-mouseleave="">
-    <p class="navbar-text user" style="font-size:16px;padding:8px;">{{ user.theUser ? user.theUser : "Guest"}} <span ng-click="$emit('show')" ng-if="user.theUser" id="dropdown" class="caret" style="cursor:pointer;color:white;"></span>
+    <div id="user" style="position:absolute;white-space:nowrap;" ng-mouseleave="">
+      <span class="helper"></span>
+      <img src="https://s1.realtimeboard.com/resources/5252525252/125466/162/204/1/small.jpg"></img>
+    <p class="navbar-text user" style="">{{ user.theUser ? user.theUser : "Guest"}} <span ng-click="$emit('show')" ng-if="user.theUser" id="dropdown" class="caret" style="cursor:pointer;color:white;"></span>
     </p>
     </div>
     <div id="test123" class="sub"ng-mouseover="$emit('show')"ng-mouseleave="">
-      <a href="#/user/{{user.theUser}}"><li>Home</li></a>
-      <a href="#"><li>Change username/password</li></a>
-      <a><li>Delete account</li></a>
+      <p><li style="text-align:left;padding:0px;font-size:10px;color:rgba(20,20,20,0.60);margin-left:4px;" ><strong>GO TO PROFILE</strong></li></p>
+      <a href="#/user/{{user.theUser}}"><li style="padding:0px;background:rgba(40,150,240,0.9);color:rgba(255,250,245,0.95);" >HOME</li></a>
+      <a href="#"><li style="border-left:3px solid rgba(255,190,0,0.9);text-align:left;background:white;">Change username/password</li></a>
+      <a><li style="border-left:3px solid rgba(255,190,0,0.9);text-align:left;background:white;">Delete account</li></a>
     </div>
-    <a ng-if="user.theUser" ng-click="logOut()" class="navbar-text logout" style="float:right;font-size:16px;">{{ user.theUser ? "logout" : "login" }}
+    <a ng-if="user.theUser" ng-click="logOut()" class="navbar-text logout" style="float:right;">{{ user.theUser ? "logout" : "login" }}
       <span class="glyphicon glyphicon-off" style="vertical-align:middle;"></span>
     </a>
-    <a ng-if="!user.theUser" class="navbar-text logout" href="#/login" style="float:right;font-size:16px;">{{ user.theUser ? "logout" : "login" }}
+    <a ng-if="!user.theUser" class="navbar-text logout" href="#/login" style="float:right;">{{ user.theUser ? "logout" : "login" }}
       <span class="glyphicon glyphicon-log-in" style="vertical-align:middle;"></span>
     </a>
     
   </div>
-  <div style="width:18%;margin:0px auto;">
-    <div class="navbar-brand">
-      <img height=40 src="images/board1.png"/>
+  <div class="title">
+    <div>
+      <h1>Collab</h1>
     </div>
-    <p class="navbar-text" style="font-size:16px;padding:8px;margin-left:-10px;">Whiteboard</p>
   </div>
 </nav>
