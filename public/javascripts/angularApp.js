@@ -216,29 +216,7 @@ app.factory("whiteboards", ['$http','$q','$location','$filter', function($http, 
   return o;
 }]);
 
-app.controller('login', ['$scope', 'user', '$http','$timeout','dropdown', function($scope, user, $http, $timeout,dropdown){
-  var isShown = false;
-  
-  $(window).scroll(function(){
-    if ($(window).scrollTop() >= 50 && !isShown){
-      isShown = true;
-      $('.title div').css("top","-20%");
-      $('.title').css("height","105%");
-      $('.title').css("border-bottom-right-radius","0px");
-    } else if ($(window).scrollTop() <= 50 && isShown){
-      isShown = false;
-      $('.title div').css("top","50%");
-      $('.title').css("height","200%");
-      $('.title').css("border-bottom-right-radius","30px");
-    }
-  });
-  $(document.body).click(function(e){
-    if ($(e.target).hasClass("caret")){
-    return;
-    }
-    $("#test123").hide();
-    $("#user").css("background","rgb(248,248,248)");
-  });
+app.controller('login', ['$scope', 'user', '$http','$timeout','dropdown', 'events',function($scope, user, $http, $timeout,dropdown, events){
 
   $scope.$on('$viewContentLoaded', function(e){
     $timeout(function(){
@@ -280,15 +258,8 @@ app.controller('create_whiteboard', ['whiteboards','$scope', '$http', function(w
   }
 }]);
 
-app.controller('home', ['$scope','whiteboards','$timeout','user','$location','dropdown', function($scope, whiteboards, $timeout, user,$location,dropdown){
+app.controller('home', ['$scope','whiteboards','$timeout','user','$location','dropdown','events', function($scope, whiteboards, $timeout, user,$location,dropdown,events){
 
-  $(document.body).click(function(e){
-    if ($(e.target).hasClass("caret")){
-    return;
-    }
-    $("#test123").hide();
-    $("#user").css("background","rgb(248,248,248)");
-  });
 
   $scope.$on('show',function(event){
     dropdown.showDropDown();
@@ -827,6 +798,34 @@ app.service("dropdown", function(){
     angular.element(document.querySelector("#user")).css("background","rgb(248,248,248)");
     angular.element(document.querySelector(".caret")).css("color","black");
   }
+});
+
+app.service("events", function(){
+  var isShown;
+  this.titleAnim = (function(){
+    $(window).scroll(function(){
+    if ($(window).scrollTop() >= 50 && !isShown){
+      isShown = true;
+      $('.title div').css("top","-20%");
+      $('.title').css("height","105%");
+      $('.title').css("border-bottom-right-radius","0px");
+    } else if ($(window).scrollTop() <= 50 && isShown){
+      isShown = false;
+      $('.title div').css("top","50%");
+      $('.title').css("height","200%");
+      $('.title').css("border-bottom-right-radius","30px");
+    }
+    });
+  })();
+  this.hideDropDown = (function(){
+    $(document.body).click(function(e){
+      if ($(e.target).hasClass("caret")){
+      return;
+      }
+      $("#test123").hide();
+      $("#user").css("background","rgb(248,248,248)");
+    });
+  })();
 });
 
 app.service("notification",function($timeout){
