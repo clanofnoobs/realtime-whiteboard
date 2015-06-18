@@ -272,6 +272,9 @@ app.controller('home', ['$scope','whiteboards','$timeout','user','$location','dr
   $scope.$on('hide',function(event){
     dropdown.hideDropDown();
   });
+  $scope.$on('login',function(event){
+    dropdown.showLogin();
+  });
 
   $scope.user = whiteboards.whiteboards;
   $scope.user["theUser"] = whiteboards.whiteboards.theUser;
