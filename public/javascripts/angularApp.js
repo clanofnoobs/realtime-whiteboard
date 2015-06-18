@@ -280,10 +280,6 @@ app.controller('home', ['$scope','whiteboards','$timeout','user','$location','dr
     user.logOut();
   }
 
-  $scope.test = function(){
-    alert("test");
-  }
-
   $scope.$watch('whiteboards', function(){
     if ($scope.whiteboards == ''){
       $scope.empty = true;
@@ -524,7 +520,14 @@ app.controller('board', ['$scope', 'whiteboards','$timeout','notification','$win
           unique_token: this.unique_token
         });
       };
-    })(activeObject.toObject)
+    })(activeObject.toObject);
+
+    for (i=0;i < whiteboards.canvas.objects.length; i++){
+      if (whiteboards.canvas.objects[i].unique_token == activeObject.unique_token){
+        whiteboards.canvas.objects[i] = activeObject;
+      }
+    } 
+
     var obj = { object: activeObject, unique_token: activeObject.unique_token }
 
     socket.emit("objectModded", obj);
@@ -817,6 +820,7 @@ app.service("events", function(){
     }
     });
   })();
+
   this.hideDropDown = (function(){
     $(document.body).click(function(e){
       if ($(e.target).hasClass("caret")){
@@ -828,7 +832,7 @@ app.service("events", function(){
   })();
 });
 
-app.service("notification",function($timeout){
+app.service("notification", function($timeout){
   this.setNotificationMessage = function(message){
     $("#tes1 div p").text("");
     $("#tes1 div p").append(message);
@@ -855,24 +859,3 @@ app.service("notification",function($timeout){
     $("#tes1 div").addClass("alert-success");
   }
 });
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
