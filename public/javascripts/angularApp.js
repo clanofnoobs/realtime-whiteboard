@@ -218,6 +218,8 @@ app.factory("whiteboards", ['$http','$q','$location','$filter', function($http, 
 
 app.controller('login', ['$scope', 'user', '$http','$timeout','dropdown', 'events',function($scope, user, $http, $timeout,dropdown, events){
 
+  $scope.noti = "notification.html";
+
   $scope.$on('$viewContentLoaded', function(e){
     $timeout(function(){
       $("#notification div").fadeOut(500);
@@ -236,11 +238,14 @@ app.controller('login', ['$scope', 'user', '$http','$timeout','dropdown', 'event
   $scope.$on('hide',function(event){
     dropdown.hideDropDown();
   });
+  $scope.$on('login',function(event){
+    dropdown.showLogin();
+  });
 
-  $scope.login = function(){
+  $scope.login = function(usr, pass){
     user.login({
-      username: $scope.username,
-      password: $scope.password
+      username: usr,
+      password: pass
     });
   }
   
@@ -801,6 +806,10 @@ app.service("dropdown", function(){
     angular.element(document.querySelector("#user")).css("background","rgb(248,248,248)");
     angular.element(document.querySelector(".caret")).css("color","black");
   }
+  this.showLogin = function(){
+    angular.element(document.querySelector("#loginModal")).css("display","block");
+    $("#loginModal").fadeIn(185);
+  }
 });
 
 app.service("events", function(){
@@ -823,10 +832,11 @@ app.service("events", function(){
 
   this.hideDropDown = (function(){
     $(document.body).click(function(e){
-      if ($(e.target).hasClass("caret")){
+      if ($(e.target).hasClass("caret") || $(e.target).hasClass("logout") || $(e.target).parents('.login').length || $(e.target).hasClass("glyphicon-log-in")){
       return;
       }
       $("#test123").hide();
+      $("#loginModal").fadeOut(185);
       $("#user").css("background","rgb(248,248,248)");
     });
   })();

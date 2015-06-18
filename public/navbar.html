@@ -6,7 +6,7 @@
     <p class="navbar-text user" style="">{{ user.theUser ? user.theUser : "Guest"}} <span ng-click="$emit('show')" ng-if="user.theUser" id="dropdown" class="caret" style="cursor:pointer;color:white;"></span>
     </p>
     </div>
-    <div id="test123" class="sub"ng-mouseover="$emit('show')"ng-mouseleave="">
+    <div id="test123" class="sub" ng-mouseover="$emit('show')"ng-mouseleave="">
       <p><li style="text-align:left;padding:0px;font-size:10px;color:rgba(20,20,20,0.60);margin-left:4px;" ><strong>GO TO PROFILE</strong></li></p>
       <a href="#/user/{{user.theUser}}"><li style="padding:0px;background:rgba(40,150,240,0.9);color:rgba(255,250,245,0.95);" >HOME</li></a>
       <a href="#"><li style="border-left:3px solid rgba(255,190,0,0.9);text-align:left;background:white;">Change username/password</li></a>
@@ -15,9 +15,22 @@
     <a ng-if="user.theUser" ng-click="logOut()" class="navbar-text logout" style="float:right;">{{ user.theUser ? "logout" : "login" }}
       <span class="glyphicon glyphicon-off" style="vertical-align:middle;"></span>
     </a>
-    <a ng-if="!user.theUser" class="navbar-text logout" href="#/login" style="float:right;">{{ user.theUser ? "logout" : "login" }}
-      <span class="glyphicon glyphicon-log-in" style="vertical-align:middle;"></span>
-    </a>
+    <div style="float:right;position:relative;">
+      <a ng-if="!user.theUser" class="navbar-text logout" id="login" ng-click="$emit('login')">{{ user.theUser ? "logout" : "login" }}
+        <span class="glyphicon glyphicon-log-in" style="vertical-align:middle;"></span>
+      </a>
+      <div class="sub login" id="loginModal" style="display:none"> 
+        <div style="padding:10px;">
+          <form ng-submit="login(username, password)">
+            <label>Username</label>
+            <input type="text" class="form-control" ng-model="username">
+            <label>Password</label>
+            <input type="password" class="form-control" ng-model="password">
+            <button type="submit" class="btn btn-warning btn-lg">Login</button>
+          </form>
+        </div>
+      </div>
+    </div>
     
   </div>
   <div class="title">
