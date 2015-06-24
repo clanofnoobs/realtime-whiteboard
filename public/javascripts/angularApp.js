@@ -265,7 +265,6 @@ app.controller('create_whiteboard', ['whiteboards','$scope', '$http', function(w
 
 app.controller('home', ['$scope','whiteboards','$timeout','user','$location','dropdown','events', function($scope, whiteboards, $timeout, user,$location,dropdown,events){
 
-
   $scope.$on('show',function(event){
     dropdown.showDropDown();
   });

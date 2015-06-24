@@ -69,6 +69,7 @@ router.get('/request/:unique_token', isLoggedIn, function(req,res,next){
   Request.findDuplicate(req.user.id, function(err, reqs){
     //var exists = _.result(_.findWhere(reqs,{'whiteboard.unique_token':req.params.unique_token}), 'token');
     var exists = reqs.filter(function(sReq){
+      console.log(sReq);
       return (sReq.whiteboard.unique_token == req.params.unique_token);
     });
     console.log(exists);
