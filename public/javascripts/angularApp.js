@@ -301,6 +301,10 @@ app.controller('home', ['$scope','whiteboards','$timeout','user','$location','dr
     console.log(user.requestedBoard);
   }
 
+  $scope.createBoard = function(){
+    $("#board").modal('show');
+  };
+
   $scope.requestAuthor = function(){
     console.log(user.requestedBoard);
     user.requestAuthor(user.requestedBoard); 

@@ -3,7 +3,7 @@
     <div id="user" style="position:absolute;white-space:nowrap;" ng-mouseleave="">
       <span class="helper"></span>
       <img src="https://s1.realtimeboard.com/resources/5252525252/125466/162/204/1/small.jpg"></img>
-    <p class="navbar-text user" style="">{{ user.theUser ? user.theUser : "Guest"}} <span ng-click="$emit('show')" ng-if="user.theUser" id="dropdown" class="caret" style="cursor:pointer;color:white;"></span>
+    <p class="navbar-text user" ng-click="$emit('show')" style="">{{ user.theUser ? user.theUser : "Guest"}} <span ng-click="" ng-if="user.theUser" id="dropdown" class="caret" style="cursor:pointer;color:white;"></span>
     </p>
     </div>
     <div id="test123" class="sub" ng-mouseover="$emit('show')"ng-mouseleave="">

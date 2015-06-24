@@ -24,13 +24,30 @@
     </div>
   </div>
 </div>
+<div class="modal fade" id="board" tabindex="-1" role="dialog" aria-labelledby="boardLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="">Create board</h4>
+      </div>
+      <div class="modal-body">
+        <p>This board is not public. Send request to {{ user.local.username }} ? </p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        <button ng-click="requestAuthor()" type="button" class="btn btn-primary">Request</button>
+      </div>
+    </div>
+  </div>
+</div>
 <div class="col-sm-6 col-sm-offset-3">
   <div ng-controller="home">
     <div class="page-header">
       <h1 style="font-weight:100">
         <span ng-show="user.requests.length" ng-if="user.isAuthor" ng-click="showRequests()" class="badge" style="cursor:pointer;background-color:rgb(230,50,50);display:inline-block;vertical-align:middle">{{user.requests.length}}</span>
         {{user.local.username}}  
-        <a ng-if="user.isAuthor" href="#/createboard">
+        <a ng-if="user.isAuthor" ng-click="createBoard()">
           <button class="btn" style="color:white;font-size:12px;padding:3px;background-color:rgb(0,200,200);border:0px;">create</button>
         </a>
       </h1>
