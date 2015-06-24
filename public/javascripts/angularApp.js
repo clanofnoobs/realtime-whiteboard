@@ -264,6 +264,7 @@ app.controller('create_whiteboard', ['whiteboards','$scope', '$http', function(w
 }]);
 
 app.controller('home', ['$scope','whiteboards','$timeout','user','$location','dropdown','events', function($scope, whiteboards, $timeout, user,$location,dropdown,events){
+  $scope.emails = [];
 
   $scope.$on('show',function(event){
     dropdown.showDropDown();
@@ -293,6 +294,14 @@ app.controller('home', ['$scope','whiteboards','$timeout','user','$location','dr
     }
   });
 
+  $scope.$watch('email',function(){
+    if ($scope.email[$scope.email.length-1] == ","){
+      $scope.email = $scope.email.replace(",","");
+      $scope.emails.push($scope.email);
+      $scope.email = "";
+    }
+  });
+
   $scope.cloneBoard = function(boardObj){
 
     $("#exampleModal").modal('show');
@@ -301,9 +310,17 @@ app.controller('home', ['$scope','whiteboards','$timeout','user','$location','dr
     console.log(user.requestedBoard);
   }
 
-  $scope.createBoard = function(){
+  $scope.showBoardForm = function(){
     $("#board").modal('show');
   };
+
+  $scope.createBoard = function(){
+    $("#board").modal("hide");
+
+    whiteboards.create({
+      title: $scope.title
+    });
+  }
 
   $scope.requestAuthor = function(){
     console.log(user.requestedBoard);

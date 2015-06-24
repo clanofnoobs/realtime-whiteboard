@@ -32,11 +32,20 @@
         <h4 class="modal-title" id="">Create board</h4>
       </div>
       <div class="modal-body">
-        <p>This board is not public. Send request to {{ user.local.username }} ? </p>
+          <label>Title</label>
+          <input type="text" ng-model="title">
+          </br>
+          </br>
+          <label>Share with people</label>
+          <div class="share-chips-container" style="border:1px solid black;">
+            <span ng-repeat="email in emails" style="">
+              <span>{{email}}</span>
+            </span>
+            <textarea type="text" style="border:none;overflow:auto;outline:none;resize:none;" placeholder="Add people here..." ng-model="email"></textarea>
+          </div>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-        <button ng-click="requestAuthor()" type="button" class="btn btn-primary">Request</button>
+        <button type="button" ng-click="createBoard()" class="btn btn-warning btn-lg">create</button>
       </div>
     </div>
   </div>
@@ -47,7 +56,7 @@
       <h1 style="font-weight:100">
         <span ng-show="user.requests.length" ng-if="user.isAuthor" ng-click="showRequests()" class="badge" style="cursor:pointer;background-color:rgb(230,50,50);display:inline-block;vertical-align:middle">{{user.requests.length}}</span>
         {{user.local.username}}  
-        <a ng-if="user.isAuthor" ng-click="createBoard()">
+        <a ng-if="user.isAuthor" ng-click="showBoardForm()">
           <button class="btn" style="color:white;font-size:12px;padding:3px;background-color:rgb(0,200,200);border:0px;">create</button>
         </a>
       </h1>
