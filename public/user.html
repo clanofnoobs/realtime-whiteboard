@@ -36,12 +36,16 @@
           <input type="text" ng-model="title">
           </br>
           </br>
-          <label>Share with people</label>
-          <div class="share-chips-container" style="border:1px solid black;">
-            <span ng-repeat="email in emails" style="">
-              <span>{{email}}</span>
-            </span>
-            <textarea type="text" style="border:none;overflow:auto;outline:none;resize:none;" placeholder="Add people here..." ng-model="email"></textarea>
+            <div style="width:80%;margin:0px auto;">
+              <p>Share with others</p>
+              <div class="share-chips-container" style="border:0.1em solid #f2f2f2;float:none;">
+                <span ng-repeat="email in emails track by $index" style="">
+                  <span style="padding-top:5px;">{{email}}</span>
+                  <span ng-click="delete(email)" class="glyphicon glyphicon-remove" style="font-size:12px;opacity:0.9;"></span>
+                </span>
+                <textarea type="text" style="border:none;overflow:auto;outline:none;resize:none;height:30px;" placeholder="Add people here..." ng-model="email"></textarea>
+              </div>
+              <button style="overflow:none;">Test</button>
           </div>
       </div>
       <div class="modal-footer">

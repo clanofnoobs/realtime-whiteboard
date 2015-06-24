@@ -294,13 +294,19 @@ app.controller('home', ['$scope','whiteboards','$timeout','user','$location','dr
     }
   });
 
+  var lastChar = "";
   $scope.$watch('email',function(){
-    if ($scope.email[$scope.email.length-1] == ","){
+    lastChar = $scope.email[$scope.email.length-1];
+    if (lastChar == " " || lastChar == ","){
       $scope.email = $scope.email.replace(",","");
       $scope.emails.push($scope.email);
       $scope.email = "";
     }
   });
+
+  $scope.delete = function(email){
+    $scope.emails.splice($scope.emails.indexOf(email),1);
+  }
 
   $scope.cloneBoard = function(boardObj){
 
