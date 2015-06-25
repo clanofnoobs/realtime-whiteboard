@@ -1,5 +1,5 @@
 p {
-font-weight: 100;
+font-weight: 500;
 }
 a {
   color: #00B7FF;
@@ -385,3 +385,9 @@ display:none;
   background-color:white;
 }
 
+.chips{
+  background: #f2f2f2; 
+  padding:2px;
+  border-radius:2px;
+  font-weight:200;
+}
