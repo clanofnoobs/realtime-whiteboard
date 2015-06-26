@@ -335,6 +335,7 @@ router.post('/createboard', isLoggedIn, function(req,res, next){
           return;
          }
           newWhiteboard.access.push(theUser.id);
+          newWhiteboard.save();
           theUser.whiteboards.push(newWhiteboard.id);
           theUser.save(function(err){
             if (err){

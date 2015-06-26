@@ -7,7 +7,9 @@ a {
   transition: all 0.2s ease-in;
 }
 
-
+.topBar p {
+  font-weight: 100;
+}
 
 a:hover{
   text-decoration: none;
