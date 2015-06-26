@@ -294,18 +294,21 @@ app.controller('home', ['$scope','whiteboards','$timeout','user','$location','dr
     }
   });
 
-  $("#board textarea").bind("keyup", function(e){
-    console.log(e);
-    console.log($scope.email);
-    if (e.keyCode == 8 && $scope.email == ""){
-      $scope.emails.splice($scope.emails.length-1,1);
-    }
-    if (e.keyCode == 188 || e.keyCode == 32){
+  var lastChar = "";
+  $scope.$watch('email',function(e){
+    lastChar = $scope.email[$scope.email.length-1];
+    if (lastChar == " " || lastChar == ","){
       $scope.email = $scope.email.replace(",","");
       $scope.emails.push($scope.email);
       $scope.email = "";
     }
-      $scope.$apply();
+  });
+
+  $("#board textarea").bind("keyup", function(e){
+    if (e.keyCode == 8 && $scope.email == ""){
+      $scope.emails.splice($scope.emails.length-1,1);
+    }
+    $scope.$apply();
   });
 
   $scope.delete = function(email){
@@ -332,7 +335,8 @@ app.controller('home', ['$scope','whiteboards','$timeout','user','$location','dr
     $("#board").modal("hide");
 
     whiteboards.create({
-      title: $scope.title
+      title: $scope.title ? $scope.title : "Untitled",
+      emails: $scope.emails
     });
   }
 

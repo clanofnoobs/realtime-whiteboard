@@ -321,6 +321,30 @@ router.post('/createboard', isLoggedIn, function(req,res, next){
      newWhiteboard.author = user._id;
      newWhiteboard.unique_token = randomValueBase64(7);
      newWhiteboard.access.push(user.id);
+     if (req.body.emails){
+       console.log(req.body.emails);
+       req.body.emails.forEach(function(eUser){
+         User.findOne({$or:[{"local.username":eUser},{"local.email":eUser}]},function(err, theUser){
+          console.log("Found");
+         if (err){
+           console.log(err);
+           return next(err);
+         }
+         if (!theUser){
+          console.log("User not found");
+          return;
+         }
+          newWhiteboard.access.push(theUser.id);
+          theUser.whiteboards = newWhiteboard.id;
+          theUser.save(function(err){
+            if (err){
+              console.log(err);
+            }
+            console.log("Added access for user!");
+          });
+         });
+       });
+     }
      newWhiteboard.img_url = "thumbnails/placeholder.png";
      newWhiteboard.save(function(err){
        if (err){
