@@ -186,23 +186,27 @@ function saveThumb(uniq){
     board.objects.forEach(function(s){
       canvasObj.objects.push(s);
     });
-    canvas.loadFromJSON(JSON.stringify(canvasObj), function() {
-      canvas.renderAll();
-      var stream = canvas.createPNGStream();
-      stream.on('data', function(chunk) {
-        out.write(chunk);
-      });
-      stream.on('end', function(){
-        fs.renameSync(__dirname + tmp_loc, './thumbnails'+tmp_loc);
-        board.img_url = 'thumbnails'+tmp_loc;
-        board.save(function(err){
-          if (err){
-            console.log(err);
-          }
-          console.log("Updated thumbnail!");
+    if (board.objects.length > 0){
+      canvas.loadFromJSON(JSON.stringify(canvasObj), function() {
+        canvas.renderAll();
+        var stream = canvas.createPNGStream();
+        stream.on('data', function(chunk) {
+          out.write(chunk);
+        });
+        stream.on('end', function(){
+          fs.renameSync(__dirname + tmp_loc, './thumbnails'+tmp_loc);
+          board.img_url = 'thumbnails'+tmp_loc;
+          board.save(function(err){
+            if (err){
+              console.log(err);
+            }
+            console.log("Updated thumbnail!");
+          });
         });
       });
-    });
+    } else {
+      return;
+    }
   });
 }
 
