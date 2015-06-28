@@ -71,7 +71,7 @@ io.of('/room').on('connection', function(socket){
     console.log(coords.x + ", " + coords.y);
     socket.broadcast.to(joinedToken).emit("objectMove", coords);
   });
-  socket.on("clear", function(coords){
+  socket.on("clear", function(){
     Whiteboard.findOne({'unique_token':joinedToken}).exec(function(err, board){
       board.objects = [];
       board.markModified("objects");
@@ -79,8 +79,10 @@ io.of('/room').on('connection', function(socket){
         console.log("cleared obj");
       });
     });
+    socket.broadcast.to(joinedToken).emit("clear");
   });
   socket.on("objectModded", function(obj){
+    socket.broadcast.to(joinedToken).emit("objectModded", obj.clientObject);
     Whiteboard.findOne({'unique_token':joinedToken}).exec(function(err,board){
       var counter = 0;
       var found = false;
@@ -90,7 +92,6 @@ io.of('/room').on('connection', function(socket){
       }
       for (i=0;i<board.objects.length;i++){
         if (board.objects[i].unique_token == obj.unique_token){
-          console.log("the index is " + i);
           found = true;
           counter++;
           break;

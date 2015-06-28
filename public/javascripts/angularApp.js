@@ -466,6 +466,7 @@ app.controller('board', ['$scope', 'whiteboards','$timeout','notification','$win
   socket.on("clear", function(){
     canvas.clear();
     canvas.renderAll();
+    whiteboards.canvas.objects = [];
   });
 
   socket.on("userEnter", function(user){
@@ -500,6 +501,10 @@ app.controller('board', ['$scope', 'whiteboards','$timeout','notification','$win
     });
   });
 
+  socket.on("objectModded", function(object){
+    canvas.fire("object:modified", object);
+  });
+
   socket.on("scale", function(scale){
     //TODO - bugfix: scaling left, not showing up on client
     hash[scale.unique_token].scaleX = scale.x;
@@ -532,6 +537,7 @@ app.controller('board', ['$scope', 'whiteboards','$timeout','notification','$win
       hash[obj.unique_token] = obj;
     });
   });
+
   /*socket.on("drawing",function(points){
     if (testObj[points.user]){
     testObj[points.user].onMouseMove(points);
@@ -574,7 +580,7 @@ app.controller('board', ['$scope', 'whiteboards','$timeout','notification','$win
       }
     } 
 
-    var obj = { object: activeObject, unique_token: activeObject.unique_token }
+    var obj = { object: activeObject, unique_token: activeObject.unique_token, clientObject: object }
 
     socket.emit("objectModded", obj);
   });
