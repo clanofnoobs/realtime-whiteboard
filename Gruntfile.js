@@ -10,11 +10,11 @@ module.exports = function(grunt) {
     },
     sshexec: {
       deploy: {
-        command: ['cd /opt/realtime-whiteboard','git pull origin master','npm install','./launchServer.sh'].join(' && '),
+        command: ['ls','./test.sh'].join(' && '),
         options: {
           config: 'realtime'
         }
-      }
+      },
     }
   });
   grunt.registerTask('deploy', ['sshexec:deploy']);
