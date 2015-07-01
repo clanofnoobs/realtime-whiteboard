@@ -1,0 +1,337 @@
+p {
+    font-weight: 500;
+}
+a {
+    color: #00B7FF;
+    text-decoration: none;
+    transition: all 0.2s ease-in;
+}
+.topBar {
+    background-color: rgba(240,240,240,0.5);
+    border: 1px solid rgba(230,230,230,1);
+    border-bottom:none;
+    height: 25px;
+    margin: auto;
+    text-align:center;
+    transition: all 0.2s ease-in-out;
+    p {
+        font-weight: 100;
+    }
+}
+a:hover {
+    text-decoration: none;
+    cursor: pointer;
+}
+.myContainer {
+    text-align:center;
+    width:100%;
+    height: 500px;
+    margin-top: -30px;
+    background:url(../images/whiteboard1.jpg) no-repeat;
+    background-size: 100%;
+    background-color: rgba(0,0,0,0.8);
+    h1 {
+        font-size: 62px;
+        position: relative;
+        top: 50px;
+        color: white;
+        font-weight:100;
+    }
+    p {
+        font-size: 28px;
+        font-weight:100;
+        position:relative;
+        top: 100px;
+        color:white;
+    }
+}
+.myContainer a,h1,p {
+    z-index: 500;
+}
+.overlay {
+    position:absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    width:80%;
+    margin: auto;
+    text-align:center;
+    padding-bottom: 25px;
+    opacity:0;
+    transition: all 0.5s ease-in-out;
+}
+.holder:hover .overlay, #cog {
+    opacity: 1;
+}
+.author {
+    button {
+        font-size:12px;
+        border-radius:none;
+    }
+}
+.customButton {
+    border-radius:0px;
+    border:0px;
+    outline: none;
+    color: black;
+    border: none;
+    background-color: rgb(240,240,240);
+}
+.test,.topBar {
+    box-shadow:0 0 2px 2px rgba(240,240,240,0.8);
+}
+.container_3 {
+    height: 500px;
+    width: 100%;
+    background-color:white;
+}
+.myContainer:after {
+    content:'\A';
+    position:absolute;
+    width:100%;
+    height:570px;
+    top:0;
+    left:0;
+    background:rgba(0,0,0,0.8);
+    opacity:1;
+}
+.smallContainer {
+    position:relative;
+    height:auto;
+    overflow:auto;
+    text-align:center;
+    padding-top:50px;
+    padding-bottom:50px;
+    width:100%;
+    background-color: rgba(245,245,245,1);
+    p {
+        color: rgba(0,0,0,0.45);
+    }
+    div {
+        div {
+            width: 33.33%;
+            float: left;
+        }
+    }
+    span {
+        color: rgba(50,50,50,0.2);
+        position:relative;
+        vertical-align: middle;
+        font-size: 100px;
+        padding-bottom: 50px;
+    }
+}
+.cButton {
+    font-size: 22px;
+    position: relative;
+    width: 250px;
+    top: 250px;
+    margin:0px auto;
+    display:block;
+    border-radius: 1px;
+    color: white;
+    text-decoration: none;
+    padding: 15px;
+    background-color: rgba(200,200,50,1);
+    border:0px;
+    outline: 0;
+    box-shadow:inset 0 1px 1px #000000;
+}
+.arrow-up {
+    width: 0;
+    height: 0;
+    border-left: 10px solid transparent;
+    border-right: 10px solid transparent;
+    border-bottom: 10px solid #f2f2f2;
+}
+
+@media screen and (min-width: 0px) and (max-width: 769px) {
+  img { display: none; }  /* show it on small screens */
+  .myContainer h1{
+    font-size: 44px;
+  }
+
+  #user{
+    padding-left:15px;
+    padding-right:15px;
+  }
+  .myContainer p{
+    font-size: 16px;
+  }
+  .cButton{
+    font-size: 18px;
+    width:225px;
+    padding: 10px;
+  } 
+}
+
+#user {
+    img {
+        vertical-align:middle;
+        float:left;
+        margin:0px auto;
+        top:50%;
+        margin:12px;
+        border-radius:15px;
+        cursor:pointer;
+    }
+}
+.helper {
+    height: 100%;
+    vertical-align: middle;
+}
+.logout {
+    border-radius: 5px;
+    transition: all 0.2s ease-in-out;
+}
+.logout:hover {
+    color: black;
+    background-color: white;
+}
+
+.board {
+    background: white;
+    transition: background 0.08s ease-in;
+}
+.title {
+    height:200%;
+    width:250px;
+    margin:0px auto;
+    background:rgba(240,100,150,0.83);
+    border-bottom-right-radius:30px;
+    transition: 0.2s all ease-in-out;
+    div {
+        width:200px;
+        position:absolute;
+        top:50%;
+        margin:0px auto;
+        left:50%;
+        margin-left:-100px;
+        transition: 0.2s all ease-in-out;
+    }
+    h1 {
+        font-size:32px;
+        text-align:center;
+        font-weight:100;
+        color:rgba(253,253,253,0.95);
+        transform: 0.3s all ease-in-out;
+    }
+}
+.sub-nav {
+    width: 80%;
+    margin:0px auto;
+}
+.board:hover {
+    background: rgba(255,245,245,1);
+}
+.whiteboard {
+    border:1px solid rgba(215,215,215,1);
+    margin-left: 200px;
+}
+.log {
+    color: rgb(215,215,215);
+    margin-left: 15px;
+}
+.taken {
+    color: red;
+    font-style: bold;
+}
+#triangle {
+    width: 0;
+    height: 0;
+    border-left: 12.5px solid transparent;
+    border-right: 12.5px solid transparent;
+    border-bottom: 25px solid black;
+}
+.users {
+    font: monospace;
+    border-radius: 10px;
+    font-size: 28px;
+    text-align:center;
+    color: white;
+    float:right;
+    width:40px;
+    margin-right: 5px;
+    background: orange;
+    margin-top: -35px;
+}
+.drawContainer {
+    position:fixed;
+    width: 160px;
+    height: 500px;
+    top: 50%;
+    margin-top: -200px;
+    margin-left:20px;
+}
+.pencilIcon {
+    background: url('images/indicator.gif') left center no-repeat;
+    padding-left: 15px;
+}
+.drawing {
+    background-color: green;
+}
+.notDrawing {
+    background-color: red;
+}
+.nottaken {
+    color: green;
+    font-style:bold;
+}
+.sub {
+    position:absolute;
+    width:200px;
+    text-align:center;
+    background:rgba(240,240,240,0.95);
+    top:100%;
+    z-index:800;
+    box-shadow: 1px 2px 2px rgba(20,20,20,0.30);
+    li {
+        list-style-type:none;
+        transition: all 0.08s ease-in-out;
+        padding:10px;
+    }
+    a {
+        li {
+            font-size: 12px;
+            color: rgba(20,150,240,0.65);
+        }
+    }
+    li:first-child:hover {
+        background-color:white;
+    }
+}
+#test123 {
+    display:none;
+}
+.login {
+    position:absolute;
+    left:50%;
+    margin-left:-125px;
+    width:250px;
+    background-color:#f2f2f2;
+    margin-top:5px;
+    label {
+        font-size: 14px;
+        float: left;
+        color: rgba(20,20,20,0.533);
+    }
+    input {
+        border-radius:0px;
+        box-shadow:none;
+        outline:0;
+        border:0px;
+    }
+    button {
+        font-size: 11px;
+        padding:8px;
+        width:80px;
+        border-radius:4px;
+        margin-top:5px;
+    }
+}
+.chips {
+    background: #f2f2f2;
+    padding:2px;
+    border-radius:2px;
+    font-weight:200;
+}

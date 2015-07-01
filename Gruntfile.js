@@ -1,5 +1,28 @@
 module.exports = function(grunt) {
+  require('jit-grunt')(grunt);
+
   grunt.initConfig({
+    less:{
+      development:{
+        options:{
+          compress:true,
+          yuicompress: true,
+          optimization: 2
+        },
+        files:{
+          "./public/stylesheets/style1.css":"./less/style.less"
+        }
+      }
+    },
+    watch: {
+      styles:{
+        files:['less/**/*.less'],
+        tasks: ['less'],
+        options: {
+        nospawn: true
+        }
+      }
+    },
     sshconfig: {
       realtime: {
         host: '107.170.4.70',
@@ -18,5 +41,6 @@ module.exports = function(grunt) {
     }
   });
   grunt.registerTask('deploy', ['sshexec:deploy']);
+  grunt.registerTask('default',['less','watch']);
   return grunt.loadNpmTasks('grunt-ssh');
 };
