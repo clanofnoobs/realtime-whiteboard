@@ -17,6 +17,7 @@
     "express-session": "^1.10.3",
     "fabric": "^1.5.0",
     "fs-extra": "^0.13.0",
+    "gm": "^1.18.1",
     "grunt": "^0.4.5",
     "grunt-contrib-less": "^1.0.1",
     "grunt-contrib-watch": "^0.6.1",
