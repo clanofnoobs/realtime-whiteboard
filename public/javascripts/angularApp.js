@@ -243,14 +243,6 @@ app.controller('login', ['$scope', 'user', '$http','$timeout','dropdown', 'event
     dropdown.showLogin();
   });
 
-  (function(){
-    var letters = '0123456789ABCDEF'.split('');
-    var color = '#';
-    for (var i = 0; i < 6; i++ ) {
-        color += letters[Math.floor(Math.random() * 16)];
-    }
-    $scope.color = {'background-color':color};
-  });
 
   $scope.login = function(usr, pass){
     user.login({
@@ -416,7 +408,6 @@ app.controller('board', ['$scope', 'whiteboards','$timeout','notification','$win
   var obj = {};
   obj["unique_token"] = whiteboards.board.unique_token;
   obj["user"] = whiteboards.user;
-  $scope.users.push(whiteboards.user);
   socket.emit("user", obj);
 
   whiteboards.canvas = canvas.toObject();
@@ -459,6 +450,15 @@ app.controller('board', ['$scope', 'whiteboards','$timeout','notification','$win
 
   canvas.isDrawingMode = true;
 
+  function getRandomColor(){
+    var letters = '0123456789ABCDEF'.split('');
+    var color = '#';
+    for (var i = 0; i < 6; i++ ) {
+      color += letters[Math.floor(Math.random() * 16)];
+    }
+    return color;
+  };
+
 
   $scope.changeMode = function(){
     if (canvas.isDrawingMode){
@@ -467,6 +467,14 @@ app.controller('board', ['$scope', 'whiteboards','$timeout','notification','$win
       canvas.isDrawingMode = true;
     }
   };
+
+  function userConnected(theUser){
+    console.log("created");
+    var user = $("<div></div>").text(theUser);
+    user.attr("style","background-color:"+getRandomColor());
+    user.attr("id",theUser);
+    $("#topPage #container").append(user);
+  }
 
   canvas.renderAll();
   var path;
@@ -480,16 +488,17 @@ app.controller('board', ['$scope', 'whiteboards','$timeout','notification','$win
   });
 
   socket.on("userEnter", function(user){
-    createBrush(user);
-    $scope.users.push(user);
-    $scope.$apply();
-    socket.emit("userEnter", whiteboards.user); 
+    if (!document.getElementById(user)){
+      alert("user entered");
+      userConnected(user);
+    }
+    socket.emit("enter", whiteboards.user); 
   });
 
   socket.on("userAlreadyConnected", function(user){
-    createBrush(user);
-    $scope.users.push(user);
-    $scope.$apply();
+    if (!document.getElementById(user)){
+      userConnected(user);
+    }
   });
   
   socket.on("objectMove", function(coords){
@@ -926,3 +935,4 @@ app.service("notification", function($timeout){
     $("#tes1 div").addClass("alert-success");
   }
 });
+

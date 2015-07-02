@@ -64,7 +64,8 @@ io.of('/room').on('connection', function(socket){
 
     socket.broadcast.to(joinedToken).emit("userEnter", obj.user);
   });
-  socket.on("userEnter", function(user){
+  socket.on("enter", function(user){
+    console.log("emitted!");
     socket.broadcast.to(joinedToken).emit("userAlreadyConnected", user);
   });
   socket.on("objectMove", function(coords){
