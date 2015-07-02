@@ -243,6 +243,15 @@ app.controller('login', ['$scope', 'user', '$http','$timeout','dropdown', 'event
     dropdown.showLogin();
   });
 
+  (function(){
+    var letters = '0123456789ABCDEF'.split('');
+    var color = '#';
+    for (var i = 0; i < 6; i++ ) {
+        color += letters[Math.floor(Math.random() * 16)];
+    }
+    $scope.color = {'background-color':color};
+  });
+
   $scope.login = function(usr, pass){
     user.login({
       username: usr,
