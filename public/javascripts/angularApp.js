@@ -408,6 +408,7 @@ app.controller('board', ['$scope', 'whiteboards','$timeout','notification','$win
   var obj = {};
   obj["unique_token"] = whiteboards.board.unique_token;
   obj["user"] = whiteboards.user;
+  userConnected(obj["user"]);
   socket.emit("user", obj);
 
   whiteboards.canvas = canvas.toObject();
