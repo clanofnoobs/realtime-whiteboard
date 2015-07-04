@@ -451,11 +451,28 @@ app.controller('board', ['$scope', 'whiteboards','$timeout','notification','$win
 
   canvas.isDrawingMode = true;
 
-  function getRandomColor(){
+  function getRandomColor(name){
+    var rand = [0.3,0.5,0.8];
+    var counter=0;
     var letters = '0123456789ABCDEF'.split('');
     var color = '#';
-    for (var i = 0; i < 6; i++ ) {
-      color += letters[Math.floor(Math.random() * 16)];
+    var rem;
+    var charCode;
+    for (var i = 0; i < 6; i++ ){
+      if (name[i]){
+        charCode = name.charCodeAt(i);
+        rem =  charCode % 10;
+        rem = (rem == 0) ? 4 : rem;
+        rem = rem/10;
+        color += letters[Math.floor(rem* 16)];
+
+      } else {
+        if (counter == 3){
+          counter = 0;
+        }
+        color += letters[Math.floor(rand[counter]* 16)];
+        counter++;
+      }
     }
     return color;
   };
@@ -469,10 +486,14 @@ app.controller('board', ['$scope', 'whiteboards','$timeout','notification','$win
     }
   };
 
-  function userConnected(theUser){
+  function userConnected(theUser, color){
     console.log("created");
     var user = $("<div></div>").text(theUser);
-    user.attr("style","background-color:"+getRandomColor());
+    if (color){
+      user.attr("style","background-color:"+color);
+    } else {
+      user.attr("style","background-color:"+getRandomColor(theUser));
+    }
     user.attr("id",theUser);
     $("#topPage #container").append(user);
   }
@@ -490,7 +511,6 @@ app.controller('board', ['$scope', 'whiteboards','$timeout','notification','$win
 
   socket.on("userEnter", function(user){
     if (!document.getElementById(user)){
-      alert("user entered");
       userConnected(user);
     }
     socket.emit("enter", whiteboards.user); 
