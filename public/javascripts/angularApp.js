@@ -409,6 +409,8 @@ app.controller('board', ['$scope', 'whiteboards','$timeout','notification','$win
   obj["unique_token"] = whiteboards.board.unique_token;
   obj["user"] = whiteboards.user;
   userConnected(obj["user"]);
+  var userColor = $("#"+obj["user"]).css("background-color");
+  obj["color"] = userColor;
   socket.emit("user", obj);
 
   whiteboards.canvas = canvas.toObject();
@@ -451,32 +453,13 @@ app.controller('board', ['$scope', 'whiteboards','$timeout','notification','$win
 
   canvas.isDrawingMode = true;
 
-  function getRandomColor(name){
+  function getRandomColor(){
     var rand = [0.3,0.5,0.8];
     var counter=0;
     var letters = '0123456789ABCDEF'.split('');
     var color = '#';
-    var rem;
-    var charCode;
     for (var i = 0; i < 6; i++ ){
-      if (name[i]){
-        if (i % 2 == 0){
-          charCode = name.charCodeAt(i);
-          rem =  charCode % 10;
-        } else {
-          rem = (new Date().getHours() % 10);
-        }
-        rem = (rem == 0) ? 4 : rem;
-        rem = rem/10;
-        color += letters[Math.floor(rem* 16)];
-
-      } else {
-        if (counter == 3){
-          counter = 0;
-        }
-        color += letters[Math.floor(rand[counter]* 16)];
-        counter++;
-      }
+      color += letters[Math.floor(Math.random()* 16)];
     }
     return color;
   };
@@ -496,7 +479,7 @@ app.controller('board', ['$scope', 'whiteboards','$timeout','notification','$win
     if (color){
       user.attr("style","background-color:"+color);
     } else {
-      user.attr("style","background-color:"+getRandomColor(theUser));
+      user.attr("style","background-color:"+getRandomColor());
     }
     user.attr("id",theUser);
     $("#topPage #container").append(user);
@@ -514,15 +497,16 @@ app.controller('board', ['$scope', 'whiteboards','$timeout','notification','$win
   });
 
   socket.on("userEnter", function(user){
-    if (!document.getElementById(user)){
-      userConnected(user);
+    if (!document.getElementById(user.user)){
+      userConnected(user.user, user.color);
     }
-    socket.emit("enter", whiteboards.user); 
+    var obj = { user: whiteboards.user, color: userColor};
+    socket.emit("enter", obj); 
   });
 
   socket.on("userAlreadyConnected", function(user){
-    if (!document.getElementById(user)){
-      userConnected(user);
+    if (!document.getElementById(user.user)){
+      userConnected(user.user, user.color);
     }
   });
   
@@ -579,6 +563,12 @@ app.controller('board', ['$scope', 'whiteboards','$timeout','notification','$win
 
     canvas.getObjects().forEach(function(obj){
       hash[obj.unique_token] = obj;
+    });
+  });
+
+  socket.on("userLeft", function(user){
+    $("#"+user).fadeOut(300,function(){
+      $(this).remove();
     });
   });
 

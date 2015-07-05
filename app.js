@@ -55,14 +55,16 @@ var io = require('socket.io')(http);
 
 io.of('/room').on('connection', function(socket){
   var joinedToken = null;
+  var user;
   console.log("User connected");
   socket.on("user", function(obj){
     socket.join(obj.unique_token);
+    user = obj.user;
 
     joinedToken = obj.unique_token;
     console.log(obj.user + " is connected");
 
-    socket.broadcast.to(joinedToken).emit("userEnter", obj.user);
+    socket.broadcast.to(joinedToken).emit("userEnter", obj);
   });
   socket.on("enter", function(user){
     console.log("emitted!");
@@ -167,6 +169,8 @@ io.of('/room').on('connection', function(socket){
   });
   socket.on("disconnect", function(){
     console.log("Disconnected!");
+    console.log(user);
+    socket.broadcast.to(joinedToken).emit("userLeft", user);
     saveThumb(joinedToken);
   });
 });
