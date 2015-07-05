@@ -460,8 +460,12 @@ app.controller('board', ['$scope', 'whiteboards','$timeout','notification','$win
     var charCode;
     for (var i = 0; i < 6; i++ ){
       if (name[i]){
-        charCode = name.charCodeAt(i);
-        rem =  charCode % 10;
+        if (i % 2 == 0){
+          charCode = name.charCodeAt(i);
+          rem =  charCode % 10;
+        } else {
+          rem = (new Date().getHours() % 10);
+        }
         rem = (rem == 0) ? 4 : rem;
         rem = rem/10;
         color += letters[Math.floor(rem* 16)];
