@@ -400,8 +400,8 @@ app.controller('board', ['$scope', 'whiteboards','$timeout','notification','$win
     var canvas = new fabric.Canvas('c');
   }
 
-  canvas.setWidth(window.innerWidth-205);
-  canvas.setHeight(window.innerHeight-55);
+  canvas.setWidth(window.innerWidth);
+  canvas.setHeight(window.innerHeight);
   canvas.calcOffset();
   $scope.board = whiteboards.board;
 
