@@ -531,6 +531,7 @@ app.controller('board', ['$scope', 'whiteboards','$timeout','notification','$win
 
   socket.on("objectModded", function(object){
     canvas.fire("object:modified", object);
+    $scope.clientChange = true;
   });
 
   socket.on("scale", function(scale){
@@ -616,7 +617,11 @@ app.controller('board', ['$scope', 'whiteboards','$timeout','notification','$win
 
     var obj = { object: activeObject, unique_token: activeObject.unique_token, clientObject: object }
 
-    socket.emit("objectModded", obj);
+    if (!$scope.clientChange){
+      socket.emit("objectModded", obj);
+    } else {
+      $scope.clientChange = false;
+    }
   });
 
   canvas.on('object:added', function(obj){

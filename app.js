@@ -93,6 +93,10 @@ io.of('/room').on('connection', function(socket){
         console.log(err);
         return;
       }
+      if (!board){
+        console.log("Board not found!"); 
+        return;
+      }
       for (i=0;i<board.objects.length;i++){
         if (board.objects[i].unique_token == obj.unique_token){
           found = true;
