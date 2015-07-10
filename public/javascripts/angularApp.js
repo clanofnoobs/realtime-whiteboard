@@ -493,7 +493,7 @@ app.controller('board', ['$scope', 'whiteboards','$timeout','notification','$win
     var xDiffCenter = canvas.getCenter().left - (((rightMost - leftMost)/2) + leftMost);
     var yDiffCenter = canvas.getCenter().top - (((bottomMost - topMost)/2) + topMost);
 
-    canvas.setPosition({x: xDiffCenter, y: yDiffCenter-50});
+    canvas.setPosition({x: xDiffCenter, y: yDiffCenter});
     canvas.setZoom(1/1.1);
   }
 
