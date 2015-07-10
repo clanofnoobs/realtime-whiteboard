@@ -4,13 +4,25 @@
     You have limited actions for this board. 
   </div>
 </div>
-<div class="test1" style="width:200px;height:200px;overflow:scroll;border:1px solid blue;height:100%;margin-top:-80px;width:100%;">
+<div class="test1" style="width:200px;height:200px;overflow:scroll;height:100%;margin-top:-80px;width:100%;">
   <canvas id='c'  class="whiteboard"></canvas>
 </div>
 <div class="drawContainer">
-  <button class="btn btn-default" ng-click="changeMode()">
+  <button class="btn btn-default" ng-click="changeMode('draw')">
     <span class="glyphicon glyphicon-pencil"></span>
-    Toggle drawmode
+  </button>
+  <button class="btn btn-default" ng-click="changeMode('pan')">
+    <span class="glyphicon glyphicon-pencil"></span>
+  </button>
+  <button class="btn btn-default" ng-click="changeMode('move')">
+    <span class="glyphicon glyphicon-pencil"></span>
+  </button>
+  </br>
+  <button class="btn btn-default" ng-click="centerObj()">
+    Center selected object
+  </button>
+  <button class="btn btn-default" ng-click="centerFOV()">
+    Center FOV
   </button>
   </br>
   </br>

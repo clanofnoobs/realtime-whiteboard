@@ -284,7 +284,6 @@ app.controller('home', ['$scope','whiteboards','$timeout','user','$location','dr
   $scope.template = "boards.html";
   $scope.navbar = "navbar.html";
 
-  console.log($scope.user);
 
   $scope.logOut = function(){
     user.logOut();
@@ -322,7 +321,6 @@ app.controller('home', ['$scope','whiteboards','$timeout','user','$location','dr
     $("#exampleModal").modal('show');
 
     user.requestedBoard = boardObj.unique_token
-    console.log(user.requestedBoard);
   }
 
   $scope.showBoardForm = function(){
@@ -343,7 +341,6 @@ app.controller('home', ['$scope','whiteboards','$timeout','user','$location','dr
   }
 
   $scope.requestAuthor = function(){
-    console.log(user.requestedBoard);
     user.requestAuthor(user.requestedBoard); 
   }
 
@@ -384,7 +381,6 @@ app.controller('board', ['$scope', 'whiteboards','$timeout','notification','$win
   var hash = {};
   var socket = io.connect('/room');
 
-  console.log(whiteboards.board);
 
   var cUsers = [];
   if (whiteboards.board.controlled_access){
@@ -397,13 +393,17 @@ app.controller('board', ['$scope', 'whiteboards','$timeout','notification','$win
     var canvas = new fabric.StaticCanvas('c');
     $scope.isControlled = true;
   } else {
-    var canvas = new fabric.Canvas('c');
+    var canvas = new fabric.CanvasWithViewport('c');
   }
+  canvas.isGrabMode = true;
 
   canvas.setWidth(window.innerWidth);
   canvas.setHeight(window.innerHeight);
   canvas.calcOffset();
   $scope.board = whiteboards.board;
+  //canvas.setZoom(1.5);
+  //canvas.setPosition({ x:279, y: 128});
+  //201 - top :: 334:: left
 
   var obj = {};
   obj["unique_token"] = whiteboards.board.unique_token;
@@ -451,11 +451,7 @@ app.controller('board', ['$scope', 'whiteboards','$timeout','notification','$win
     ownerBrush.color = $scope.color;
   });
 
-  canvas.isDrawingMode = true;
-
   function getRandomColor(){
-    var rand = [0.3,0.5,0.8];
-    var counter=0;
     var letters = '0123456789ABCDEF'.split('');
     var color = '#';
     for (var i = 0; i < 6; i++ ){
@@ -464,17 +460,64 @@ app.controller('board', ['$scope', 'whiteboards','$timeout','notification','$win
     return color;
   };
 
+  $scope.centerObj = function(){
+    canvas.setZoom(1);
+    var xDiff = canvas.getCenter().left - $scope.selectedObj.left;
+    var yDiff = canvas.getCenter().top - $scope.selectedObj.top;
+    canvas.setPosition({ x:xDiff,  y: yDiff });
+  }
+  $scope.test123 = canvas.getObjects();
 
-  $scope.changeMode = function(){
-    if (canvas.isDrawingMode){
-    canvas.isDrawingMode = false;
-    } else {
-      canvas.isDrawingMode = true;
+  $scope.centerFOV = function(){
+    canvas.setZoom(1);
+    var rightMost = canvas.getObjects()[0].left;
+    var leftMost = rightMost;
+    var bottomMost = canvas.getObjects()[0].top;
+    var topMost = bottomMost;
+    
+    $scope.test123.forEach(function(obj){
+      obj.setCoords();
+      if (obj.left > rightMost){
+        rightMost = obj.left;
+      }
+      if (obj.left < leftMost){
+        leftMost = obj.left;
+      }
+      if (obj.top > bottomMost){
+        bottomMost = obj.top;
+      }
+      if (obj.top < topMost){
+        topMost = obj.top;
+      }
+    });
+    var xDiffCenter = canvas.getCenter().left - (((rightMost - leftMost)/2) + leftMost);
+    var yDiffCenter = canvas.getCenter().top - (((bottomMost - topMost)/2) + topMost);
+
+    canvas.setPosition({x: xDiffCenter, y: yDiffCenter-50});
+    canvas.setZoom(1/1.1);
+  }
+
+  $scope.changeMode = function(action){
+    switch(action){
+      case 'pan':
+        canvas.isDrawingMode = false;
+        canvas.isGrabMode = true;
+        break;
+      case 'move':
+        canvas.isDrawingMode = false;
+        canvas.isGrabMode = false;
+        break;
+      case 'draw':
+        canvas.isGrabMode = false;
+        canvas.isDrawingMode = true;
+        break;
+      default:
+        canvas.isDrawingMode = false;
+        canvas.isGrabMode = true;
     }
   };
 
   function userConnected(theUser, color){
-    console.log("created");
     var user = $("<div></div>").text(theUser);
     if (color){
       user.attr("style","background-color:"+color);
@@ -644,9 +687,15 @@ app.controller('board', ['$scope', 'whiteboards','$timeout','notification','$win
     socket.emit("rotating", obj);
   });
 
+  canvas.on('object:selected', function(e){
+    $scope.selectedObj = e.target;
+    console.log(e.target);
+  });
+
   canvas.on('object:moving', debounce(function(e){
     var activeObject = e.target;
 
+    console.log(e.target);
     var coords = { x: activeObject.get('left'), y: activeObject.get('top'), unique_token: activeObject.unique_token }
     socket.emit("objectMove", coords);
   },12));
@@ -683,7 +732,6 @@ app.controller('board', ['$scope', 'whiteboards','$timeout','notification','$win
 
     canvas.renderAll();
 
-    console.log(json);
     socket.emit("draw", json);
   });
   var isDrawing;
@@ -751,8 +799,8 @@ app.controller('board', ['$scope', 'whiteboards','$timeout','notification','$win
       obj.radius = 30;
     }
     obj.unique_token = makeid();
-    obj.top = 250;
-    obj.left = 250;
+    obj.top = canvas.getCenter().top;
+    obj.left = canvas.getCenter().left;
     obj.width = 30;
     obj.height = 30;
     obj.stroke = $scope.strokeColor || 'black';
