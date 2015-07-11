@@ -376,6 +376,26 @@ app.controller('home', ['$scope','whiteboards','$timeout','user','$location','dr
 }]);
 
 app.controller('board', ['$scope', 'whiteboards','$timeout','notification','$window', function($scope, whiteboards, $timeout, notification, $window){
+  $("[rel='tooltip']").tooltip();
+  document.onmousemove = function(e){
+    if (e.x <= 180 && !$scope.isMoving && !isDrawing){
+      $(".drawContainer").css("margin-left","10px");
+    } else {
+      //$(".bottom").fadeOut(100);
+      $(".drawContainer").css("margin-left","-170px");
+    }
+  }
+
+  $(document).keydown(function(e){
+    if (e.keyCode == 18){
+      canvas.isGrabMode = true;
+    }
+  });
+  $(document).keyup(function(e){
+    if (e.keyCode == 18){
+      canvas.isGrabMode = false;
+    }
+  });
   $scope.users = [];
   var count = 0;
   var hash = {};
@@ -430,25 +450,12 @@ app.controller('board', ['$scope', 'whiteboards','$timeout','notification','$win
     count++;
   });
     
-  var brush = new fabric.PencilBrush(canvas);
-  //var brush1 = new fabric.PencilBrush(canvas);
-  var ownerBrush = new fabric.PencilBrush(canvas);
-  var testObj = {};
-  //clients brushes
-  /*
-  testObj['cla'] = brush1;
-  brush1.color = 'green';
-  */
-
-  //owner brush; gets used in draw emission event
-  ownerBrush.color = $scope.color || 'black';
-  ownerBrush.width = 1;
   $scope.$watch('drawingStrokeWidth', function(){
-    ownerBrush.width = $scope.drawingStrokeWidth;
+    canvas.freeDrawingBrush.width = $scope.drawingStrokeWidth;
   });
   
   $scope.$watch('color', function(){
-    ownerBrush.color = $scope.color;
+    canvas.freeDrawingBrush.color = $scope.color;
   });
 
   function getRandomColor(){
@@ -494,7 +501,7 @@ app.controller('board', ['$scope', 'whiteboards','$timeout','notification','$win
     var yDiffCenter = canvas.getCenter().top - (((bottomMost - topMost)/2) + topMost);
 
     canvas.setPosition({x: xDiffCenter, y: yDiffCenter});
-    canvas.setZoom(1/1.1);
+    //canvas.setZoom(1/1.1);
   }
 
   $scope.changeMode = function(action){
@@ -643,6 +650,7 @@ app.controller('board', ['$scope', 'whiteboards','$timeout','notification','$win
   });
   
   canvas.on('object:modified', function(object){
+    $scope.isMoving = false;
     var activeObject = object.target;
     activeObject.toObject = (function(toObject){
       return function(){
@@ -693,6 +701,7 @@ app.controller('board', ['$scope', 'whiteboards','$timeout','notification','$win
   });
 
   canvas.on('object:moving', debounce(function(e){
+    $scope.isMoving = true;
     var activeObject = e.target;
 
     console.log(e.target);

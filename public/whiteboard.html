@@ -1,3 +1,7 @@
+<div class="btn btn-default share">
+  Share
+  <span class="glyphicon glyphicon-share-alt"></span>
+</div>
 <div id="tes1" style="position:absolute;bottom:15%;width:500px;margin:0px auto;left:50%;margin-left: -250px;text-align:center;display:none;z-index:5;">
   <div class="alert alert-danger alert-dismissible fade in" role="alert">
     <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button>
@@ -8,21 +12,21 @@
   <canvas id='c'  class="whiteboard"></canvas>
 </div>
 <div class="drawContainer">
-  <button class="btn btn-default" ng-click="changeMode('draw')">
+  <button class="btn btn-default draw" ng-click="changeMode('draw')">
     <span class="glyphicon glyphicon-pencil"></span>
   </button>
-  <button class="btn btn-default" ng-click="changeMode('pan')">
-    <span class="glyphicon glyphicon-pencil"></span>
+  <button class="btn btn-default pan" ng-click="changeMode('pan')">
+    <span class="glyphicon glyphicon-hand-up"></span>
   </button>
-  <button class="btn btn-default" ng-click="changeMode('move')">
-    <span class="glyphicon glyphicon-pencil"></span>
+  <button rel="select mode" title="pan" class="btn btn-default move" ng-click="changeMode('move')">
+    <span class="glyphicon glyphicon-move"></span>
   </button>
   </br>
-  <button class="btn btn-default" ng-click="centerObj()">
-    Center selected object
+  <button rel="tooltip" title="center selected obj" class="btn btn-default" ng-click="centerObj()">
+    <span class="glyphicon glyphicon-sound-stereo"></span>
   </button>
   <button class="btn btn-default" ng-click="centerFOV()">
-    Center FOV
+    <span class="glyphicon glyphicon-fullscreen"></span>
   </button>
   </br>
   </br>
@@ -31,7 +35,6 @@
   </br>
   </br>
   <label for="shape-stroke">Drawing Stroke Width</label>
-  </br>
   <input ng-model="drawingStrokeWidth" type="range" min="1" max="10" value="1" id="shape-stroke">
   {{strokeWidth || 1}}
 
@@ -52,7 +55,6 @@
   </button>
   </br>
   </br>
-
   <label for="shape-stroke">Stroke Width</label>
   </br>
   <input ng-model="strokeWidth" type="range" min="1" max="10" value="1" id="shape-stroke">
@@ -69,7 +71,5 @@
   <input ng-model="fillColor" type="color" id="shape-stroke-color" style="float:right;">
   </br>
   </br>
-  <button ng-click="canvasActions(null, clearCanvas)">Clear canvas</button>
-  <button ng-click="getPhoto()">Get photo</button>
-
+  <button class="btn btn-default" ng-click="canvasActions(null, clearCanvas)">Clear canvas</button>
 </div>
