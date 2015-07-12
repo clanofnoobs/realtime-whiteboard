@@ -1,6 +1,6 @@
 <div ng-include="navbar">
 </div>
-
+<test action="createBoard()" state="state" title="title" emails="emails" ng-model="email"></test>
 <div id="tes1" style="position:absolute;bottom:150px;width:500px;margin:0px auto;left:50%;margin-left: -250px;text-align:center;display:none;z-index:10;">
   <div class="alert alert-success alert-dismissible fade in" role="alert">
     <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button>
@@ -20,35 +20,6 @@
       <div class="modal-footer">
         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
         <button ng-click="requestAuthor()" type="button" class="btn btn-primary">Request</button>
-      </div>
-    </div>
-  </div>
-</div>
-<div class="modal fade" id="board" tabindex="-1" role="dialog" aria-labelledby="boardLabel" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-        <h5 class="modal-title" id="">Create</h5>
-      </div>
-      <div class="modal-body">
-            <div style="width:80%;margin:0px auto;">
-              <input style="width:100%;font-size:42px;font-weight:200;color:rgba(24,24,24,0.75);" type="text" ng-model="title" onclick="this.select()">
-              </br>
-              </br>
-              <p>Share with others (e-mail/username)</p>
-              <div class="share-chips-container" style="border:0.1em solid #f2f2f2;float:none;">
-                <span class="chips" ng-repeat="email in emails track by $index" style="">
-                  <span>{{email}}</span>
-                  <span ng-click="delete(email)" class="glyphicon glyphicon-remove" style="cursor:pointer;font-size:12px;opacity:0.9;"></span>
-                </span>
-                <textarea key-change type="text" style="border:none;overflow:auto;outline:none;resize:none;height:30px;" placeholder="Add people here..." ng-model="email"></textarea>
-              </div>
-              <button ng-click="" class="customButton">Can edit only</button>
-          </div>
-      </div>
-      <div class="modal-footer">
-        <button type="button" ng-click="createBoard()" class="btn btn-warning btn-lg">create</button>
       </div>
     </div>
   </div>
