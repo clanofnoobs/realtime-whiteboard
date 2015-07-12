@@ -524,11 +524,14 @@ app.controller('board', ['$scope', 'whiteboards','$timeout','notification','$win
       user.attr("style","background-color:"+getRandomColor());
     }
     user.attr("rel", "tooltip");
+    user.attr("class","user");
     user.css("display","none");
     user.attr("title", theUser);
     user.attr("id",theUser);
+    user.attr("data-placement","left");
     $("#topPage").append(user);
     $(user).fadeIn(2000);
+    $("[rel='tooltip']").tooltip();
   }
 
   canvas.renderAll();
