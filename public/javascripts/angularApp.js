@@ -265,7 +265,8 @@ app.controller('create_whiteboard', ['whiteboards','$scope', '$http', function(w
   }
 }]);
 
-app.controller('home', ['$scope','whiteboards','$timeout','user','$location','dropdown','events', function($scope, whiteboards, $timeout, user,$location,dropdown,events){
+app.controller('home', ['$scope','whiteboards','$timeout','user','$location','dropdown','events','$state', function($scope, whiteboards, $timeout, user,$location,dropdown,events,$state){
+  $scope.state = "user";
   $scope.emails = [];
 
   $scope.$on('show',function(event){
@@ -277,6 +278,8 @@ app.controller('home', ['$scope','whiteboards','$timeout','user','$location','dr
   $scope.$on('login',function(event){
     dropdown.showLogin();
   });
+  $scope.create = "create_share_board.html"
+  $scope.test = $state.$current.self.name;
 
   $scope.user = whiteboards.whiteboards;
   $scope.user["theUser"] = whiteboards.whiteboards.theUser;
@@ -289,32 +292,12 @@ app.controller('home', ['$scope','whiteboards','$timeout','user','$location','dr
     user.logOut();
   }
 
+
   $scope.$watch('whiteboards', function(){
     if ($scope.whiteboards == ''){
       $scope.empty = true;
     }
   });
-
-  var lastChar = "";
-  $scope.$watch('email',function(e){
-    lastChar = $scope.email[$scope.email.length-1];
-    if (lastChar == " " || lastChar == ","){
-      $scope.email = $scope.email.replace(",","");
-      $scope.emails.push($scope.email);
-      $scope.email = "";
-    }
-  });
-
-  $("#board textarea").bind("keyup", function(e){
-    if (e.keyCode == 8 && $scope.email == ""){
-      $scope.emails.splice($scope.emails.length-1,1);
-    }
-    $scope.$apply();
-  });
-
-  $scope.delete = function(email){
-    $scope.emails.splice($scope.emails.indexOf(email),1);
-  }
 
   $scope.cloneBoard = function(boardObj){
 
@@ -376,6 +359,8 @@ app.controller('home', ['$scope','whiteboards','$timeout','user','$location','dr
 }]);
 
 app.controller('board', ['$scope', 'whiteboards','$timeout','notification','$window', function($scope, whiteboards, $timeout, notification, $window){
+  $scope.state = "board";
+  $scope.emails = [];
   $("[rel='tooltip']").tooltip();
   document.onmousemove = function(e){
     if (e.x <= 180 && !$scope.isMoving && !isDrawing){
@@ -385,6 +370,13 @@ app.controller('board', ['$scope', 'whiteboards','$timeout','notification','$win
       $(".drawContainer").css("margin-left","-170px");
     }
   }
+  $scope.share = "create_share_board.html"
+
+  $scope.showShareForm = function(){
+    $("#board").modal('show');
+  }
+  $scope.submitShare = function(){
+  };
 
   $(document).keydown(function(e){
     if (e.keyCode == 18){
@@ -525,14 +517,18 @@ app.controller('board', ['$scope', 'whiteboards','$timeout','notification','$win
   };
 
   function userConnected(theUser, color){
-    var user = $("<div></div>").text(theUser);
+    var user = $("<div></div>").text(theUser.charAt(0));
     if (color){
       user.attr("style","background-color:"+color);
     } else {
       user.attr("style","background-color:"+getRandomColor());
     }
+    user.attr("rel", "tooltip");
+    user.css("display","none");
+    user.attr("title", theUser);
     user.attr("id",theUser);
-    $("#topPage #container").append(user);
+    $("#topPage").append(user);
+    $(user).fadeIn(2000);
   }
 
   canvas.renderAll();
@@ -1013,3 +1009,40 @@ app.service("notification", function($timeout){
   }
 });
 
+app.directive('test', function() {
+  return {
+    restrict: 'E',
+    scope: {
+      action: '&',
+      emails: '=',
+      title: '=',
+      state: '=',
+      model: '=ngModel'
+    },
+    templateUrl: 'create_share_board.html',
+    replace: true,
+    link: linker
+  }
+    function linker(scope, elem, attr) {
+      $("#board textarea").bind('keyup',function(e){
+        if (e.keyCode == 8 && scope.model == ""){
+          scope.emails.splice(scope.emails.length-1,1);
+        }
+        scope.$apply();
+      });
+
+      scope.delete = function(email){
+        scope.emails.splice(scope.emails.indexOf(email),1);
+      }
+
+      scope.$watch('model', function(){
+        var lastChar = "";
+          lastChar = scope.model[scope.model.length-1];
+          if (lastChar == " " || lastChar == ","){
+            scope.model = scope.model.replace(",","");
+            scope.emails.push(scope.model);
+            scope.model = "";
+        }
+      });
+    }
+});
