@@ -71,7 +71,6 @@ io.of('/room').on('connection', function(socket){
     socket.broadcast.to(joinedToken).emit("userAlreadyConnected", user);
   });
   socket.on("objectMove", function(coords){
-    console.log(coords.x + ", " + coords.y);
     socket.broadcast.to(joinedToken).emit("objectMove", coords);
   });
   socket.on("clear", function(){
@@ -105,7 +104,6 @@ io.of('/room').on('connection', function(socket){
         }
         counter++;
       }
-      console.log(board.objects[counter-1].unique_token);
       board.objects[counter-1] = obj.object;
       board.markModified("objects");
       board.save(function(err){
@@ -141,10 +139,13 @@ io.of('/room').on('connection', function(socket){
     socket.broadcast.to(joinedToken).emit("scale", scale);
   });
   socket.on("draw", function(point){
-    console.log(point);
     Whiteboard.findOne({'unique_token':joinedToken}).exec(function(err,board){
       if (err){
         console.log(err);
+        return;
+      }
+      if (!board){
+        console.log("Board not found! - Draw");
         return;
       }
       board.objects.push(point);
@@ -173,7 +174,6 @@ io.of('/room').on('connection', function(socket){
   });
   socket.on("disconnect", function(){
     console.log("Disconnected!");
-    console.log(user);
     socket.broadcast.to(joinedToken).emit("userLeft", user);
     saveThumb(joinedToken);
   });
@@ -183,9 +183,8 @@ function saveThumb(uniq){
   Whiteboard.findOne({'unique_token':uniq})
     .populate('author')
     .exec(function(err,board){
-      console.log(board);
     if (!board){
-      console.log("Board not found");
+      console.log("Board not found - Save thumb");
       return;
     }
     var canvas = fabric.createCanvasForNode(1000,800);
