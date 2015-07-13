@@ -3,9 +3,10 @@
   @colorHex: e(@randomColor);
   @color:~"#@{colorHex}";
 }
+
 body {
-padding:0;
-margin:0;
+  padding:0;
+  margin:0;
 }
 p {
     font-weight: 500;
@@ -24,7 +25,7 @@ a {
     text-align:center;
     transition: all 0.2s ease-in-out;
     p {
-        font-weight: 100;
+        font-weight: 100 !important;
     }
 }
 a:hover {
@@ -44,11 +45,12 @@ a:hover {
         position: relative;
         top: 50px;
         color: white;
-        font-weight:100;
+        font-weight:100 !important;
+        font-family: 'Helvetica Neue','Segoe UI';
     }
     p {
         font-size: 28px;
-        font-weight:100;
+        font-weight:100 !important;
         position:relative;
         top: 100px;
         color:white;
@@ -93,7 +95,7 @@ a:hover {
   transition: 0.15s margin-bottom ease-in-out;
   p{
     color: rgba(25,25,25,0.95);
-    font-weight:200;
+    font-weight:200 !important;
   }
 }
 
@@ -259,7 +261,7 @@ a:hover {
     h1 {
         font-size:32px;
         text-align:center;
-        font-weight:100;
+        font-weight:100 !important;
         color:rgba(253,253,253,0.95);
         transform: 0.3s all ease-in-out;
     }
@@ -324,7 +326,7 @@ canvas {
     label{
       text-align:left;
       float:left;
-      font-weight:200;
+      font-weight:200 !important;
       color:white;
     }
 }
@@ -402,7 +404,7 @@ canvas {
     background: #f2f2f2;
     padding:2px;
     border-radius:2px;
-    font-weight:200;
+    font-weight:200 !important;
 }
 #topPage{
   position:absolute;
