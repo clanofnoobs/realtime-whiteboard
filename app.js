@@ -7,6 +7,7 @@ var bodyParser = require('body-parser');
 var flash = require('connect-flash');
 var fabric = require('fabric').fabric;
 var fs = require("fs-extra");
+var compress = require("compression");
 
 var users = require('./routes/users');
 
@@ -24,6 +25,7 @@ var app = express();
 
 var passport = require('passport');
 var expressSession = require('express-session');
+app.use(compress());
 app.use(expressSession({secret:'mySecretKey'}));
 app.use(passport.initialize());
 app.use(passport.session());
