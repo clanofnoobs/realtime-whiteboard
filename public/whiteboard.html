@@ -13,20 +13,20 @@
   <canvas id='c'  class="whiteboard"></canvas>
 </div>
 <div class="drawContainer">
-  <button class="btn btn-default draw" ng-click="changeMode('draw')">
+  <button rel="tooltip" title="Draw" class="btn btn-default draw" ng-click="changeMode('draw')">
     <span class="glyphicon glyphicon-pencil"></span>
   </button>
-  <button class="btn btn-default pan" ng-click="changeMode('pan')">
+  <button rel="tooltip" title="Pan" class="btn btn-default pan" ng-click="changeMode('pan')">
     <span class="glyphicon glyphicon-hand-up"></span>
   </button>
-  <button rel="select mode" title="pan" class="btn btn-default move" ng-click="changeMode('move')">
+  <button rel="tooltip" title="Select/Move obj" class="btn btn-default move" ng-click="changeMode('move')">
     <span class="glyphicon glyphicon-move"></span>
   </button>
   </br>
-  <button rel="tooltip" title="center selected obj" class="btn btn-default" ng-click="centerObj()">
+  <button rel="tooltip" title="Center around selected obj" class="btn btn-default" ng-click="centerObj()">
     <span class="glyphicon glyphicon-sound-stereo"></span>
   </button>
-  <button class="btn btn-default" ng-click="centerFOV()">
+  <button rel="tooltip" title="Center around canvas" class="btn btn-default" ng-click="centerFOV()">
     <span class="glyphicon glyphicon-fullscreen"></span>
   </button>
   </br>
