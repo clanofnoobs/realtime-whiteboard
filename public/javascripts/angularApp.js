@@ -20,7 +20,6 @@ app.controller('signup', ['$scope', '$http','$timeout', function($scope, $http, 
     }
   });
 
-
   $scope.getUsername = function(cred){
     if (cred == $scope.email){
       $scope.loadingEmail = true;
