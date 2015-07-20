@@ -49,7 +49,7 @@ module.exports = function(passport){
             if (err) {
               throw err;
             }
-            var body = 'Thank you for registering at Realtime Whiteboards. </br> Click <a href="http://localhost:3000/activate?token='+newUser.token+'">here</a> to activate your profile.'
+            var body = 'Thank you for registering at Realtime Whiteboards. </br> Click <a href="http://realtimecollab.com/activate?token='+newUser.token+'">here</a> to activate your profile.'
             mailer.setMailOptions({
               token: newUser.token,
               email: newUser.local.email,
