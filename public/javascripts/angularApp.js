@@ -574,7 +574,9 @@ app.controller('board', ['$scope', 'whiteboards','$timeout','notification','$win
     canvas.renderAll();
 
     canvas.getObjects().forEach(function(obj){
-      hash[obj.unique_token] = obj;
+      if (o!bj.isMoving){
+        hash[obj.unique_token] = obj;
+      }
     });
   });
 
