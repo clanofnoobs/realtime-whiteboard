@@ -152,22 +152,22 @@ app.factory("whiteboards", ['$http','$q','$location','$filter', function($http, 
   o.create = function(whiteboard){
     return $http.post('/createboard', whiteboard)
       .success(function(data){
-       $location.url("/user/"+data.author.local.username+"/board/"+data.slug+"?unique_token="+data.unique_token);
+      $location.url("/user/"+data.author.local.username+"/board/"+data.slug+"?unique_token="+data.unique_token);
       }).error(function(data){
-       console.log(data);
+      console.log(data);
       });
   }
 
-  o.deleteBoard = function(unique_token){
+  o.deleteBoard = function(unique_token) {
     var deferred = $q.defer();
     return $http.delete('/board/delete/'+unique_token)
-      .success(function(data){
+      .success(function(data) {
         deferred.resolve(data);
-        o.whiteboards.whiteboards = o.whiteboards.whiteboards.filter(function(sBoard){
+        o.whiteboards.whiteboards = o.whiteboards.whiteboards.filter(function(sBoard) {
           return (sBoard.unique_token != unique_token);
         });
         return deferred.promise;
-      }).error(function(data, status, headers, config){
+      }).error(function(data, status, headers, config) {
         if (status == 403){
           deferred.reject(data);
           alert("you are not logged in");
@@ -283,7 +283,7 @@ app.controller('home', ['$scope','whiteboards','$timeout','user','$location','dr
   $scope.user = whiteboards.whiteboards;
   $scope.user["theUser"] = whiteboards.whiteboards.theUser;
   $scope.whiteboards = whiteboards.whiteboards.whiteboards;
-  $scope.template = "boards.html";
+  $scope.test1 = "boards.html";
   $scope.navbar = "navbar.html";
 
 
@@ -423,6 +423,7 @@ app.controller('board', ['$scope', 'whiteboards','$timeout','notification','$win
   var userColor = $("#"+obj["user"]).css("background-color");
   obj["color"] = userColor;
   socket.emit("user", obj);
+  socket.emit("connect", username);
 
   whiteboards.canvas = canvas.toObject();
   whiteboards.canvas.objects = [];
@@ -850,7 +851,7 @@ app.config([
     '$urlRouterProvider',
     function($stateProvider, $urlRouterProvider){
       $stateProvider
-        .state('root',{
+        .state('root', {
           url:'',
           controller: 'login',
           templateUrl: 'test1.html',
