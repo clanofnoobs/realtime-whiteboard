@@ -10,7 +10,6 @@ var crypto = require("crypto");
 var mailer = require("../mail/mail");
 var _ = require("lodash-node");
 var Q = require("q");
-var fabric = require("fabric").fabric;
 var fs = require("fs-extra");
 
 function getRequests(username){

@@ -8,7 +8,6 @@ var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var flash = require('connect-flash');
-var fabric = require('fabric').fabric;
 var fs = require("fs-extra");
 var compress = require("compression");
 
@@ -192,7 +191,6 @@ function saveThumb(uniq){
       console.log("Board not found - Save thumb");
       return;
     }
-    var canvas = fabric.createCanvasForNode(1000,800);
     var tmp_loc = '/' + board.author.local.username + '-' + board.unique_token+'.png';
     var out = fs.createWriteStream(__dirname + tmp_loc);
     var canvasObj = canvas.toObject();
